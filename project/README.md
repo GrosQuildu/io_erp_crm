@@ -2,7 +2,7 @@
 
 System is composed of two frontend desktop applications (for crm and erp) and backend server common for both apps.
 
-### Functionalities:
+### Functionalities
 #### General
 * crm, erp and admin employees
 
@@ -19,6 +19,21 @@ System is composed of two frontend desktop applications (for crm and erp) and ba
 * Tasks
 * Meetings
 * Email communication
+
+
+### Use cases
+Employees management
+![Employees management](/project/use_cases/employees_management.png)
+
+---
+
+ERP
+![Employees management](/project/use_cases/erp.png)
+
+---
+
+CRM
+![Employees management](/project/use_cases/crm.png)
 
 
 ### Entity Relationship Diagram
@@ -40,10 +55,6 @@ CRM entities
 [Backend api swagger specification - yaml](/project/api/erp_crm_api.yaml)
 
 [Backend api swagger specification - live](http://80.211.144.146/swagger-ui/)
-
-
-### Use cases
-
 
 
 ## Technology

@@ -25,8 +25,12 @@ System is composed of two frontend desktop applications (for crm and erp) and ba
 Whole database
 ![Whole database](/project/db_schemas/schema.png)
 
+---
+
 ERP entities
 ![erp database](/project/db_schemas/schema_erp.png)
+
+---
 
 CRM entities
 ![crm database](/project/db_schemas/schema_crm.png)
@@ -47,7 +51,7 @@ CRM entities
 * Spring Boot
 * Sprint Data REST
 * Spring Data JPA
-* Sprint REST Assured
+* Spring REST Assured
 * Maven
 * Swagger / Springfox
 * Postgresql

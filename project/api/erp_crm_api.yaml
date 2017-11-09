@@ -71,11 +71,7 @@ definitions:
       id:
         type: integer
         format: int32
-      lastName:
-        type: string
-        minLength: 5
-        maxLength: 100
-      firstName:
+      name:
         type: string
         minLength: 5
         maxLength: 100
@@ -102,8 +98,7 @@ definitions:
         default: true
     required:
       - id
-      - lastName
-      - firstName
+      - name
       - mail
       - role
       - password
@@ -407,11 +402,7 @@ definitions:
       vip:
         type: boolean
         default: false
-      firstName:
-        type: string
-        minLength: 5
-        maxLength: 100
-      lastName:
+      name:
         type: string
         minLength: 5
         maxLength: 100
@@ -438,8 +429,7 @@ definitions:
       - id
       - employeeId
       - clientTypeId
-      - firstName
-      - lastName
+      - name
       - mail
 
   ContactGroup:

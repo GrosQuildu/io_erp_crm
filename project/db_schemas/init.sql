@@ -22,8 +22,7 @@ CREATE SCHEMA crm AUTHORIZATION schemacrawler;
 /* Common for ERP and CRM */
 CREATE TABLE erp_crm.employees (
     id     integer PRIMARY KEY,
-    last_name       varchar(100) NOT NULL,
-    first_name      varchar(100) NOT NULL,
+    name            varchar(100) NOT NULL,
     telephone       varchar(32),
     mail            varchar(256) NOT NULL UNIQUE,
     password        varchar(256) NOT NULL,
@@ -65,6 +64,7 @@ CREATE TABLE erp.units (
 
 CREATE TABLE erp.articles (
     id integer PRIMARY KEY,
+    name            varchar(256) NOT NULL,
     availability    integer NOT NULL,
     unit_id         integer NOT NULL,
     unit_price      money   NOT NULL,
@@ -144,8 +144,7 @@ CREATE TABLE crm.contacts (
     employee_id     integer NOT NULL,
     contacts_groups_id integer NOT NULL,
     vip             boolean DEFAULT 'false',
-    first_name      varchar(100) NOT NULL,
-    last_name       varchar(100) NOT NULL,
+    name      varchar(100) NOT NULL,
     street          varchar(100),
     city            varchar(100),
     post_code       varchar(10),

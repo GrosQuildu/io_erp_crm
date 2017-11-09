@@ -9,7 +9,7 @@
 
 # create schemas, password is schemacrawler:
 sudo docker run -it --rm -v $(pwd):/share  --link scpostgres:postgres postgres \
- psql -h postgres -U schemacrawler -f /share/init.sql
+ psql -h postgres -U schemacrawler -f /share/database.sql
 
 # schemaClawler docker:
 sudo docker run \

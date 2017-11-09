@@ -11,14 +11,14 @@ System is composed of two frontend desktop applications (for crm and erp) and ba
 * Orders management
 * Proformas generation
 * Warehouse
-* Delivery costs based on weights
-* Reports
+* Delivery costs based on weight of articles
+* Reports (sum of orders for each employee in time period, articles sold)
 
 #### CRM
 * Companys / customers / contacts management
 * Tasks
 * Meetings
-* Emails communication
+* Email communication
 
 
 ### Entity Relationship Diagram
@@ -36,6 +36,10 @@ CRM entities
 [Backend api swagger specification - yaml](/project/api/erp_crm_api.yaml)
 
 [Backend api swagger specification - live](http://80.211.144.146/swagger-ui/)
+
+
+### Use cases
+
 
 
 ## Technology

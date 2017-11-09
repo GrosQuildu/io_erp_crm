@@ -11,14 +11,14 @@ Enterprise resource planning and Customer Relationship Management systems.
 * Orders management
 * Proformas generation
 * Warehouse
-* Delivery costs calculation
-* Reports
+* Delivery costs based on weight of articles
+* Reports (sum of orders for each employee in time period, articles sold)
 
 #### CRM
 * Companys / customers / contacts management
 * Tasks
 * Meetings
-* Emails communication
+* Email communication
 
 ### Project
 ![Here](/project/) for architecture, diagrams and technologies

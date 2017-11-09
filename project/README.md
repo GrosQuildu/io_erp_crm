@@ -33,9 +33,9 @@ CRM entities
 
 
 ### API specification
-![Backend api swagger specification - yaml](/project/api/erp_crm_api.yaml)
+[Backend api swagger specification - yaml](/project/api/erp_crm_api.yaml)
 
-![Backend api swagger specification - live](http://80.211.144.146/swagger-ui/)
+[Backend api swagger specification - live](http://80.211.144.146/swagger-ui/)
 
 
 ## Technology

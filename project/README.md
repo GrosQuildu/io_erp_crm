@@ -1,6 +1,8 @@
 # ERP & CRM project
 
-System is composed of two frontend desktop applications (for crm and erp) and backend server common for both apps.
+System is composed of two frontend desktop applications (for crm and erp) and backend server with RESTful API web service (common for both apps). Desktop applications use external email providers to send, receive and store emails.
+
+![Architecture](/project/architecture.png)
 
 ### Functionalities
 #### General

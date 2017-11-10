@@ -22,3 +22,9 @@ Enterprise resource planning and Customer Relationship Management systems.
 
 ### Project
 ![Here](/project/) for architecture, diagrams and technologies
+
+### Authors
+* Marcin Blacharski
+* Grzegorz Puczkowski
+* Paweł Płatek
+* Agnieszka Barszcz

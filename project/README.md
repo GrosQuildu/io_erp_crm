@@ -76,3 +76,8 @@ Server is a Spring Boot application. Main adventage is that it's self-contained 
 PostgreSQL was chosen mainly because it's open source and efficient.
 
 #### Frontend
+* JavaFX
+* CSS
+* javamail - mail client
+* HTML
+* iText - pdf generating

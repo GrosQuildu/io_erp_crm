@@ -13,7 +13,7 @@ System is composed of two frontend desktop applications (for crm and erp) and ba
 * Orders management
 * Proformas generation
 * Warehouse
-* Delivery costs based on weight of articles
+* Delivery costs
 * Reports (sum of orders for each employee in time period, articles sold)
 
 #### CRM

@@ -11,7 +11,7 @@ Enterprise resource planning and Customer Relationship Management systems.
 * Orders management
 * Proformas generation
 * Warehouse
-* Delivery costs based on weight of articles
+* Delivery costs
 * Reports (sum of orders for each employee in time period, articles sold)
 
 #### CRM

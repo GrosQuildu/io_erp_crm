@@ -200,9 +200,6 @@ definitions:
       id:
         type: integer
         format: int32
-      articleId:
-        type: integer
-        format: int32
       weightFrom:
         type: number
         format: float

@@ -74,7 +74,6 @@ CREATE TABLE erp.articles (
 
 CREATE TABLE erp.delivery_costs (
     id integer PRIMARY KEY,
-    article_id       integer NOT NULL,
     weight_from      real NOT NULL,
     weight_to        real NOT NULL,
     price            money NOT NULL,

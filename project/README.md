@@ -78,5 +78,6 @@ PostgreSQL was chosen mainly because it's open source and efficient.
 #### Frontend
 * JavaFX
 * CSS
-* javamail
+* javamail - mail client
 * HTML
+* iText - pdf generating

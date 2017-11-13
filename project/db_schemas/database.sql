@@ -76,8 +76,7 @@ CREATE TABLE erp.delivery_costs (
     id integer PRIMARY KEY,
     weight_from      real NOT NULL,
     weight_to        real NOT NULL,
-    price            money NOT NULL,
-    FOREIGN KEY (article_id) REFERENCES erp.articles (id)
+    price            money NOT NULL
 );
 
 

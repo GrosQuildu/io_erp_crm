@@ -2,8 +2,6 @@ package io.swagger.model.erp;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import org.joda.time.LocalDate;
@@ -15,11 +13,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * Order
+ * Order_
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-16T02:31:17.737Z")
 @Entity
-public class Order   {
+public class Order_ {
   @JsonProperty("id")
   @Id
   @GeneratedValue
@@ -73,7 +71,7 @@ public class Order   {
   @JsonProperty("isDone")
   private Boolean isDone = false;
 
-  public Order id(Integer id) {
+  public Order_ id(Integer id) {
     this.id = id;
     return this;
   }
@@ -94,7 +92,7 @@ public class Order   {
     this.id = id;
   }
 
-  public Order orderNumber(String orderNumber) {
+  public Order_ orderNumber(String orderNumber) {
     this.orderNumber = orderNumber;
     return this;
   }
@@ -115,7 +113,7 @@ public class Order   {
     this.orderNumber = orderNumber;
   }
 
-  public Order orderDate(LocalDate orderDate) {
+  public Order_ orderDate(LocalDate orderDate) {
     this.orderDate = orderDate;
     return this;
   }
@@ -137,7 +135,7 @@ public class Order   {
     this.orderDate = orderDate;
   }
 
-  public Order realizationDate(LocalDate realizationDate) {
+  public Order_ realizationDate(LocalDate realizationDate) {
     this.realizationDate = realizationDate;
     return this;
   }
@@ -158,7 +156,7 @@ public class Order   {
     this.realizationDate = realizationDate;
   }
 
-  public Order realizationDeadline(String realizationDeadline) {
+  public Order_ realizationDeadline(String realizationDeadline) {
     this.realizationDeadline = realizationDeadline;
     return this;
   }
@@ -179,7 +177,7 @@ public class Order   {
     this.realizationDeadline = realizationDeadline;
   }
 
-  public Order employeeId(Integer employeeId) {
+  public Order_ employeeId(Integer employeeId) {
     this.employeeId = employeeId;
     return this;
   }
@@ -200,7 +198,7 @@ public class Order   {
     this.employeeId = employeeId;
   }
 
-  public Order clientId(Integer clientId) {
+  public Order_ clientId(Integer clientId) {
     this.clientId = clientId;
     return this;
   }
@@ -221,7 +219,7 @@ public class Order   {
     this.clientId = clientId;
   }
 
-  public Order conditions(String conditions) {
+  public Order_ conditions(String conditions) {
     this.conditions = conditions;
     return this;
   }
@@ -241,7 +239,7 @@ public class Order   {
     this.conditions = conditions;
   }
 
-  public Order comments(String comments) {
+  public Order_ comments(String comments) {
     this.comments = comments;
     return this;
   }
@@ -261,7 +259,7 @@ public class Order   {
     this.comments = comments;
   }
 
-  public Order advance(BigDecimal advance) {
+  public Order_ advance(BigDecimal advance) {
     this.advance = advance;
     return this;
   }
@@ -282,7 +280,7 @@ public class Order   {
     this.advance = advance;
   }
 
-  public Order vat(Float vat) {
+  public Order_ vat(Float vat) {
     this.vat = vat;
     return this;
   }
@@ -303,7 +301,7 @@ public class Order   {
     this.vat = vat;
   }
 
-  public Order state(String state) {
+  public Order_ state(String state) {
     this.state = state;
     return this;
   }
@@ -324,7 +322,7 @@ public class Order   {
     this.state = state;
   }
 
-  public Order deliveryCost(BigDecimal deliveryCost) {
+  public Order_ deliveryCost(BigDecimal deliveryCost) {
     this.deliveryCost = deliveryCost;
     return this;
   }
@@ -345,7 +343,7 @@ public class Order   {
     this.deliveryCost = deliveryCost;
   }
 
-  public Order deliveryAddress(String deliveryAddress) {
+  public Order_ deliveryAddress(String deliveryAddress) {
     this.deliveryAddress = deliveryAddress;
     return this;
   }
@@ -366,7 +364,7 @@ public class Order   {
     this.deliveryAddress = deliveryAddress;
   }
 
-  public Order isSigned(Boolean isSigned) {
+  public Order_ isSigned(Boolean isSigned) {
     this.isSigned = isSigned;
     return this;
   }
@@ -386,7 +384,7 @@ public class Order   {
     this.isSigned = isSigned;
   }
 
-  public Order isPaid(String isPaid) {
+  public Order_ isPaid(String isPaid) {
     this.isPaid = isPaid;
     return this;
   }
@@ -406,7 +404,7 @@ public class Order   {
     this.isPaid = isPaid;
   }
 
-  public Order isDone(Boolean isDone) {
+  public Order_ isDone(Boolean isDone) {
     this.isDone = isDone;
     return this;
   }
@@ -435,7 +433,7 @@ public class Order   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Order order = (Order) o;
+    Order_ order = (Order_) o;
     return Objects.equals(this.id, order.id) &&
             Objects.equals(this.orderNumber, order.orderNumber) &&
             Objects.equals(this.orderDate, order.orderDate) &&
@@ -463,7 +461,7 @@ public class Order   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Order {\n");
+    sb.append("class Order_ {\n");
 
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    orderNumber: ").append(toIndentedString(orderNumber)).append("\n");

@@ -7,7 +7,7 @@ package io.swagger.api.erp;
 
 import java.math.BigDecimal;
 import io.swagger.model.Error;
-import io.swagger.model.erp.Order;
+import io.swagger.model.erp.Order_;
 import io.swagger.model.erp.OrderedArticle;
 
 import io.swagger.annotations.*;
@@ -36,7 +36,7 @@ public interface OrdersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createOrder(@ApiParam(value = "Order to create"  )  @Valid @RequestBody Order order);
+    ResponseEntity<Integer> createOrder(@ApiParam(value = "Order_ to create"  )  @Valid @RequestBody Order_ order);
 
 
     @ApiOperation(value = "Create new OrderedArticle for given order", notes = "", response = Integer.class, authorizations = {
@@ -84,11 +84,11 @@ public interface OrdersApi {
     ResponseEntity<Void> deleteOrderedArticle(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,@ApiParam(value = "",required=true ) @PathVariable("OrderedArticleId") Integer orderedArticleId);
 
 
-    @ApiOperation(value = "Returns Order", notes = "", response = Order.class, authorizations = {
+    @ApiOperation(value = "Returns Order_", notes = "", response = Order_.class, authorizations = {
         @Authorization(value = "APIKeyHeader")
     }, tags={ "ERP - orders", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "", response = Order.class),
+        @ApiResponse(code = 200, message = "", response = Order_.class),
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
@@ -96,7 +96,7 @@ public interface OrdersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
-    ResponseEntity<Order> getOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId);
+    ResponseEntity<Order_> getOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId);
 
 
     @ApiOperation(value = "Returns order's delivery costs", notes = "", response = BigDecimal.class, authorizations = {
@@ -174,11 +174,11 @@ public interface OrdersApi {
     ResponseEntity<List<OrderedArticle>> getOrderedArticles(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId);
 
 
-    @ApiOperation(value = "Returns list of Orders", notes = "", response = Order.class, responseContainer = "List", authorizations = {
+    @ApiOperation(value = "Returns list of Orders", notes = "", response = Order_.class, responseContainer = "List", authorizations = {
         @Authorization(value = "APIKeyHeader")
     }, tags={ "ERP - orders", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "", response = Order.class, responseContainer = "List"),
+        @ApiResponse(code = 200, message = "", response = Order_.class, responseContainer = "List"),
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
@@ -186,7 +186,7 @@ public interface OrdersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
-    ResponseEntity<List<Order>> getOrders();
+    ResponseEntity<List<Order_>> getOrders();
 
 
     @ApiOperation(value = "Update existing order", notes = "", response = Void.class, authorizations = {
@@ -201,7 +201,7 @@ public interface OrdersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,@ApiParam(value = "Order to create"  )  @Valid @RequestBody Order order);
+    ResponseEntity<Void> updateOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,@ApiParam(value = "Order_ to create"  )  @Valid @RequestBody Order_ order);
 
 
     @ApiOperation(value = "Update existing OrderedArticle", notes = "", response = Void.class, authorizations = {

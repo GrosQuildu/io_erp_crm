@@ -2,7 +2,7 @@ package io.swagger.api.erp;
 
 import java.math.BigDecimal;
 
-import io.swagger.model.erp.Order;
+import io.swagger.model.erp.Order_;
 import io.swagger.model.erp.OrderedArticle;
 
 import io.swagger.annotations.*;
@@ -23,7 +23,7 @@ public class OrdersApiController implements OrdersApi {
 
 
 
-    public ResponseEntity<Integer> createOrder(@ApiParam(value = "Order to create"  )  @Valid @RequestBody Order order) {
+    public ResponseEntity<Integer> createOrder(@ApiParam(value = "Order_ to create"  )  @Valid @RequestBody Order_ order) {
         // do some magic!
         return new ResponseEntity<Integer>(HttpStatus.OK);
     }
@@ -45,9 +45,9 @@ public class OrdersApiController implements OrdersApi {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    public ResponseEntity<Order> getOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId) {
+    public ResponseEntity<Order_> getOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId) {
         // do some magic!
-        return new ResponseEntity<Order>(HttpStatus.OK);
+        return new ResponseEntity<Order_>(HttpStatus.OK);
     }
 
     public ResponseEntity<BigDecimal> getOrderDeliveryCosts(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId) {
@@ -77,13 +77,13 @@ public class OrdersApiController implements OrdersApi {
         return new ResponseEntity<List<OrderedArticle>>(HttpStatus.OK);
     }
 
-    public ResponseEntity<List<Order>> getOrders() {
+    public ResponseEntity<List<Order_>> getOrders() {
         // do some magic!
-        return new ResponseEntity<List<Order>>(HttpStatus.OK);
+        return new ResponseEntity<List<Order_>>(HttpStatus.OK);
     }
 
     public ResponseEntity<Void> updateOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,
-        @ApiParam(value = "Order to create"  )  @Valid @RequestBody Order order) {
+        @ApiParam(value = "Order_ to create"  )  @Valid @RequestBody Order_ order) {
         // do some magic!
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

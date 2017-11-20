@@ -2,11 +2,15 @@ package io.swagger.api.erp;
 
 import java.math.BigDecimal;
 
+import io.swagger.ModelHelper;
+import io.swagger.model.erp.OrderRepository;
 import io.swagger.model.erp.Order_;
 import io.swagger.model.erp.OrderedArticle;
 
 import io.swagger.annotations.*;
 
+import io.swagger.model.erp.OrderedArticleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,77 +25,100 @@ import javax.validation.Valid;
 @Controller
 public class OrdersApiController implements OrdersApi {
 
+    /** Dependent:
+        * orderedArticles
+        * proforma
+     * Depends on:
+        * employee
+        * client
+     */
+    @Autowired
+    OrderRepository orderRepository;
+    @Autowired
+    OrderedArticleRepository orderedArticleRepository ;
 
-
-    public ResponseEntity<Integer> createOrder(@ApiParam(value = "Order_ to create"  )  @Valid @RequestBody Order_ order) {
-        // do some magic!
-        return new ResponseEntity<Integer>(HttpStatus.OK);
+    private Order_ getOrderHelper(Integer id) {
+        Order_ order = orderRepository.findById(id);
+        if(order == null)
+            throw new Error("Order not found");
+        return order;
     }
 
-    public ResponseEntity<Integer> createOrderedArticle(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,
-        @ApiParam(value = "OrderedArticle to create"  )  @Valid @RequestBody OrderedArticle order) {
-        // do some magic!
-        return new ResponseEntity<Integer>(HttpStatus.OK);
+    public ResponseEntity<Integer> createOrder(@ApiParam(value = "Order_ to create"  )  @Valid @RequestBody Order_ order) {
+        order = orderRepository.save(order);
+        return new ResponseEntity<Integer>(order.getId(), HttpStatus.OK);
     }
 
     public ResponseEntity<Void> deleteOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId) {
-        // do some magic!
-        return new ResponseEntity<Void>(HttpStatus.OK);
-    }
+        getOrderHelper(orderId);
 
-    public ResponseEntity<Void> deleteOrderedArticle(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,
-        @ApiParam(value = "",required=true ) @PathVariable("OrderedArticleId") Integer orderedArticleId) {
-        // do some magic!
+        for (OrderedArticle orderedArticle :
+                orderedArticleRepository.findAllByOrderId(orderId)) {
+            orderedArticleRepository.delete(orderedArticle);
+        }
+        orderRepository.delete(orderId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<Order_> getOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId) {
-        // do some magic!
-        return new ResponseEntity<Order_>(HttpStatus.OK);
+        Order_ order = getOrderHelper(orderId);
+        return new ResponseEntity<Order_>(order, HttpStatus.OK);
     }
 
     public ResponseEntity<BigDecimal> getOrderDeliveryCosts(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId) {
-        // do some magic!
-        return new ResponseEntity<BigDecimal>(HttpStatus.OK);
+        getOrderHelper(orderId);
+
+        BigDecimal weightSum = new BigDecimal(0);
+        Float weight = null;
+        for (OrderedArticle orderedArticle :
+                orderedArticleRepository.findAllByOrderId(orderId)) {
+            weight = orderedArticle.getWeight();
+            if(weight == null) {
+                weight = orderedArticle.getArticle().getWeight() * orderedArticle.getAmount();
+            }
+            weightSum.add(new BigDecimal(weight));
+        }
+        //todo
+        BigDecimal deliveryCost = weightSum;
+        return new ResponseEntity<BigDecimal>(deliveryCost, HttpStatus.OK);
     }
 
     public ResponseEntity<BigDecimal> getOrderNetPrice(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId) {
-        // do some magic!
-        return new ResponseEntity<BigDecimal>(HttpStatus.OK);
+        getOrderHelper(orderId);
+
+        BigDecimal netPriceSum = new BigDecimal(0);
+        BigDecimal netPrice = null;
+        for (OrderedArticle orderedArticle :
+                orderedArticleRepository.findAllByOrderId(orderId)) {
+            netPrice = orderedArticle.getNetPrice();
+            if(netPrice == null) {
+                netPrice = orderedArticle.getArticle().getUnitPrice().multiply(new BigDecimal(orderedArticle.getAmount()));
+            }
+            netPriceSum.add(netPrice);
+        }
+        return new ResponseEntity<BigDecimal>(netPriceSum, HttpStatus.OK);
     }
 
-    public ResponseEntity<OrderedArticle> getOrderedArticle(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,
-        @ApiParam(value = "",required=true ) @PathVariable("OrderedArticleId") Integer orderedArticleId) {
-        // do some magic!
-        return new ResponseEntity<OrderedArticle>(HttpStatus.OK);
-    }
-
-    public ResponseEntity<BigDecimal> getOrderedArticleNetPrice(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,
-        @ApiParam(value = "",required=true ) @PathVariable("OrderedArticleId") Integer orderedArticleId) {
-        // do some magic!
-        return new ResponseEntity<BigDecimal>(HttpStatus.OK);
-    }
-
-    public ResponseEntity<List<OrderedArticle>> getOrderedArticles(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId) {
-        // do some magic!
-        return new ResponseEntity<List<OrderedArticle>>(HttpStatus.OK);
-    }
 
     public ResponseEntity<List<Order_>> getOrders() {
-        // do some magic!
-        return new ResponseEntity<List<Order_>>(HttpStatus.OK);
+        List<Order_> orders = (List<Order_>) orderRepository.findAll();
+        return new ResponseEntity<List<Order_>>(orders, HttpStatus.OK);
     }
 
     public ResponseEntity<Void> updateOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,
         @ApiParam(value = "Order_ to create"  )  @Valid @RequestBody Order_ order) {
-        // do some magic!
-        return new ResponseEntity<Void>(HttpStatus.OK);
-    }
 
-    public ResponseEntity<Void> updateOrderedArticle(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,
-        @ApiParam(value = "",required=true ) @PathVariable("OrderedArticleId") Integer orderedArticleId,
-        @ApiParam(value = "OrderedArticle to create"  )  @Valid @RequestBody OrderedArticle orderedArticle) {
-        // do some magic!
+        if(orderId != order.getId())
+            throw new Error("Wrong order id");
+
+        Order_ orderOld = getOrderHelper(orderId);
+        try {
+            ModelHelper.combine(orderOld, order);
+        } catch (Exception e) {
+            throw new Error("Wrong article object");
+        }
+
+        orderRepository.save(order);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 

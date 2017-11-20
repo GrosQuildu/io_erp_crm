@@ -5,9 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import org.joda.time.LocalDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -20,29 +18,49 @@ public class Proforma   {
   @JsonProperty("id")
   @Id
   @GeneratedValue
-  private Integer id = null;
+  private Integer id;
 
   @JsonProperty("proformaNumber")
-  private String proformaNumber = null;
+  @NotNull
+  private String proformaNumber;
 
-  @JsonProperty("orderId")
-  private Integer orderId = null;
+  @JsonProperty("order")
+  @NotNull
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "order_id")
+  private Order_ order;
 
   @JsonProperty("issueDate")
-  private LocalDate issueDate = null;
+  @NotNull
+  private LocalDate issueDate ;
 
   @JsonProperty("saleDate")
-  private LocalDate saleDate = null;
+  @NotNull
+  private LocalDate saleDate;
 
   @JsonProperty("paymentDate")
-  private LocalDate paymentDate = null;
+  @NotNull
+  private LocalDate paymentDate;
 
   @JsonProperty("paymentMethod")
-  private String paymentMethod = null;
+  @NotNull
+  private String paymentMethod;
 
   public Proforma id(Integer id) {
     this.id = id;
     return this;
+  }
+
+  protected Proforma() {}
+
+  public Proforma(Integer id, String proformaNumber, Order_ order, LocalDate issueDate, LocalDate saleDate, LocalDate paymentDate, String paymentMethod) {
+      this.id = id;
+      this.proformaNumber = proformaNumber;
+      this.order = order;
+      this.issueDate = issueDate;
+      this.saleDate = saleDate;
+      this.paymentDate = paymentDate;
+      this.paymentMethod = paymentMethod;
   }
 
    /**
@@ -82,25 +100,25 @@ public class Proforma   {
     this.proformaNumber = proformaNumber;
   }
 
-  public Proforma orderId(Integer orderId) {
-    this.orderId = orderId;
+  public Proforma orderId(Order_ order) {
+    this.order = order;
     return this;
   }
 
    /**
-   * Get orderId
-   * @return orderId
+   * Get order
+   * @return order
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public Integer getOrderId() {
-    return orderId;
+  public Order_ getOrder() {
+    return order;
   }
 
-  public void setOrderId(Integer orderId) {
-    this.orderId = orderId;
+  public void setOrder(Order_ order) {
+    this.order = order;
   }
 
   public Proforma issueDate(LocalDate issueDate) {
@@ -202,7 +220,7 @@ public class Proforma   {
     Proforma proforma = (Proforma) o;
     return Objects.equals(this.id, proforma.id) &&
         Objects.equals(this.proformaNumber, proforma.proformaNumber) &&
-        Objects.equals(this.orderId, proforma.orderId) &&
+        Objects.equals(this.order, proforma.order) &&
         Objects.equals(this.issueDate, proforma.issueDate) &&
         Objects.equals(this.saleDate, proforma.saleDate) &&
         Objects.equals(this.paymentDate, proforma.paymentDate) &&
@@ -211,7 +229,7 @@ public class Proforma   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, proformaNumber, orderId, issueDate, saleDate, paymentDate, paymentMethod);
+    return Objects.hash(id, proformaNumber, order, issueDate, saleDate, paymentDate, paymentMethod);
   }
 
   @Override
@@ -221,7 +239,7 @@ public class Proforma   {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    proformaNumber: ").append(toIndentedString(proformaNumber)).append("\n");
-    sb.append("    orderId: ").append(toIndentedString(orderId)).append("\n");
+    sb.append("    order: ").append(toIndentedString(order)).append("\n");
     sb.append("    issueDate: ").append(toIndentedString(issueDate)).append("\n");
     sb.append("    saleDate: ").append(toIndentedString(saleDate)).append("\n");
     sb.append("    paymentDate: ").append(toIndentedString(paymentDate)).append("\n");

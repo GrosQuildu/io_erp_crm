@@ -1,5 +1,6 @@
 package io.swagger.model.erp;
 
+import java.util.Iterator;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,17 +23,29 @@ public class DeliveryCost   {
   private Integer id = null;
 
   @JsonProperty("weightFrom")
-  private Float weightFrom = null;
+  @NotNull
+  private Float weightFrom;
 
   @JsonProperty("weightTo")
-  private Float weightTo = null;
+  @NotNull
+  private Float weightTo;
 
   @JsonProperty("price")
-  private BigDecimal price = null;
+  @NotNull
+  private BigDecimal price;
 
   public DeliveryCost id(Integer id) {
     this.id = id;
     return this;
+  }
+
+  protected DeliveryCost() {}
+
+  public DeliveryCost(Integer id, Float weightFrom, Float weightTo, BigDecimal price) {
+    this.id = id;
+    this.weightFrom = weightFrom;
+    this.weightTo = weightTo;
+    this.price = price;
   }
 
    /**

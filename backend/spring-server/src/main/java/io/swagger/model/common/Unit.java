@@ -4,6 +4,9 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.*;
 
 /**
@@ -11,15 +14,32 @@ import javax.validation.constraints.*;
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-15T00:41:28.115Z")
 
+@Entity
 public class Unit   {
   @JsonProperty("id")
-  private Integer id = null;
+  @Id
+  @GeneratedValue
+  private Integer id;
 
   @JsonProperty("name")
-  private String name = null;
+  @NotNull
+  private String name;
 
   @JsonProperty("nameShort")
-  private String nameShort = null;
+  @NotNull
+  private String nameShort;
+
+  protected Unit() {}
+
+  public Unit(Integer id, String name, String nameShort) {
+      this.id = id;
+      this.name = name;
+      this.nameShort = nameShort;
+  }
+
+  public Unit(Integer id) {
+      this.id = id;
+  }
 
   public Unit id(Integer id) {
     this.id = id;

@@ -84,5 +84,11 @@
             <artifactId>spring-boot-starter-data-rest</artifactId>
             <version>1.5.8.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>3.0.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

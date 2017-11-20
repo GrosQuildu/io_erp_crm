@@ -21,25 +21,30 @@ public class Order_ {
   @JsonProperty("id")
   @Id
   @GeneratedValue
-  private Integer id = null;
+  private Integer id;
 
   @JsonProperty("orderNumber")
-  private String orderNumber = null;
+  @NotNull
+  private String orderNumber;
 
   @JsonProperty("orderDate")
-  private LocalDate orderDate = null;
+  @NotNull
+  private LocalDate orderDate;
 
   @JsonProperty("realizationDate")
   private LocalDate realizationDate = null;
 
   @JsonProperty("realizationDeadline")
-  private String realizationDeadline = null;
+  @NotNull
+  private String realizationDeadline;
 
   @JsonProperty("employeeId")
-  private Integer employeeId = null;
+  @NotNull
+  private Integer employeeId;
 
   @JsonProperty("clientId")
-  private Integer clientId = null;
+  @NotNull
+  private Integer clientId;
 
   @JsonProperty("conditions")
   private String conditions = "";
@@ -51,10 +56,12 @@ public class Order_ {
   private BigDecimal advance = null;
 
   @JsonProperty("vat")
-  private Float vat = null;
+  @NotNull
+  private Float vat;
 
   @JsonProperty("state")
-  private String state = null;
+  @NotNull
+  private String state;
 
   @JsonProperty("deliveryCost")
   private BigDecimal deliveryCost = null;

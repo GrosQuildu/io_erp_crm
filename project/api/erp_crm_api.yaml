@@ -224,9 +224,6 @@ definitions:
       availability:
         type: integer
         format: int32
-      ordered:
-        type: integer
-        format: int32
       unitId:
         type: integer
         format: int32

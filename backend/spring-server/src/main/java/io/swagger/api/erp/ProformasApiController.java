@@ -1,9 +1,11 @@
 package io.swagger.api.erp;
 
-import io.swagger.model.erp.Proforma;
+import io.swagger.ModelHelper;
+import io.swagger.model.erp.*;
 
 import io.swagger.annotations.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,31 +20,64 @@ import javax.validation.Valid;
 @Controller
 public class ProformasApiController implements ProformasApi {
 
+    @Autowired
+    ProformaRepository proformaRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
+    private Proforma getProformatHelper(Integer id) {
+        Proforma proforma = proformaRepository.findById(id);
+        if(proforma == null)
+            throw new Error("Proforma not found");
+        return proforma;
+    }
+
+    private void checkOrder(Proforma proforma) {
+        Order_ order = orderRepository.findById(proforma.getOrder().getId());
+        if(order == null)
+            throw new Error("Order not found");
+    }
 
     public ResponseEntity<Integer> createProforma(@ApiParam(value = "Proforma to create"  )  @Valid @RequestBody Proforma proforma) {
-        // do some magic!
+        checkOrder(proforma);
+        proforma = proformaRepository.save(proforma);
         return new ResponseEntity<Integer>(HttpStatus.OK);
     }
 
     public ResponseEntity<Void> deleteProforma(@ApiParam(value = "",required=true ) @PathVariable("proformaId") Integer proformaId) {
-        // do some magic!
+        proformaRepository.delete(proformaId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<Proforma> getProforma(@ApiParam(value = "",required=true ) @PathVariable("proformaId") Integer proformaId) {
-        // do some magic!
-        return new ResponseEntity<Proforma>(HttpStatus.OK);
+        Proforma proforma = proformaRepository.findById(proformaId);
+        return new ResponseEntity<Proforma>(proforma, HttpStatus.OK);
     }
 
     public ResponseEntity<List<Proforma>> getProformas() {
-        // do some magic!
-        return new ResponseEntity<List<Proforma>>(HttpStatus.OK);
+        List<Proforma> proformas = (List<Proforma>) proformaRepository.findAll();
+        return new ResponseEntity<List<Proforma>>(proformas, HttpStatus.OK);
     }
 
     public ResponseEntity<Void> updateProforma(@ApiParam(value = "",required=true ) @PathVariable("proformaId") Integer proformaId,
         @ApiParam(value = "Proforma to create"  )  @Valid @RequestBody Proforma proforma) {
-        // do some magic!
+        if(proformaId != proforma.getId())
+            throw new Error("Wrong proforma id");
+
+        Proforma proformaOld = getProformatHelper(proformaId);
+
+        try {
+            ModelHelper.combine(proformaOld, proforma);
+        } catch (Exception e) {
+            throw new Error("Wrong proforma object");
+        }
+
+        Order_ order = orderRepository.findById(proforma.getOrder().getId());
+        if(order == null)
+            throw new Error("Order not found");
+        proforma.setOrder(order);
+
+        proformaRepository.save(proforma);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 

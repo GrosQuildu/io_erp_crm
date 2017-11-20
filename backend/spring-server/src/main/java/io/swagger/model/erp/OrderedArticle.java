@@ -3,10 +3,10 @@ package io.swagger.model.erp;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
+
 import java.math.BigDecimal;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -19,19 +19,27 @@ public class OrderedArticle   {
   @JsonProperty("id")
   @Id
   @GeneratedValue
-  private Integer id = null;
+  private Integer id;
 
-  @JsonProperty("articleId")
-  private Integer articleId = null;
+  @JsonProperty("article")
+  @NotNull
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "article_id")
+  private Article article;
 
-  @JsonProperty("orderId")
-  private Integer orderId = null;
+  @JsonProperty("order")
+  @NotNull
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "order_id")
+  private Order_ order;
 
   @JsonProperty("description")
-  private String description = null;
+  @NotNull
+  private String description;
 
   @JsonProperty("amount")
-  private Integer amount = null;
+  @NotNull
+  private Integer amount;
 
   @JsonProperty("unitPrice")
   private BigDecimal unitPrice = null;
@@ -41,6 +49,20 @@ public class OrderedArticle   {
 
   @JsonProperty("weight")
   private Float weight = null;
+
+  protected OrderedArticle() {}
+
+  public OrderedArticle(Integer id, Article article, Order_ order, String description, Integer amount) {
+    this.id = id;
+    this.article = article;
+    this.order = order;
+    this.description = description;
+    this.amount = amount;
+  }
+
+  public OrderedArticle(Integer id) {
+    this.id = id;
+  }
 
   public OrderedArticle id(Integer id) {
     this.id = id;
@@ -63,46 +85,46 @@ public class OrderedArticle   {
     this.id = id;
   }
 
-  public OrderedArticle articleId(Integer articleId) {
-    this.articleId = articleId;
+  public OrderedArticle articleId(Article article) {
+    this.article = article;
     return this;
   }
 
    /**
-   * Get articleId
-   * @return articleId
+   * Get article
+   * @return article
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public Integer getArticleId() {
-    return articleId;
+  public Article getArticle() {
+    return article;
   }
 
-  public void setArticleId(Integer articleId) {
-    this.articleId = articleId;
+  public void setArticle(Article article) {
+    this.article = article;
   }
 
-  public OrderedArticle orderId(Integer orderId) {
-    this.orderId = orderId;
+  public OrderedArticle orderId(Order_ orderId) {
+    this.order = orderId;
     return this;
   }
 
    /**
-   * Get orderId
-   * @return orderId
+   * Get order
+   * @return order
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public Integer getOrderId() {
-    return orderId;
+  public Order_ getOrder() {
+    return order;
   }
 
-  public void setOrderId(Integer orderId) {
-    this.orderId = orderId;
+  public void setOrder(Order_ order) {
+    this.order = order;
   }
 
   public OrderedArticle description(String description) {
@@ -222,8 +244,8 @@ public class OrderedArticle   {
     }
     OrderedArticle orderedArticle = (OrderedArticle) o;
     return Objects.equals(this.id, orderedArticle.id) &&
-        Objects.equals(this.articleId, orderedArticle.articleId) &&
-        Objects.equals(this.orderId, orderedArticle.orderId) &&
+        Objects.equals(this.article, orderedArticle.article) &&
+        Objects.equals(this.order, orderedArticle.order) &&
         Objects.equals(this.description, orderedArticle.description) &&
         Objects.equals(this.amount, orderedArticle.amount) &&
         Objects.equals(this.unitPrice, orderedArticle.unitPrice) &&
@@ -233,7 +255,7 @@ public class OrderedArticle   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, articleId, orderId, description, amount, unitPrice, netPrice, weight);
+    return Objects.hash(id, article, order, description, amount, unitPrice, netPrice, weight);
   }
 
   @Override
@@ -242,8 +264,8 @@ public class OrderedArticle   {
     sb.append("class OrderedArticle {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    articleId: ").append(toIndentedString(articleId)).append("\n");
-    sb.append("    orderId: ").append(toIndentedString(orderId)).append("\n");
+    sb.append("    article: ").append(toIndentedString(article)).append("\n");
+    sb.append("    order: ").append(toIndentedString(order)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
     sb.append("    unitPrice: ").append(toIndentedString(unitPrice)).append("\n");

@@ -3,12 +3,11 @@ package io.swagger.model.erp;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.common.Unit;
 
 
 import java.math.BigDecimal;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -21,22 +20,37 @@ public class Article   {
   @JsonProperty("id")
   @Id
   @GeneratedValue
-  private Integer id = null;
+  private Integer id;
 
   @JsonProperty("availability")
-  private Integer availability = null;
+  @NotNull
+  private Integer availability;
 
-  @JsonProperty("ordered")
-  private Integer ordered = null;
-
-  @JsonProperty("unitId")
-  private Integer unitId = null;
+  @JsonProperty("unit")
+  @NotNull
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "unit_id")
+  private Unit unit;
 
   @JsonProperty("unitPrice")
-  private BigDecimal unitPrice = null;
+  @NotNull
+  private BigDecimal unitPrice;
 
   @JsonProperty("weight")
   private Float weight = null;
+
+  protected Article(){}
+
+  public Article(Integer id, Integer availability, Unit unit, BigDecimal unitPrice) {
+    this.id = id;
+    this.availability = availability;
+    this.unit = unit;
+    this.unitPrice = unitPrice;
+  }
+
+  public Article(Integer id) {
+    this.id = id;
+  }
 
   public Article id(Integer id) {
     this.id = id;
@@ -80,45 +94,27 @@ public class Article   {
     this.availability = availability;
   }
 
-  public Article ordered(Integer ordered) {
-    this.ordered = ordered;
+
+
+  public Article unitId(Unit unitId) {
+    this.unit = unitId;
     return this;
   }
 
    /**
-   * Get ordered
-   * @return ordered
-  **/
-  @ApiModelProperty(value = "")
-
-
-  public Integer getOrdered() {
-    return ordered;
-  }
-
-  public void setOrdered(Integer ordered) {
-    this.ordered = ordered;
-  }
-
-  public Article unitId(Integer unitId) {
-    this.unitId = unitId;
-    return this;
-  }
-
-   /**
-   * Get unitId
-   * @return unitId
+   * Get unit
+   * @return unit
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public Integer getUnitId() {
-    return unitId;
+  public Unit getUnit() {
+    return unit;
   }
 
-  public void setUnitId(Integer unitId) {
-    this.unitId = unitId;
+  public void setUnit(Unit unit) {
+    this.unit = unit;
   }
 
   public Article unitPrice(BigDecimal unitPrice) {
@@ -175,15 +171,14 @@ public class Article   {
     Article article = (Article) o;
     return Objects.equals(this.id, article.id) &&
         Objects.equals(this.availability, article.availability) &&
-        Objects.equals(this.ordered, article.ordered) &&
-        Objects.equals(this.unitId, article.unitId) &&
+        Objects.equals(this.unit, article.unit) &&
         Objects.equals(this.unitPrice, article.unitPrice) &&
         Objects.equals(this.weight, article.weight);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, availability, ordered, unitId, unitPrice, weight);
+    return Objects.hash(id, availability, unit, unitPrice, weight);
   }
 
   @Override
@@ -193,8 +188,7 @@ public class Article   {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    availability: ").append(toIndentedString(availability)).append("\n");
-    sb.append("    ordered: ").append(toIndentedString(ordered)).append("\n");
-    sb.append("    unitId: ").append(toIndentedString(unitId)).append("\n");
+    sb.append("    unit: ").append(toIndentedString(unit)).append("\n");
     sb.append("    unitPrice: ").append(toIndentedString(unitPrice)).append("\n");
     sb.append("    weight: ").append(toIndentedString(weight)).append("\n");
     sb.append("}");

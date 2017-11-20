@@ -11,5 +11,5 @@ import java.util.List;
 @RepositoryRestResource
 public interface ArticleRepository extends CrudRepository<Article, Integer> {
     public Article findById(Integer id);
-    public List<Article> findByUnitId(Integer id);
+    public List<Article> findAllByUnitId(Integer id);
 }

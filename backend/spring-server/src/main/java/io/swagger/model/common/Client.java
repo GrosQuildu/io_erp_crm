@@ -4,6 +4,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.persistence.*;
 import javax.validation.constraints.*;
 
 /**
@@ -11,14 +12,19 @@ import javax.validation.constraints.*;
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-15T00:41:28.115Z")
 
+@Entity
 public class Client   {
   @JsonProperty("id")
-  private Integer id = null;
+  @Id
+  @GeneratedValue
+  private Integer id;
 
   @JsonProperty("name")
-  private String name = null;
+  @NotNull
+  private String name;
 
   @JsonProperty("street")
+  @NotNull
   private String street = null;
 
   @JsonProperty("city")
@@ -46,14 +52,27 @@ public class Client   {
   private String telephone = null;
 
   @JsonProperty("mail")
-  private String mail = null;
+  @NotNull
+  private String mail;
 
-  @JsonProperty("clientTypeId")
-  private Integer clientTypeId = null;
+  @JsonProperty("clientType")
+  @NotNull
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "client_type_id")
+  private ClientType clientType;
 
   public Client id(Integer id) {
     this.id = id;
     return this;
+  }
+
+  protected Client() {}
+
+  public Client(Integer id, String name, String mail, ClientType clientType) {
+      this.id = id;
+      this.name = name;
+      this.mail = mail;
+      this.clientType = clientType;
   }
 
    /**
@@ -294,25 +313,25 @@ public class Client   {
     this.mail = mail;
   }
 
-  public Client clientTypeId(Integer clientTypeId) {
-    this.clientTypeId = clientTypeId;
+  public Client clientTypeId(ClientType clientTypeId) {
+    this.clientType = clientTypeId;
     return this;
   }
 
    /**
-   * Get clientTypeId
-   * @return clientTypeId
+   * Get clientType
+   * @return clientType
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public Integer getClientTypeId() {
-    return clientTypeId;
+  public ClientType getClientType() {
+    return clientType;
   }
 
-  public void setClientTypeId(Integer clientTypeId) {
-    this.clientTypeId = clientTypeId;
+  public void setClientType(ClientType clientType) {
+    this.clientType = clientType;
   }
 
 
@@ -337,12 +356,12 @@ public class Client   {
         Objects.equals(this.nip, client.nip) &&
         Objects.equals(this.telephone, client.telephone) &&
         Objects.equals(this.mail, client.mail) &&
-        Objects.equals(this.clientTypeId, client.clientTypeId);
+        Objects.equals(this.clientType, client.clientType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, street, city, postCode, nameDelivery, streetDelivery, cityDelivery, postCodeDelivery, nip, telephone, mail, clientTypeId);
+    return Objects.hash(id, name, street, city, postCode, nameDelivery, streetDelivery, cityDelivery, postCodeDelivery, nip, telephone, mail, clientType);
   }
 
   @Override
@@ -362,7 +381,7 @@ public class Client   {
     sb.append("    nip: ").append(toIndentedString(nip)).append("\n");
     sb.append("    telephone: ").append(toIndentedString(telephone)).append("\n");
     sb.append("    mail: ").append(toIndentedString(mail)).append("\n");
-    sb.append("    clientTypeId: ").append(toIndentedString(clientTypeId)).append("\n");
+    sb.append("    clientType: ").append(toIndentedString(clientType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

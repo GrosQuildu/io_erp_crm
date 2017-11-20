@@ -41,7 +41,7 @@ public class ArticlesApiController implements ArticlesApi {
     private Article getArticleHelper(Integer id) {
         Article article = articleRepository.findById(id);
         if(article == null)
-            throw new Error("Article not found");
+            throw new Error("Ordered article not found");
         return article;
     }
 

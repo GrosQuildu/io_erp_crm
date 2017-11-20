@@ -3,6 +3,10 @@ package io.swagger.api.erp;
 import java.math.BigDecimal;
 
 import io.swagger.ModelHelper;
+import io.swagger.model.common.Client;
+import io.swagger.model.common.ClientRepository;
+import io.swagger.model.common.Employee;
+import io.swagger.model.common.EmployeeRepository;
 import io.swagger.model.erp.OrderRepository;
 import io.swagger.model.erp.Order_;
 import io.swagger.model.erp.OrderedArticle;
@@ -35,7 +39,11 @@ public class OrdersApiController implements OrdersApi {
     @Autowired
     OrderRepository orderRepository;
     @Autowired
-    OrderedArticleRepository orderedArticleRepository ;
+    OrderedArticleRepository orderedArticleRepository;
+    @Autowired
+    ClientRepository clientRepository;
+    @Autowired
+    EmployeeRepository employeeRepository;
 
     private Order_ getOrderHelper(Integer id) {
         Order_ order = orderRepository.findById(id);
@@ -45,6 +53,16 @@ public class OrdersApiController implements OrdersApi {
     }
 
     public ResponseEntity<Integer> createOrder(@ApiParam(value = "Order_ to create"  )  @Valid @RequestBody Order_ order) {
+        Employee employee = employeeRepository.findById(order.getEmployee().getId());
+        if(employee == null)
+            throw new Error("Employee not found");
+        order.setEmployee(employee);
+
+        Client client = clientRepository.findById(order.getClient().getId());
+        if(client == null)
+            throw new Error("Client not found");
+        order.setClient(client);
+
         order = orderRepository.save(order);
         return new ResponseEntity<Integer>(order.getId(), HttpStatus.OK);
     }
@@ -117,6 +135,16 @@ public class OrdersApiController implements OrdersApi {
         } catch (Exception e) {
             throw new Error("Wrong article object");
         }
+
+        Employee employee = employeeRepository.findById(order.getEmployee().getId());
+        if(employee == null)
+            throw new Error("Employee not found");
+        order.setEmployee(employee);
+
+        Client client = clientRepository.findById(order.getClient().getId());
+        if(client == null)
+            throw new Error("Client not found");
+        order.setClient(client);
 
         orderRepository.save(order);
         return new ResponseEntity<Void>(HttpStatus.OK);

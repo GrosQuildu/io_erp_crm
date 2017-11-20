@@ -4,11 +4,12 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
+
+import io.swagger.model.common.Client;
+import io.swagger.model.common.Employee;
 import org.joda.time.LocalDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -38,13 +39,17 @@ public class Order_ {
   @NotNull
   private String realizationDeadline;
 
-  @JsonProperty("employeeId")
+  @JsonProperty("employee")
   @NotNull
-  private Integer employeeId;
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "employee_id")
+  private Employee employee;
 
-  @JsonProperty("clientId")
+  @JsonProperty("client")
   @NotNull
-  private Integer clientId;
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "client_id")
+  private Client client;
 
   @JsonProperty("conditions")
   private String conditions = "";
@@ -184,46 +189,46 @@ public class Order_ {
     this.realizationDeadline = realizationDeadline;
   }
 
-  public Order_ employeeId(Integer employeeId) {
-    this.employeeId = employeeId;
+  public Order_ employeeId(Employee employee) {
+    this.employee = employee;
     return this;
   }
 
   /**
-   * Get employeeId
-   * @return employeeId
+   * Get employee
+   * @return employee
    **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public Integer getEmployeeId() {
-    return employeeId;
+  public Employee getEmployee() {
+    return employee;
   }
 
-  public void setEmployeeId(Integer employeeId) {
-    this.employeeId = employeeId;
+  public void setEmployee(Employee employee) {
+    this.employee = employee;
   }
 
-  public Order_ clientId(Integer clientId) {
-    this.clientId = clientId;
+  public Order_ clientId(Client client) {
+    this.client = client;
     return this;
   }
 
   /**
-   * Get clientId
-   * @return clientId
+   * Get client
+   * @return client
    **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public Integer getClientId() {
-    return clientId;
+  public Client getClient() {
+    return client;
   }
 
-  public void setClientId(Integer clientId) {
-    this.clientId = clientId;
+  public void setClient(Client client) {
+    this.client = client;
   }
 
   public Order_ conditions(String conditions) {
@@ -446,8 +451,8 @@ public class Order_ {
             Objects.equals(this.orderDate, order.orderDate) &&
             Objects.equals(this.realizationDate, order.realizationDate) &&
             Objects.equals(this.realizationDeadline, order.realizationDeadline) &&
-            Objects.equals(this.employeeId, order.employeeId) &&
-            Objects.equals(this.clientId, order.clientId) &&
+            Objects.equals(this.employee, order.employee) &&
+            Objects.equals(this.client, order.client) &&
             Objects.equals(this.conditions, order.conditions) &&
             Objects.equals(this.comments, order.comments) &&
             Objects.equals(this.advance, order.advance) &&
@@ -462,7 +467,7 @@ public class Order_ {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, orderNumber, orderDate, realizationDate, realizationDeadline, employeeId, clientId, conditions, comments, advance, vat, state, deliveryCost, deliveryAddress, isSigned, isPaid, isDone);
+    return Objects.hash(id, orderNumber, orderDate, realizationDate, realizationDeadline, employee, client, conditions, comments, advance, vat, state, deliveryCost, deliveryAddress, isSigned, isPaid, isDone);
   }
 
   @Override
@@ -475,8 +480,8 @@ public class Order_ {
     sb.append("    orderDate: ").append(toIndentedString(orderDate)).append("\n");
     sb.append("    realizationDate: ").append(toIndentedString(realizationDate)).append("\n");
     sb.append("    realizationDeadline: ").append(toIndentedString(realizationDeadline)).append("\n");
-    sb.append("    employeeId: ").append(toIndentedString(employeeId)).append("\n");
-    sb.append("    clientId: ").append(toIndentedString(clientId)).append("\n");
+    sb.append("    employee: ").append(toIndentedString(employee)).append("\n");
+    sb.append("    client: ").append(toIndentedString(client)).append("\n");
     sb.append("    conditions: ").append(toIndentedString(conditions)).append("\n");
     sb.append("    comments: ").append(toIndentedString(comments)).append("\n");
     sb.append("    advance: ").append(toIndentedString(advance)).append("\n");

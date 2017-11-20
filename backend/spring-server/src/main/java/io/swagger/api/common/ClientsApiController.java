@@ -1,9 +1,15 @@
 package io.swagger.api.common;
 
+import io.swagger.ModelHelper;
 import io.swagger.model.common.Client;
 
 import io.swagger.annotations.*;
 
+import io.swagger.model.common.ClientRepository;
+import io.swagger.model.common.ClientType;
+import io.swagger.model.common.ClientTypeRepository;
+import io.swagger.model.erp.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,31 +24,75 @@ import javax.validation.Valid;
 @Controller
 public class ClientsApiController implements ClientsApi {
 
+    /** Dependent:
+        * orders
+     * Depends on:
+        * client types
+     */
+    @Autowired
+    ClientRepository clientRepository;
+    @Autowired
+    ClientTypeRepository clientTypeRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
+    private Client getClientHelper(Integer id) {
+        Client client = clientRepository.findById(id);
+        if(client == null)
+            throw new Error("Client not found");
+        return client;
+    }
 
     public ResponseEntity<Integer> createClient(@ApiParam(value = "Client to create"  )  @Valid @RequestBody Client client) {
-        // do some magic!
-        return new ResponseEntity<Integer>(HttpStatus.OK);
+        ClientType clientType = clientTypeRepository.findById(client.getClientType().getId());
+        if(clientType == null)
+            throw new Error("Client type not found");
+        client.setClientType(clientType);
+
+        client = clientRepository.save(client);
+        return new ResponseEntity<Integer>(client.getId(), HttpStatus.OK);
     }
 
     public ResponseEntity<Void> deleteClient(@ApiParam(value = "",required=true ) @PathVariable("clientId") Integer clientId) {
-        // do some magic!
+        getClientHelper(clientId);
+
+        Integer orderedArticlesAssigned = orderRepository.findAllByClientId(clientId).size();
+        if(orderedArticlesAssigned != 0)
+            throw new Error(orderedArticlesAssigned + " orders are assigned to this client");
+
+        clientRepository.delete(clientId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<Client> getClient(@ApiParam(value = "",required=true ) @PathVariable("clientId") Integer clientId) {
-        // do some magic!
-        return new ResponseEntity<Client>(HttpStatus.OK);
+        getClientHelper(clientId);
+        Client client = clientRepository.findById(clientId);
+        return new ResponseEntity<Client>(client, HttpStatus.OK);
     }
 
     public ResponseEntity<List<Client>> getClients() {
-        // do some magic!
-        return new ResponseEntity<List<Client>>(HttpStatus.OK);
+        List<Client> clients = (List<Client>) clientRepository.findAll();
+        return new ResponseEntity<List<Client>>(clients, HttpStatus.OK);
     }
 
     public ResponseEntity<Void> updateClient(@ApiParam(value = "",required=true ) @PathVariable("clientId") Integer clientId,
         @ApiParam(value = "Client to create"  )  @Valid @RequestBody Client client) {
-        // do some magic!
+        if(clientId != client.getId())
+            throw new Error("Wrong article id");
+
+        Client articleOld = getClientHelper(clientId);
+        try {
+            ModelHelper.combine(articleOld, client);
+        } catch (Exception e) {
+            throw new Error("Wrong article object");
+        }
+
+        ClientType clientType = clientTypeRepository.findById(client.getClientType().getId());
+        if(clientType == null)
+            throw new Error("Client type not found");
+        client.setClientType(clientType);
+
+        client = clientRepository.save(client);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 

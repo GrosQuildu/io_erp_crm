@@ -47,7 +47,7 @@ public class UnitsApiController implements UnitsApi {
     public ResponseEntity<Void> deleteUnit(@ApiParam(value = "",required=true ) @PathVariable("unitId") Integer unitId) {
         getUnitHelper(unitId);
 
-        Integer articlesAssigned = articlesRepository.findByUnitId(unitId).size();
+        Integer articlesAssigned = articlesRepository.findAllByUnitId(unitId).size();
         if(articlesAssigned != 0)
             throw new Error(articlesAssigned + " articles are assigned to this unit");
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 
+import io.swagger.model.BaseModel;
 import io.swagger.model.common.Client;
 import io.swagger.model.common.Employee;
 import org.joda.time.LocalDate;
@@ -18,7 +19,7 @@ import javax.validation.constraints.*;
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-16T02:31:17.737Z")
 @Entity
-public class Order_ {
+public class Order_ extends BaseModel {
   @JsonProperty("id")
   @Id
   @GeneratedValue
@@ -36,18 +37,16 @@ public class Order_ {
   private LocalDate realizationDate = null;
 
   @JsonProperty("realizationDeadline")
-  @NotNull
   private String realizationDeadline;
 
   @JsonProperty("employee")
-  @NotNull
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "employee_id")
-  private Employee employee;
+  private Employee employee = null;
 
   @JsonProperty("client")
   @NotNull
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "client_id")
   private Client client;
 
@@ -82,6 +81,21 @@ public class Order_ {
 
   @JsonProperty("isDone")
   private Boolean isDone = false;
+
+  protected Order_() {}
+
+  public Order_(Integer id, String orderNumber, LocalDate orderDate, Client client, Float vat, String state) {
+    this.id = id;
+    this.orderNumber = orderNumber;
+    this.orderDate = orderDate;
+    this.client = client;
+    this.vat = vat;
+    this.state = state;
+  }
+
+  public Order_(Integer id) {
+    this.id = id;
+  }
 
   public Order_ id(Integer id) {
     this.id = id;

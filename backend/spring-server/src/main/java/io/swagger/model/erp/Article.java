@@ -3,6 +3,7 @@ package io.swagger.model.erp;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.BaseModel;
 import io.swagger.model.common.Unit;
 
 
@@ -16,7 +17,7 @@ import javax.validation.constraints.*;
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-15T00:41:28.115Z")
 @Entity
-public class Article {
+public class Article extends BaseModel {
   @JsonProperty("id")
   @Id
   @GeneratedValue
@@ -28,7 +29,7 @@ public class Article {
 
   @JsonProperty("unit")
   @NotNull
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "unit_id")
   private Unit unit;
 

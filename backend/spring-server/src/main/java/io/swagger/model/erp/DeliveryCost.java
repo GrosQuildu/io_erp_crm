@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.BaseModel;
+
 import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +18,7 @@ import javax.validation.constraints.*;
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-15T00:41:28.115Z")
 @Entity
-public class DeliveryCost   {
+public class DeliveryCost extends BaseModel {
   @JsonProperty("id")
   @Id
   @GeneratedValue
@@ -46,6 +48,10 @@ public class DeliveryCost   {
     this.weightFrom = weightFrom;
     this.weightTo = weightTo;
     this.price = price;
+  }
+
+  public DeliveryCost(Integer id) {
+    this.id = id;
   }
 
    /**

@@ -74,14 +74,14 @@ public abstract class BaseModel {
      * Check dependencies (mainly before create/update). Throw error if entity we want to save is referring to
      * object that doesn't exists
      * @param dependencyClass Class of object that is required to create/update our entity
-     * @param model entity to create/update
      * @param repository repository of required objects (corresponding to dependencyClass)
+     * @param model entity to create/update
      * @param <D> Class of required object (Entity, extends BaseModel)
      * @param <T> Class of model (Entity, extends BaseModel)
      * @param <R> Class of required objects repository (extends CrudRepository)
      * @return T, model
      */
-    public static <D extends BaseModel, T, R extends CrudRepository> T dependsOn(Class dependencyClass, T model, R repository) {
+    public static <D extends BaseModel, T, R extends CrudRepository> T dependsOn(Class dependencyClass, R repository, T model) {
         String dependencySimpleName = dependencyClass.getSimpleName();
 
         String methodGet = "get" + dependencySimpleName;

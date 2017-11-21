@@ -2,6 +2,7 @@ package io.swagger.api.erp;
 
 import io.swagger.ModelHelper;
 import io.swagger.api.ApiException;
+import io.swagger.model.BaseModel;
 import io.swagger.model.common.Unit;
 import io.swagger.model.common.UnitRepository;
 import io.swagger.model.erp.Article;
@@ -27,9 +28,9 @@ import javax.validation.Valid;
 public class ArticlesApiController implements ArticlesApi {
 
     /** Dependent:
-        * orderedArticles
+        * orderedArticles (hard, block on delete)
      * Depends on:
-        * unit
+        * unit (not null)
      */
     @Autowired
     ArticleRepository articleRepository;
@@ -38,37 +39,21 @@ public class ArticlesApiController implements ArticlesApi {
     @Autowired
     OrderedArticleRepository orderedArticleRepository;
 
-    private Article getArticleHelper(Integer id) {
-        Article article = articleRepository.findById(id);
-        if(article == null)
-            throw new Error("Ordered article not found");
-        return article;
-    }
-
     public ResponseEntity<Integer> createArticle(@ApiParam(value = "Article to create"  )  @Valid @RequestBody Article article) {
-        Unit unit = unitRepository.findById(article.getUnit().getId());
-        if(unit == null)
-            throw new Error("Unit not found");
-        article.setUnit(unit);
-
+        article = BaseModel.dependsOn(Unit.class, unitRepository, article);
         article = articleRepository.save(article);
         return new ResponseEntity<Integer>(article.getId(), HttpStatus.OK);
     }
 
     public ResponseEntity<Void> deleteArticle(@ApiParam(value = "",required=true ) @PathVariable("articleId") Integer articleId) {
-        getArticleHelper(articleId);
-
-        Integer orderedArticlesAssigned = orderedArticleRepository.findAllByArticleId(articleId).size();
-        if(orderedArticlesAssigned != 0)
-            throw new Error(orderedArticlesAssigned + " ordered articles are assigned to this article");
-
+        Article article = BaseModel.getModelHelper(articleRepository, articleId);
+        BaseModel.dependent(orderedArticleRepository, article);
         articleRepository.delete(articleId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<Article> getArticle(@ApiParam(value = "",required=true ) @PathVariable("articleId") Integer articleId) {
-        getArticleHelper(articleId);
-        Article article = articleRepository.findById(articleId);
+        Article article = BaseModel.getModelHelper(articleRepository, articleId);
         return new ResponseEntity<Article>(article, HttpStatus.OK);
     }
 
@@ -80,20 +65,9 @@ public class ArticlesApiController implements ArticlesApi {
     public ResponseEntity<Void> updateArticle(@ApiParam(value = "",required=true ) @PathVariable("articleId") Integer articleId,
         @ApiParam(value = "Article to create"  )  @Valid @RequestBody Article article) {
         if(articleId != article.getId())
-            throw new Error("Wrong article id");
-
-        Article articleOld = getArticleHelper(articleId);
-        try {
-            ModelHelper.combine(articleOld, article);
-        } catch (Exception e) {
-            throw new Error("Wrong article object");
-        }
-
-        Unit unit = unitRepository.findById(article.getUnit().getId());
-        if(unit == null)
-            throw new Error("Unit not found");
-        article.setUnit(unit);
-
+            throw new Error("Wrong id");
+        article = BaseModel.combineWithOld(articleRepository, article);
+        article = BaseModel.dependsOn(Unit.class, unitRepository,   article);
         article = articleRepository.save(article);
         return new ResponseEntity<Void>(HttpStatus.OK);
 

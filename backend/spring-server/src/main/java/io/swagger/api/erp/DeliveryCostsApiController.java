@@ -1,6 +1,7 @@
 package io.swagger.api.erp;
 
 import io.swagger.ModelHelper;
+import io.swagger.model.BaseModel;
 import io.swagger.model.erp.DeliveryCost;
 
 import io.swagger.annotations.*;
@@ -22,15 +23,13 @@ import javax.validation.Valid;
 @Controller
 public class DeliveryCostsApiController implements DeliveryCostsApi {
 
+    /** Dependent:
+        * none
+     * Depends on:
+        * none
+     */
     @Autowired
     DeliveryCostRepository deliveryCostRepository;
-
-    private DeliveryCost getDeliveryCostHelper(Integer id) {
-        DeliveryCost deliveryCost = deliveryCostRepository.findById(id);
-        if(deliveryCost == null)
-            throw new Error("Delivery cost not found");
-        return deliveryCost;
-    }
 
     public ResponseEntity<Integer> createDeliveryCost(@ApiParam(value = "DeliveryCost to create"  )  @Valid @RequestBody DeliveryCost deliveryCost) {
         deliveryCost = deliveryCostRepository.save(deliveryCost);
@@ -38,14 +37,13 @@ public class DeliveryCostsApiController implements DeliveryCostsApi {
     }
 
     public ResponseEntity<Void> deleteDeliveryCost(@ApiParam(value = "",required=true ) @PathVariable("deliveryCostId") Integer deliveryCostId) {
-        getDeliveryCostHelper(deliveryCostId);
-        deliveryCostRepository.delete(deliveryCostId);
+        DeliveryCost deliveryCost = BaseModel.getModelHelper(deliveryCostRepository, deliveryCostId);
+        deliveryCostRepository.delete(deliveryCost);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<DeliveryCost> getDeliveryCost(@ApiParam(value = "",required=true ) @PathVariable("deliveryCostId") Integer deliveryCostId) {
-        getDeliveryCostHelper(deliveryCostId);
-        DeliveryCost deliveryCost = deliveryCostRepository.findById(deliveryCostId);
+        DeliveryCost deliveryCost = BaseModel.getModelHelper(deliveryCostRepository, deliveryCostId);
         return new ResponseEntity<DeliveryCost>(deliveryCost, HttpStatus.OK);
     }
 
@@ -58,14 +56,7 @@ public class DeliveryCostsApiController implements DeliveryCostsApi {
         @ApiParam(value = "DeliveryCost to create"  )  @Valid @RequestBody DeliveryCost deliveryCost) {
         if(deliveryCostId != deliveryCost.getId())
             throw new Error("Wrong id");
-
-        DeliveryCost deliveryCostOld = getDeliveryCostHelper(deliveryCostId);
-        try {
-            ModelHelper.combine(deliveryCostOld, deliveryCost);
-        } catch (Exception e) {
-            throw new Error("Wrong object");
-        }
-
+        deliveryCost = BaseModel.combineWithOld(deliveryCostRepository, deliveryCost);
         deliveryCost = deliveryCostRepository.save(deliveryCost);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

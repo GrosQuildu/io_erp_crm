@@ -24,7 +24,7 @@ import javax.validation.Valid;
 public class UnitsApiController implements UnitsApi {
 
     /** Dependent:
-        * articles
+        * articles (hard, block on delete)
      * Depends on:
         * none
      */
@@ -58,7 +58,7 @@ public class UnitsApiController implements UnitsApi {
 
     public ResponseEntity<Void> updateUnit(@ApiParam(value = "",required=true ) @PathVariable("unitId") Integer unitId,
         @ApiParam(value = "Unit to update"  )  @Valid @RequestBody Unit unit) {
-        if(unit.getId() != null && unitId != unit.getId())
+        if(unitId != unit.getId())
             throw new Error("Wrong id");
         unit = BaseModel.combineWithOld(unitRepository, unit);
         unit = unitRepository.save(unit);

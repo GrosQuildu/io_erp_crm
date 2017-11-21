@@ -26,9 +26,9 @@ import javax.validation.Valid;
 public class ClientsApiController implements ClientsApi {
 
     /** Dependent:
-        * orders (soft)
+        * orders (soft, do nothing on delete)
      * Depends on:
-        * client types
+        * client types (not null)
      */
     @Autowired
     ClientRepository clientRepository;
@@ -37,43 +37,8 @@ public class ClientsApiController implements ClientsApi {
     @Autowired
     OrderRepository orderRepository;
 
-//    private Client getClientHelper(Integer id) {
-//        Client client = clientRepository.findById(id);
-//        if(client == null)
-//            throw new Error("Client not found");
-//        return client;
-//    }
-
-//    private Client dependsOnClientTypes(Client client) {
-//        ClientType clientTypeFromModel = client.getClientType();
-//        if(clientTypeFromModel == null) {
-//            throw new Error("Client type is null");
-//        }
-//        ClientType clientType = clientTypeRepository.findById(clientTypeFromModel.getId());
-//        if(clientType == null)
-//            throw new Error("Client type not found");
-//        client.setClientType(clientType);
-//        return client;
-//    }
-
-//    private void dependentOrders(Integer clientId) {
-//        Integer orderedArticlesAssigned = orderRepository.findAllByClientId(clientId).size();
-//        if(orderedArticlesAssigned != 0)
-//            throw new Error(orderedArticlesAssigned + " orders are assigned to this client");
-//    }
-
-//    private Client combineWithOld(Client client) {
-//        Client articleOld = BaseModel.getModelHelper(clientRepository, client.getId());
-//        try {
-//            ModelHelper.combine(articleOld, client);
-//        } catch (Exception e) {
-//            throw new Error("Wrong client object");
-//        }
-//        return client;
-//    }
-
     public ResponseEntity<Integer> createClient(@ApiParam(value = "Client to create"  )  @Valid @RequestBody Client client) {
-        client = BaseModel.dependsOn(ClientType.class, client, clientTypeRepository);
+        client = BaseModel.dependsOn(ClientType.class, clientTypeRepository, client);
         client = clientRepository.save(client);
         return new ResponseEntity<Integer>(client.getId(), HttpStatus.OK);
     }
@@ -96,11 +61,11 @@ public class ClientsApiController implements ClientsApi {
     }
 
     public ResponseEntity<Void> updateClient(@ApiParam(value = "",required=true ) @PathVariable("clientId") Integer clientId,
-        @ApiParam(value = "Client to create"  )  @Valid @RequestBody Client client) {
-        if(client.getId() != null && clientId != client.getId())
-            throw new Error("Wrong article id");
+        @ApiParam(value = "Client to update"  )  @Valid @RequestBody Client client) {
+        if(clientId != client.getId())
+            throw new Error("Wrong id");
         client = BaseModel.combineWithOld(clientRepository, client);
-        client = BaseModel.dependsOn(ClientType.class, client, clientTypeRepository);
+        client = BaseModel.dependsOn(ClientType.class, clientTypeRepository, client);
         client = clientRepository.save(client);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

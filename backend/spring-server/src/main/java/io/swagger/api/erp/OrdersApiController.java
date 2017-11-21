@@ -3,17 +3,15 @@ package io.swagger.api.erp;
 import java.math.BigDecimal;
 
 import io.swagger.ModelHelper;
+import io.swagger.model.BaseModel;
 import io.swagger.model.common.Client;
 import io.swagger.model.common.ClientRepository;
 import io.swagger.model.common.Employee;
 import io.swagger.model.common.EmployeeRepository;
-import io.swagger.model.erp.OrderRepository;
-import io.swagger.model.erp.Order_;
-import io.swagger.model.erp.OrderedArticle;
+import io.swagger.model.erp.*;
 
 import io.swagger.annotations.*;
 
-import io.swagger.model.erp.OrderedArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +28,11 @@ import javax.validation.Valid;
 public class OrdersApiController implements OrdersApi {
 
     /** Dependent:
-        * orderedArticles
-        * proforma
+        * orderedArticles (cascade, remove all on delete)
+        * proforma (hard, block on delete)
      * Depends on:
-        * employee
-        * client
+        * employee (may be null)
+        * client (not null)
      */
     @Autowired
     OrderRepository orderRepository;
@@ -44,52 +42,37 @@ public class OrdersApiController implements OrdersApi {
     ClientRepository clientRepository;
     @Autowired
     EmployeeRepository employeeRepository;
-
-    private Order_ getOrderHelper(Integer id) {
-        Order_ order = orderRepository.findById(id);
-        if(order == null)
-            throw new Error("Order not found");
-        return order;
-    }
+    @Autowired
+    ProformaRepository proformaRepository;
 
     public ResponseEntity<Integer> createOrder(@ApiParam(value = "Order_ to create"  )  @Valid @RequestBody Order_ order) {
-        Employee employee = employeeRepository.findById(order.getEmployee().getId());
-        if(employee == null)
-            throw new Error("Employee not found");
-        order.setEmployee(employee);
-
-        Client client = clientRepository.findById(order.getClient().getId());
-        if(client == null)
-            throw new Error("Client not found");
-        order.setClient(client);
-
+        if(order.getEmployee() != null)
+            order = BaseModel.dependsOn(Employee.class, employeeRepository, order);
+        order = BaseModel.dependsOn(Client.class, clientRepository, order);
         order = orderRepository.save(order);
         return new ResponseEntity<Integer>(order.getId(), HttpStatus.OK);
     }
 
     public ResponseEntity<Void> deleteOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId) {
-        getOrderHelper(orderId);
-
-        for (OrderedArticle orderedArticle :
-                orderedArticleRepository.findAllByOrderId(orderId)) {
-            orderedArticleRepository.delete(orderedArticle);
-        }
+        Order_ order = BaseModel.getModelHelper(orderRepository, orderId);
+        BaseModel.dependent(proformaRepository, order);
+        orderedArticleRepository.delete(orderedArticleRepository.findAllByOrderId(order.getId()));
         orderRepository.delete(orderId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<Order_> getOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId) {
-        Order_ order = getOrderHelper(orderId);
+        Order_ order = BaseModel.getModelHelper(orderRepository, orderId);
         return new ResponseEntity<Order_>(order, HttpStatus.OK);
     }
 
     public ResponseEntity<BigDecimal> getOrderDeliveryCosts(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId) {
-        getOrderHelper(orderId);
+        Order_ order = BaseModel.getModelHelper(orderRepository, orderId);
 
         BigDecimal weightSum = new BigDecimal(0);
         Float weight = null;
         for (OrderedArticle orderedArticle :
-                orderedArticleRepository.findAllByOrderId(orderId)) {
+                orderedArticleRepository.findAllByOrderId(order.getId())) {
             weight = orderedArticle.getWeight();
             if(weight == null) {
                 weight = orderedArticle.getArticle().getWeight() * orderedArticle.getAmount();
@@ -102,12 +85,12 @@ public class OrdersApiController implements OrdersApi {
     }
 
     public ResponseEntity<BigDecimal> getOrderNetPrice(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId) {
-        getOrderHelper(orderId);
+        Order_ order = BaseModel.getModelHelper(orderRepository, orderId);
 
         BigDecimal netPriceSum = new BigDecimal(0);
         BigDecimal netPrice = null;
         for (OrderedArticle orderedArticle :
-                orderedArticleRepository.findAllByOrderId(orderId)) {
+                orderedArticleRepository.findAllByOrderId(order.getId())) {
             netPrice = orderedArticle.getNetPrice();
             if(netPrice == null) {
                 netPrice = orderedArticle.getArticle().getUnitPrice().multiply(new BigDecimal(orderedArticle.getAmount()));
@@ -125,27 +108,13 @@ public class OrdersApiController implements OrdersApi {
 
     public ResponseEntity<Void> updateOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,
         @ApiParam(value = "Order_ to create"  )  @Valid @RequestBody Order_ order) {
-
         if(orderId != order.getId())
-            throw new Error("Wrong order id");
+            throw new Error("Wrong id");
 
-        Order_ orderOld = getOrderHelper(orderId);
-        try {
-            ModelHelper.combine(orderOld, order);
-        } catch (Exception e) {
-            throw new Error("Wrong article object");
-        }
-
-        Employee employee = employeeRepository.findById(order.getEmployee().getId());
-        if(employee == null)
-            throw new Error("Employee not found");
-        order.setEmployee(employee);
-
-        Client client = clientRepository.findById(order.getClient().getId());
-        if(client == null)
-            throw new Error("Client not found");
-        order.setClient(client);
-
+        order = BaseModel.combineWithOld(orderRepository, order);
+        if(order.getEmployee() != null)
+            order = BaseModel.dependsOn(Employee.class, employeeRepository, order);
+        order = BaseModel.dependsOn(Client.class, clientRepository, order);
         orderRepository.save(order);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

@@ -24,7 +24,7 @@ import javax.validation.Valid;
 public class EmployeesApiController implements EmployeesApi {
 
     /** Dependent:
-        * orders (soft)
+        * orders (soft, do nothing on delete)
      * Depends on:
         * none
      */
@@ -62,8 +62,8 @@ public class EmployeesApiController implements EmployeesApi {
     }
 
     public ResponseEntity<Void> updateEmployee(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,
-        @ApiParam(value = "Employee to create"  )  @Valid @RequestBody Employee employee) {
-        if(employee.getId() != null && employeeId != employee.getId())
+        @ApiParam(value = "Employee to update"  )  @Valid @RequestBody Employee employee) {
+        if(employeeId != employee.getId())
             throw new Error("Wrong id");
         employee = BaseModel.combineWithOld(employeeRepository, employee);
         employee = employeeRepository.save(employee);

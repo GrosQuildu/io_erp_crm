@@ -24,7 +24,7 @@ import javax.validation.Valid;
 public class ClientTypesApiController implements ClientTypesApi {
 
     /** Dependent:
-        * clients
+        * clients (hard, block on delete)
      * Depends on:
         * none
      */
@@ -56,7 +56,7 @@ public class ClientTypesApiController implements ClientTypesApi {
     }
 
     public ResponseEntity<Void> updateClientType(@ApiParam(value = "",required=true ) @PathVariable("clientTypeId") Integer clientTypeId,
-        @ApiParam(value = "ClientType to create"  )  @Valid @RequestBody ClientType clientType) {
+        @ApiParam(value = "ClientType to update"  )  @Valid @RequestBody ClientType clientType) {
         if(clientTypeId != clientType.getId())
             throw new Error("Wrong id");
         clientType = BaseModel.combineWithOld(clientTypeRepository, clientType);

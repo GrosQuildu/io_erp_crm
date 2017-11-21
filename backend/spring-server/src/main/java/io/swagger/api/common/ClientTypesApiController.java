@@ -1,6 +1,7 @@
 package io.swagger.api.common;
 
 import io.swagger.ModelHelper;
+import io.swagger.model.BaseModel;
 import io.swagger.model.common.ClientRepository;
 import io.swagger.model.common.ClientType;
 
@@ -32,32 +33,20 @@ public class ClientTypesApiController implements ClientTypesApi {
     @Autowired
     ClientRepository clientRepository;
 
-    private ClientType getClientTypeHelper(Integer id) {
-        ClientType clientType = clientTypeRepository.findById(id);
-        if(clientType == null)
-            throw new Error("Client type not found");
-        return clientType;
-    }
-
     public ResponseEntity<Integer> createClientType(@ApiParam(value = "ClientType to create"  )  @Valid @RequestBody ClientType clientType) {
         clientType = clientTypeRepository.save(clientType);
         return new ResponseEntity<Integer>(clientType.getId(), HttpStatus.OK);
     }
 
     public ResponseEntity<Void> deleteClientType(@ApiParam(value = "",required=true ) @PathVariable("clientTypeId") Integer clientTypeId) {
-        getClientTypeHelper(clientTypeId);
-
-        Integer articlesAssigned = clientRepository.findAllByClientTypeId(clientTypeId).size();
-        if(articlesAssigned != 0)
-            throw new Error(articlesAssigned + " clients are assigned to this client type");
-
+        BaseModel.getModelHelper(clientRepository, clientTypeId);
+        BaseModel.dependent(clientRepository, ClientType.class, clientTypeId);
         clientTypeRepository.delete(clientTypeId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<ClientType> getClientType(@ApiParam(value = "",required=true ) @PathVariable("clientTypeId") Integer clientTypeId) {
-        getClientTypeHelper(clientTypeId);
-        ClientType clientType= clientTypeRepository.findById(clientTypeId);
+        ClientType clientType = BaseModel.getModelHelper(clientRepository, clientTypeId);
         return new ResponseEntity<ClientType>(clientType, HttpStatus.OK);
     }
 
@@ -70,14 +59,7 @@ public class ClientTypesApiController implements ClientTypesApi {
         @ApiParam(value = "ClientType to create"  )  @Valid @RequestBody ClientType clientType) {
         if(clientTypeId != clientType.getId())
             throw new Error("Wrong id");
-
-        ClientType clientTypeOld = getClientTypeHelper(clientTypeId);
-        try {
-            ModelHelper.combine(clientTypeOld, clientType);
-        } catch (Exception e) {
-            throw new Error("Wrong object");
-        }
-
+        clientType = BaseModel.combineWithOld(clientTypeRepository, clientType);
         clientType = clientTypeRepository.save(clientType);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

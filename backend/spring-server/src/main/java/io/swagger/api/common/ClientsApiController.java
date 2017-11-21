@@ -1,6 +1,7 @@
 package io.swagger.api.common;
 
 import io.swagger.ModelHelper;
+import io.swagger.model.BaseModel;
 import io.swagger.model.common.Client;
 
 import io.swagger.annotations.*;
@@ -36,37 +37,56 @@ public class ClientsApiController implements ClientsApi {
     @Autowired
     OrderRepository orderRepository;
 
-    private Client getClientHelper(Integer id) {
-        Client client = clientRepository.findById(id);
-        if(client == null)
-            throw new Error("Client not found");
-        return client;
-    }
+//    private Client getClientHelper(Integer id) {
+//        Client client = clientRepository.findById(id);
+//        if(client == null)
+//            throw new Error("Client not found");
+//        return client;
+//    }
+
+//    private Client dependsOnClientTypes(Client client) {
+//        ClientType clientTypeFromModel = client.getClientType();
+//        if(clientTypeFromModel == null) {
+//            throw new Error("Client type is null");
+//        }
+//        ClientType clientType = clientTypeRepository.findById(clientTypeFromModel.getId());
+//        if(clientType == null)
+//            throw new Error("Client type not found");
+//        client.setClientType(clientType);
+//        return client;
+//    }
+
+//    private void dependentOrders(Integer clientId) {
+//        Integer orderedArticlesAssigned = orderRepository.findAllByClientId(clientId).size();
+//        if(orderedArticlesAssigned != 0)
+//            throw new Error(orderedArticlesAssigned + " orders are assigned to this client");
+//    }
+
+//    private Client combineWithOld(Client client) {
+//        Client articleOld = BaseModel.getModelHelper(clientRepository, client.getId());
+//        try {
+//            ModelHelper.combine(articleOld, client);
+//        } catch (Exception e) {
+//            throw new Error("Wrong client object");
+//        }
+//        return client;
+//    }
 
     public ResponseEntity<Integer> createClient(@ApiParam(value = "Client to create"  )  @Valid @RequestBody Client client) {
-        ClientType clientType = clientTypeRepository.findById(client.getClientType().getId());
-        if(clientType == null)
-            throw new Error("Client type not found");
-        client.setClientType(clientType);
-
+        client = BaseModel.dependsOn(ClientType.class, client, clientTypeRepository);
         client = clientRepository.save(client);
         return new ResponseEntity<Integer>(client.getId(), HttpStatus.OK);
     }
 
     public ResponseEntity<Void> deleteClient(@ApiParam(value = "",required=true ) @PathVariable("clientId") Integer clientId) {
-        getClientHelper(clientId);
-
-        Integer orderedArticlesAssigned = orderRepository.findAllByClientId(clientId).size();
-        if(orderedArticlesAssigned != 0)
-            throw new Error(orderedArticlesAssigned + " orders are assigned to this client");
-
+        BaseModel.getModelHelper(clientRepository, clientId);
+        BaseModel.dependent(orderRepository, Client.class, clientId);
         clientRepository.delete(clientId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<Client> getClient(@ApiParam(value = "",required=true ) @PathVariable("clientId") Integer clientId) {
-        getClientHelper(clientId);
-        Client client = clientRepository.findById(clientId);
+        Client client = BaseModel.getModelHelper(clientRepository, clientId);
         return new ResponseEntity<Client>(client, HttpStatus.OK);
     }
 
@@ -77,21 +97,10 @@ public class ClientsApiController implements ClientsApi {
 
     public ResponseEntity<Void> updateClient(@ApiParam(value = "",required=true ) @PathVariable("clientId") Integer clientId,
         @ApiParam(value = "Client to create"  )  @Valid @RequestBody Client client) {
-        if(clientId != client.getId())
+        if(client.getId() != null && clientId != client.getId())
             throw new Error("Wrong article id");
-
-        Client articleOld = getClientHelper(clientId);
-        try {
-            ModelHelper.combine(articleOld, client);
-        } catch (Exception e) {
-            throw new Error("Wrong article object");
-        }
-
-        ClientType clientType = clientTypeRepository.findById(client.getClientType().getId());
-        if(clientType == null)
-            throw new Error("Client type not found");
-        client.setClientType(clientType);
-
+        client = BaseModel.combineWithOld(clientRepository, client);
+        client = BaseModel.dependsOn(ClientType.class, client, clientTypeRepository);
         client = clientRepository.save(client);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

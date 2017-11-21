@@ -3,6 +3,7 @@ package io.swagger.model.common;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.BaseModel;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -13,7 +14,7 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-15T00:41:28.115Z")
 
 @Entity
-public class Client   {
+public class Client extends BaseModel {
   @JsonProperty("id")
   @Id
   @GeneratedValue
@@ -57,7 +58,7 @@ public class Client   {
 
   @JsonProperty("clientType")
   @NotNull
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "client_type_id")
   private ClientType clientType;
 

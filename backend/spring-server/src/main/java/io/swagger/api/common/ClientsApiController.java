@@ -26,7 +26,7 @@ import javax.validation.Valid;
 public class ClientsApiController implements ClientsApi {
 
     /** Dependent:
-        * orders
+        * orders (soft)
      * Depends on:
         * client types
      */
@@ -79,8 +79,8 @@ public class ClientsApiController implements ClientsApi {
     }
 
     public ResponseEntity<Void> deleteClient(@ApiParam(value = "",required=true ) @PathVariable("clientId") Integer clientId) {
-        BaseModel.getModelHelper(clientRepository, clientId);
-        BaseModel.dependent(orderRepository, Client.class, clientId);
+        Client client = BaseModel.getModelHelper(clientRepository, clientId);
+//        BaseModel.dependent(orderRepository, client);
         clientRepository.delete(clientId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

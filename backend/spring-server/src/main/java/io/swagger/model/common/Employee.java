@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.BaseModel;
+
 import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +20,7 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-20T01:05:47.562Z")
 
 @Entity
-public class Employee {
+public class Employee extends BaseModel {
   @JsonProperty("id")
   @Id
   @GeneratedValue
@@ -38,6 +40,19 @@ public class Employee {
   @JsonProperty("password")
   @NotNull
   private String password;
+
+  protected Employee() {}
+
+  public Employee(Integer id, String name, String mail, String password) {
+    this.id = id;
+    this.name = name;
+    this.mail = mail;
+    this.password = password;
+  }
+
+  public Employee(Integer id) {
+    this.id = id;
+  }
 
   /**
    * Gets or Sets role

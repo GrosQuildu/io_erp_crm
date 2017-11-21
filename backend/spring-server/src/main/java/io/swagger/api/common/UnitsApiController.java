@@ -1,6 +1,7 @@
 package io.swagger.api.common;
 
 import io.swagger.ModelHelper;
+import io.swagger.model.BaseModel;
 import io.swagger.model.common.Unit;
 
 import io.swagger.annotations.*;
@@ -32,12 +33,6 @@ public class UnitsApiController implements UnitsApi {
     @Autowired
     ArticleRepository articlesRepository;
 
-    private Unit getUnitHelper(Integer id) {
-        Unit unit = unitRepository.findById(id);
-        if(unit == null)
-            throw new Error("Unit not found");
-        return unit;
-    }
 
     public ResponseEntity<Integer> createUnit(@ApiParam(value = "Unit to create"  )  @Valid @RequestBody Unit unit) {
         unit = unitRepository.save(unit);
@@ -45,19 +40,14 @@ public class UnitsApiController implements UnitsApi {
     }
 
     public ResponseEntity<Void> deleteUnit(@ApiParam(value = "",required=true ) @PathVariable("unitId") Integer unitId) {
-        getUnitHelper(unitId);
-
-        Integer articlesAssigned = articlesRepository.findAllByUnitId(unitId).size();
-        if(articlesAssigned != 0)
-            throw new Error(articlesAssigned + " articles are assigned to this unit");
-
+        Unit unit = BaseModel.getModelHelper(unitRepository, unitId);
+        BaseModel.dependent(articlesRepository, unit);
         unitRepository.delete(unitId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<Unit> getUnit(@ApiParam(value = "",required=true ) @PathVariable("unitId") Integer unitId) {
-        getUnitHelper(unitId);
-        Unit unit = unitRepository.findById(unitId);
+        Unit unit = BaseModel.getModelHelper(unitRepository, unitId);
         return new ResponseEntity<Unit>(unit, HttpStatus.OK);
     }
 
@@ -68,16 +58,9 @@ public class UnitsApiController implements UnitsApi {
 
     public ResponseEntity<Void> updateUnit(@ApiParam(value = "",required=true ) @PathVariable("unitId") Integer unitId,
         @ApiParam(value = "Unit to update"  )  @Valid @RequestBody Unit unit) {
-        if(unitId != unit.getId())
+        if(unit.getId() != null && unitId != unit.getId())
             throw new Error("Wrong id");
-
-        Unit unitOld = getUnitHelper(unitId);
-        try {
-            ModelHelper.combine(unitOld, unit);
-        } catch (Exception e) {
-            throw new Error("Wrong object");
-        }
-
+        unit = BaseModel.combineWithOld(unitRepository, unit);
         unit = unitRepository.save(unit);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

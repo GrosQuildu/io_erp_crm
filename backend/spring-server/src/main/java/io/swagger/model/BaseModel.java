@@ -12,12 +12,12 @@ import java.util.List;
 public abstract class BaseModel {
 
     /**
-     *
-     * @param repository:
-     * @param model
-     * @param <T>
-     * @param <R>
-     * @return
+     * Combine (merge) model (send via http) with old model from database
+     * @param repository model repository
+     * @param model model to merge
+     * @param <T> Class of model (Entity, extends BaseModel)
+     * @param <R> Class of model repository (extends CrudRepository)
+     * @return T, updated Model
      */
     public static <T extends BaseModel, R extends CrudRepository> T combineWithOld(R repository, T model) {
         T modelOld = BaseModel.getModelHelper(repository, model.getId());
@@ -29,6 +29,14 @@ public abstract class BaseModel {
         return model;
     }
 
+    /**
+     * Get (find) model (entity) by id
+     * @param repository model repository
+     * @param id Integer
+     * @param <T> Class of model (Entity, extends BaseModel)
+     * @param <R> Class of model repository (extends CrudRepository)
+     * @return T, model
+     */
     public static <T, R extends CrudRepository> T getModelHelper(R repository, Integer id) {
         T model = (T) repository.findOne(id);
         if(model == null)
@@ -36,8 +44,16 @@ public abstract class BaseModel {
         return model;
     }
 
-    public static <R extends CrudRepository> void dependent(R dependentRepository, Class modelClass, Integer id) {
-        String methodFindAllByModelIdString = "findAllBy" + modelClass.getSimpleName() + "Id";
+    /**
+     * Check dependencies (mainly before deletion from database). Throw error if there are any objects referring to
+     * entity that we want delete
+     * @param dependentRepository repository of objects that may referring to entity we want delete
+     * @param model entity to delete
+     * @param <T> Class of model (Entity, extends BaseModel)
+     * @param <R> Class of dependent objects repository (extends CrudRepository)
+     */
+    public static <T extends BaseModel, R extends CrudRepository> void dependent(R dependentRepository, T model) {
+        String methodFindAllByModelIdString = "findAllBy" + model.getClass().getSimpleName() + "Id";
         java.lang.reflect.Method methodFindAllByModelId;
 
         try {
@@ -47,13 +63,24 @@ public abstract class BaseModel {
 
         Integer depentendObjectAssignedCount = 0;
         try {
-            depentendObjectAssignedCount = ((List) methodFindAllByModelId.invoke(dependentRepository, id)).size();
+            depentendObjectAssignedCount = ((List) methodFindAllByModelId.invoke(dependentRepository, model.getId())).size();
         } catch (Exception e) { throw new java.lang.Error("Method call error in dependent: " + e); }
         System.out.println(depentendObjectAssignedCount);
         if(depentendObjectAssignedCount != 0)
-            throw new java.lang.Error(depentendObjectAssignedCount + " dependent objects are assigned to this " + modelClass.getSimpleName());
+            throw new java.lang.Error(depentendObjectAssignedCount + " dependent objects are assigned to this " + model.getClass().getSimpleName());
     }
 
+    /**
+     * Check dependencies (mainly before create/update). Throw error if entity we want to save is referring to
+     * object that doesn't exists
+     * @param dependencyClass Class of object that is required to create/update our entity
+     * @param model entity to create/update
+     * @param repository repository of required objects (corresponding to dependencyClass)
+     * @param <D> Class of required object (Entity, extends BaseModel)
+     * @param <T> Class of model (Entity, extends BaseModel)
+     * @param <R> Class of required objects repository (extends CrudRepository)
+     * @return T, model
+     */
     public static <D extends BaseModel, T, R extends CrudRepository> T dependsOn(Class dependencyClass, T model, R repository) {
         String dependencySimpleName = dependencyClass.getSimpleName();
 

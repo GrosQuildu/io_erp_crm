@@ -1,6 +1,7 @@
 package io.swagger.api.common;
 
 import io.swagger.ModelHelper;
+import io.swagger.model.BaseModel;
 import io.swagger.model.common.Employee;
 
 import io.swagger.annotations.*;
@@ -23,7 +24,7 @@ import javax.validation.Valid;
 public class EmployeesApiController implements EmployeesApi {
 
     /** Dependent:
-        * orders
+        * orders (soft)
      * Depends on:
         * none
      */
@@ -31,13 +32,6 @@ public class EmployeesApiController implements EmployeesApi {
     EmployeeRepository employeeRepository;
     @Autowired
     OrderRepository orderRepository;
-
-    private Employee getEmployeeHelper(Integer id) {
-        Employee employee = employeeRepository.findById(id);
-        if(employee == null)
-            throw new Error("Employee not found");
-        return employee;
-    }
 
     public ResponseEntity<Void> changePassword(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,
         @ApiParam(value = ""  )  @Valid @RequestBody Employee employee) {
@@ -51,19 +45,14 @@ public class EmployeesApiController implements EmployeesApi {
     }
 
     public ResponseEntity<Void> deleteEmployee(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId) {
-        getEmployeeHelper(employeeId);
-
-        Integer ordersAssigned = orderRepository.findAllByEmployeeId(employeeId).size();
-        if(ordersAssigned != 0)
-            throw new Error(ordersAssigned + " orders are assigned to this employee");
-
+        Employee employee = BaseModel.getModelHelper(employeeRepository, employeeId);
+//        BaseModel.dependent(orderRepository, employee);
         employeeRepository.delete(employeeId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<Employee> getEmployee(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId) {
-        getEmployeeHelper(employeeId);
-        Employee employee= employeeRepository.findById(employeeId);
+        Employee employee =  BaseModel.getModelHelper(employeeRepository, employeeId);
         return new ResponseEntity<Employee>(employee, HttpStatus.OK);
     }
 
@@ -74,16 +63,9 @@ public class EmployeesApiController implements EmployeesApi {
 
     public ResponseEntity<Void> updateEmployee(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,
         @ApiParam(value = "Employee to create"  )  @Valid @RequestBody Employee employee) {
-        if(employeeId != employee.getId())
+        if(employee.getId() != null && employeeId != employee.getId())
             throw new Error("Wrong id");
-
-        Employee employeeOld = getEmployeeHelper(employeeId);
-        try {
-            ModelHelper.combine(employeeOld, employee);
-        } catch (Exception e) {
-            throw new Error("Wrong object");
-        }
-
+        employee = BaseModel.combineWithOld(employeeRepository, employee);
         employee = employeeRepository.save(employee);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

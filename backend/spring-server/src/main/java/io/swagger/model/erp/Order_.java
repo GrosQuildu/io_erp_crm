@@ -27,17 +27,19 @@ public class Order_ extends BaseModel {
 
   @JsonProperty("orderNumber")
   @NotNull
+  @Column(nullable = false, unique = true)
   private String orderNumber;
 
   @JsonProperty("orderDate")
   @NotNull
+  @Column(nullable = false, unique = false)
   private LocalDate orderDate;
 
   @JsonProperty("realizationDate")
   private LocalDate realizationDate = null;
 
   @JsonProperty("realizationDeadline")
-  private String realizationDeadline;
+  private String realizationDeadline = null;
 
   @JsonProperty("employee")
   @ManyToOne(cascade = CascadeType.PERSIST)
@@ -61,10 +63,12 @@ public class Order_ extends BaseModel {
 
   @JsonProperty("vat")
   @NotNull
+  @Column(nullable = false, unique = false)
   private Float vat;
 
   @JsonProperty("state")
   @NotNull
+  @Column(nullable = false, unique = false)
   private String state;
 
   @JsonProperty("deliveryCost")

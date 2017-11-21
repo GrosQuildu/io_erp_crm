@@ -25,6 +25,7 @@ public class Article extends BaseModel {
 
   @JsonProperty("availability")
   @NotNull
+  @Column(nullable = false, unique = false)
   private Integer availability;
 
   @JsonProperty("unit")
@@ -35,6 +36,7 @@ public class Article extends BaseModel {
 
   @JsonProperty("unitPrice")
   @NotNull
+  @Column(nullable = false, unique = false)
   private BigDecimal unitPrice;
 
   @JsonProperty("weight")

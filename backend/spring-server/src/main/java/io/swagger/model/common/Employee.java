@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.BaseModel;
 
 import java.math.BigDecimal;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -28,6 +29,7 @@ public class Employee extends BaseModel {
 
   @JsonProperty("name")
   @NotNull
+  @Column(nullable = false, unique = false)
   private String name;
 
   @JsonProperty("telephone")
@@ -35,10 +37,12 @@ public class Employee extends BaseModel {
 
   @JsonProperty("mail")
   @NotNull
+  @Column(nullable = false, unique = true)
   private String mail;
 
   @JsonProperty("password")
   @NotNull
+  @Column(nullable = false, unique = true)
   private String password;
 
   protected Employee() {}

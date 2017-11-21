@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.BaseModel;
 
 import java.math.BigDecimal;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -26,14 +27,17 @@ public class DeliveryCost extends BaseModel {
 
   @JsonProperty("weightFrom")
   @NotNull
+  @Column(nullable = false, unique = false)
   private Float weightFrom;
 
   @JsonProperty("weightTo")
   @NotNull
+  @Column(nullable = false, unique = false)
   private Float weightTo;
 
   @JsonProperty("price")
   @NotNull
+  @Column(nullable = false, unique = false)
   private BigDecimal price;
 
   public DeliveryCost id(Integer id) {

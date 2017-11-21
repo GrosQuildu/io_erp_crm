@@ -23,12 +23,13 @@ public class Proforma extends BaseModel {
 
   @JsonProperty("proformaNumber")
   @NotNull
+  @Column(nullable = false, unique = true)
   private String proformaNumber;
 
   @JsonProperty("order")
   @NotNull
   @OneToOne(cascade = CascadeType.PERSIST)
-  @JoinColumn(name = "order_id")
+  @JoinColumn(name = "order_id", unique = true)
   private Order_ order;
 
   @JsonProperty("issueDate")

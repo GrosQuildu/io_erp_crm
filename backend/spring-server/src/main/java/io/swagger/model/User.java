@@ -15,10 +15,19 @@ import javax.validation.constraints.*;
 
 public class User   {
   @JsonProperty("user")
-  private String user = null;
+  @NotNull
+  private String user;
 
   @JsonProperty("password")
-  private String password = null;
+  @NotNull
+  private String password;
+
+  protected User() {}
+
+  public User(String user, String password) {
+    this.user = user;
+    this.password = password;
+  }
 
   public User user(String user) {
     this.user = user;

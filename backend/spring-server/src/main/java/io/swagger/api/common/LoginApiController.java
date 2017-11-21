@@ -16,8 +16,6 @@ import javax.validation.Valid;
 @Controller
 public class LoginApiController implements LoginApi {
 
-
-
     public ResponseEntity<Token> login(@ApiParam(value = ""  )  @Valid @RequestBody User user) {
         // do some magic!
         return new ResponseEntity<Token>(HttpStatus.OK);

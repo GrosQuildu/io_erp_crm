@@ -22,10 +22,10 @@ public class Client extends BaseModel {
 
   @JsonProperty("name")
   @NotNull
+  @Column(nullable = false, unique = false)
   private String name;
 
   @JsonProperty("street")
-  @NotNull
   private String street = null;
 
   @JsonProperty("city")
@@ -54,6 +54,7 @@ public class Client extends BaseModel {
 
   @JsonProperty("mail")
   @NotNull
+  @Column(nullable = false, unique = true)
   private String mail;
 
   @JsonProperty("clientType")

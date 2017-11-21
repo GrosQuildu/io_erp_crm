@@ -39,6 +39,7 @@ public class OrderedArticle extends BaseModel {
 
   @JsonProperty("amount")
   @NotNull
+  @Column(nullable = false, unique = false)
   private Integer amount;
 
   @JsonProperty("unitPrice")

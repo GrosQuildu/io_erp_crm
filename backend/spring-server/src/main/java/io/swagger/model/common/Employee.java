@@ -47,11 +47,12 @@ public class Employee extends BaseModel {
 
   protected Employee() {}
 
-  public Employee(Integer id, String name, String mail, String password) {
+  public Employee(Integer id, String name, String mail, String password, Role role) {
     this.id = id;
     this.name = name;
     this.mail = mail;
     this.password = password;
+    this.role = role;
   }
 
   public Employee(Integer id) {
@@ -61,14 +62,14 @@ public class Employee extends BaseModel {
   /**
    * Gets or Sets role
    */
-  public enum RoleEnum {
+  public enum Role {
     ERP("erp"),
     CRM("crm"),
     ADMIN("admin");
 
     private String value;
 
-    RoleEnum(String value) {
+    Role(String value) {
       this.value = value;
     }
 
@@ -79,8 +80,8 @@ public class Employee extends BaseModel {
     }
 
     @JsonCreator
-    public static RoleEnum fromValue(String text) {
-      for (RoleEnum b : RoleEnum.values()) {
+    public static Role fromValue(String text) {
+      for (Role b : Role.values()) {
         if (String.valueOf(b.value).equals(text)) {
           return b;
         }
@@ -91,7 +92,7 @@ public class Employee extends BaseModel {
 
   @JsonProperty("role")
   @NotNull
-  private RoleEnum role;
+  private Role role;
 
   @JsonProperty("monthSchedule")
   private BigDecimal monthSchedule = null;
@@ -204,7 +205,7 @@ public class Employee extends BaseModel {
     this.password = password;
   }
 
-  public Employee role(RoleEnum role) {
+  public Employee role(Role role) {
     this.role = role;
     return this;
   }
@@ -217,11 +218,11 @@ public class Employee extends BaseModel {
   @NotNull
 
 
-  public RoleEnum getRole() {
+  public Role getRole() {
     return role;
   }
 
-  public void setRole(RoleEnum role) {
+  public void setRole(Role role) {
     this.role = role;
   }
 

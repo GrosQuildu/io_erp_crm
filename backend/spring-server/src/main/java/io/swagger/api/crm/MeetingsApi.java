@@ -33,7 +33,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings",
+    @RequestMapping(value = "/crm/meetings",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
@@ -48,7 +48,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/contacts",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/contacts",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
@@ -63,7 +63,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/employees",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/employees",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
@@ -78,7 +78,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/notes",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/notes",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
@@ -93,7 +93,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}",
+    @RequestMapping(value = "/crm/meetings/{meetingId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
@@ -108,7 +108,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/contacts/{MeetingContactId}",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/contacts/{MeetingContactId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
@@ -123,7 +123,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/employees/{MeetingEmployeeId}",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/employees/{MeetingEmployeeId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
@@ -138,7 +138,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/notes/{MeetingNoteId}",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/notes/{MeetingNoteId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
@@ -153,7 +153,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}",
+    @RequestMapping(value = "/crm/meetings/{meetingId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -168,7 +168,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/contacts/{MeetingContactId}",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/contacts/{MeetingContactId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -183,7 +183,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/contacts",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/contacts",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -198,7 +198,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/employees/{MeetingEmployeeId}",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/employees/{MeetingEmployeeId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -213,7 +213,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/employees",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/employees",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -228,7 +228,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/notes/{MeetingNoteId}",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/notes/{MeetingNoteId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -243,7 +243,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/notes",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/notes",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -258,7 +258,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings",
+    @RequestMapping(value = "/crm/meetings",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -273,7 +273,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}",
+    @RequestMapping(value = "/crm/meetings/{meetingId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
@@ -288,7 +288,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/contacts/{MeetingContactId}",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/contacts/{MeetingContactId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
@@ -303,7 +303,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/employees/{MeetingEmployeeId}",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/employees/{MeetingEmployeeId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
@@ -318,7 +318,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/meetings/{meetingId}/notes/{MeetingNoteId}",
+    @RequestMapping(value = "/crm/meetings/{meetingId}/notes/{MeetingNoteId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)

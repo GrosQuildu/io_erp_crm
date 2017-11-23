@@ -30,7 +30,7 @@ public interface DeliveryCostsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/deliveryCosts",
+    @RequestMapping(value = "/erp/deliveryCosts",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
@@ -45,7 +45,7 @@ public interface DeliveryCostsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/deliveryCosts/{deliveryCostId}",
+    @RequestMapping(value = "/erp/deliveryCosts/{deliveryCostId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
@@ -60,7 +60,7 @@ public interface DeliveryCostsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/deliveryCosts/{deliveryCostId}",
+    @RequestMapping(value = "/erp/deliveryCosts/{deliveryCostId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -75,7 +75,7 @@ public interface DeliveryCostsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/deliveryCosts",
+    @RequestMapping(value = "/erp/deliveryCosts",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -90,7 +90,7 @@ public interface DeliveryCostsApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/deliveryCosts/{deliveryCostId}",
+    @RequestMapping(value = "/erp/deliveryCosts/{deliveryCostId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)

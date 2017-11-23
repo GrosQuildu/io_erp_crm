@@ -30,7 +30,7 @@ public interface ProformasApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/proformas",
+    @RequestMapping(value = "/erp/proformas",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
@@ -45,7 +45,7 @@ public interface ProformasApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/proformas/{proformaId}",
+    @RequestMapping(value = "/erp/proformas/{proformaId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
@@ -60,7 +60,7 @@ public interface ProformasApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/proformas/{proformaId}",
+    @RequestMapping(value = "/erp/proformas/{proformaId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -75,7 +75,7 @@ public interface ProformasApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/proformas",
+    @RequestMapping(value = "/erp/proformas",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -90,7 +90,7 @@ public interface ProformasApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/proformas/{proformaId}",
+    @RequestMapping(value = "/erp/proformas/{proformaId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)

@@ -32,7 +32,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks",
+    @RequestMapping(value = "/crm/tasks",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
@@ -47,7 +47,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks/{taskId}/comments",
+    @RequestMapping(value = "/crm/tasks/{taskId}/comments",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
@@ -62,7 +62,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks/{taskId}/notes",
+    @RequestMapping(value = "/crm/tasks/{taskId}/notes",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
@@ -77,7 +77,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks/{taskId}",
+    @RequestMapping(value = "/crm/tasks/{taskId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
@@ -92,7 +92,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks/{taskId}/comments/{TaskCommentId}",
+    @RequestMapping(value = "/crm/tasks/{taskId}/comments/{TaskCommentId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
@@ -107,7 +107,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks/{taskId}/notes/{TaskNoteId}",
+    @RequestMapping(value = "/crm/tasks/{taskId}/notes/{TaskNoteId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
@@ -122,7 +122,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks/{taskId}",
+    @RequestMapping(value = "/crm/tasks/{taskId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -137,7 +137,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks/{taskId}/comments/{TaskCommentId}",
+    @RequestMapping(value = "/crm/tasks/{taskId}/comments/{TaskCommentId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -152,7 +152,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks/{taskId}/comments",
+    @RequestMapping(value = "/crm/tasks/{taskId}/comments",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -167,7 +167,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks/{taskId}/notes/{TaskNoteId}",
+    @RequestMapping(value = "/crm/tasks/{taskId}/notes/{TaskNoteId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -182,7 +182,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks/{taskId}/notes",
+    @RequestMapping(value = "/crm/tasks/{taskId}/notes",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -197,7 +197,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks",
+    @RequestMapping(value = "/crm/tasks",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -212,7 +212,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks/{taskId}",
+    @RequestMapping(value = "/crm/tasks/{taskId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
@@ -227,7 +227,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks/{taskId}/comments/{TaskCommentId}",
+    @RequestMapping(value = "/crm/tasks/{taskId}/comments/{TaskCommentId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
@@ -242,7 +242,7 @@ public interface TasksApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/tasks/{taskId}/notes/{TaskNoteId}",
+    @RequestMapping(value = "/crm/tasks/{taskId}/notes/{TaskNoteId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)

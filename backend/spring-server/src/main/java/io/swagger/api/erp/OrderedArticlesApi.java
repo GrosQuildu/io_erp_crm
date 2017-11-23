@@ -33,7 +33,7 @@ public interface OrderedArticlesApi {
             @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
             @ApiResponse(code = 500, message = "Server error", response = Error.class) })
 
-    @RequestMapping(value = "/orders/{orderId}/articles",
+    @RequestMapping(value = "/erp/orders/{orderId}/articles",
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.POST)
@@ -48,7 +48,7 @@ public interface OrderedArticlesApi {
             @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
             @ApiResponse(code = 500, message = "Server error", response = Error.class) })
 
-    @RequestMapping(value = "/orders/{orderId}/articles/{OrderedArticleId}",
+    @RequestMapping(value = "/erp/orders/{orderId}/articles/{OrderedArticleId}",
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.DELETE)
@@ -63,7 +63,7 @@ public interface OrderedArticlesApi {
             @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
             @ApiResponse(code = 500, message = "Server error", response = Error.class) })
 
-    @RequestMapping(value = "/orders/{orderId}/articles/{OrderedArticleId}",
+    @RequestMapping(value = "/erp/orders/{orderId}/articles/{OrderedArticleId}",
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.GET)
@@ -78,7 +78,7 @@ public interface OrderedArticlesApi {
             @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
             @ApiResponse(code = 500, message = "Server error", response = Error.class) })
 
-    @RequestMapping(value = "/orders/{orderId}/articles/{OrderedArticleId}/netPrice",
+    @RequestMapping(value = "/erp/orders/{orderId}/articles/{OrderedArticleId}/netPrice",
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.GET)
@@ -92,7 +92,7 @@ public interface OrderedArticlesApi {
             @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
             @ApiResponse(code = 500, message = "Server error", response = Error.class) })
 
-    @RequestMapping(value = "/orders/{orderId}/articles/{OrderedArticleId}/weight",
+    @RequestMapping(value = "/erp/orders/{orderId}/articles/{OrderedArticleId}/weight",
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.GET)
@@ -107,7 +107,7 @@ public interface OrderedArticlesApi {
             @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
             @ApiResponse(code = 500, message = "Server error", response = Error.class) })
 
-    @RequestMapping(value = "/orders/{orderId}/articles",
+    @RequestMapping(value = "/erp/orders/{orderId}/articles",
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.GET)
@@ -123,7 +123,7 @@ public interface OrderedArticlesApi {
             @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
             @ApiResponse(code = 500, message = "Server error", response = Error.class) })
 
-    @RequestMapping(value = "/orders/{orderId}/articles/{OrderedArticleId}",
+    @RequestMapping(value = "/erp/orders/{orderId}/articles/{OrderedArticleId}",
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.PUT)

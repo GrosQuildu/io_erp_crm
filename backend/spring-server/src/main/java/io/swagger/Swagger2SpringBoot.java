@@ -1,17 +1,32 @@
 package io.swagger;
 
+import io.swagger.configuration.CustomUserDetails;
+import io.swagger.configuration.UserService;
+import io.swagger.model.common.Employee;
+import io.swagger.model.common.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 @SpringBootApplication
 @EnableSwagger2
 @ComponentScan(basePackages = { "io.swagger", "io.swagger.api" })
 public class Swagger2SpringBoot implements CommandLineRunner {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... arg0) throws Exception {
@@ -32,5 +47,38 @@ public class Swagger2SpringBoot implements CommandLineRunner {
             return 10;
         }
 
+    }
+
+    @Autowired
+    public void authenticationManager(AuthenticationManagerBuilder builder, EmployeeRepository repository, UserService service) throws Exception {
+        //Setup a default user if db is empty
+        if (repository.count()==0) {
+            List<String> passwords = Arrays.asList(generatePassword(12), generatePassword(12), generatePassword(12));
+            service.save(new Employee(1, "admin", "admin@io_erp_crm.com", passwords.get(0), Employee.Role.ADMIN));
+            service.save(new Employee(2, "main_crm", "main_crm@io_erp_crm.com", passwords.get(1), Employee.Role.CRM));
+            service.save(new Employee(3, "main_erp", "main_erp@io_erp_crm.com", passwords.get(2), Employee.Role.ERP));
+            System.out.println("Created default employees:");
+            System.out.println("admin - " + passwords.get(0));
+            System.out.println("main_crm - " + passwords.get(1));
+            System.out.println("main_erp - " + passwords.get(2));
+            builder.userDetailsService(userDetailsService(repository)).passwordEncoder(passwordEncoder);
+        }
+    }
+
+    protected String generatePassword(Integer length) {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder pass = new StringBuilder();
+        Random rnd = new Random();
+        while (pass.length() < length) {
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            pass.append(SALTCHARS.charAt(index));
+        }
+        String passStr = pass.toString();
+        return passStr;
+
+    }
+
+    private UserDetailsService userDetailsService(final EmployeeRepository repository) {
+        return username -> new CustomUserDetails(repository.findByMail(username));
     }
 }

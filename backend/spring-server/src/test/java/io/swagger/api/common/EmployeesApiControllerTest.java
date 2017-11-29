@@ -22,15 +22,12 @@ import io.swagger.model.common.Employee;
 import io.swagger.model.common.Employee.Role;
 
 public class EmployeesApiControllerTest {
-
-
-	//--- token za kazdym uruchomieniem serwera musi byc zmieniany ---//
+  
 	String token = "Bearer 77b0f777-9671-4b9d-8044-db1a11d4f27d";
 	RequestSpecification httpRequest = RestAssured.given().
 										contentType("application/json").
 										headers("accept", "application/json",
 												"Authorization", token);
-
 
 	/*
 	 * Nie działa, zwraca kod 400, a hasla nie roznia sie od siebie
@@ -67,6 +64,7 @@ public class EmployeesApiControllerTest {
 	 */
 	@Test
 	public void testCreateEmployee() {
+    
 		String newUser = "{ \"id\": 14, \"name\": \"user14\", \"telephone\": \"teluser13\", \"mail\": \"mail@13.com\", \"password\": \"11311\", \"role\": \"erp\", \"monthSchedule\": 2, \"visibility\": true}";
 		httpRequest.
 				and().
@@ -77,6 +75,7 @@ public class EmployeesApiControllerTest {
 		Response response = httpRequest.when().get("http://localhost:8080/api/employees/14");
 		JsonPath jsonPath = new JsonPath(response.getBody().asString());
 		String usName = jsonPath.getString("name");
+
 		assertEquals(usName,"user14");
 	}
 

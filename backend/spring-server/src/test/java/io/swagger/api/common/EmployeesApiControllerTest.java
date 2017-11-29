@@ -22,19 +22,12 @@ import io.swagger.model.common.Employee;
 import io.swagger.model.common.Employee.Role;
 
 public class EmployeesApiControllerTest {
-
-
-	//N93OKVHSDPVS admin ----------------------//
+  
 	String token = "Bearer 77b0f777-9671-4b9d-8044-db1a11d4f27d";
 	RequestSpecification httpRequest = RestAssured.given().
 										contentType("application/json").
 										headers("accept", "application/json",
 												"Authorization", token);
-
-	//-------adm AKSZMK47IOVW  77b0f777-9671-4b9d-8044-db1a11d4f27d
-	// crm OUJ0I2LD6MUD
-	// erp IZ1Y60MBPMKZ 89650ba9-501f-46a2-b99c-18ad1d8fcbcc
-
 
 	/*
 	 * Nie działa, zwraca kod 400, a hasla nie roznia sie od siebie
@@ -49,7 +42,6 @@ public class EmployeesApiControllerTest {
 
 		JsonPath jsonPath = new JsonPath(response.getBody().asString());
 		String oldPswd = jsonPath.getString("password");
-		//System.out.println("pswd1 -> " + oldPswd);
 
 		httpRequest.
 				and().
@@ -63,7 +55,6 @@ public class EmployeesApiControllerTest {
 
 		jsonPath = new JsonPath(response.getBody().asString());
 		String newPswd = jsonPath.getString("password");
-		//System.out.println("pswd2 -> " + newPswd);
 		assertNotEquals(oldPswd,newPswd);
 	}
 
@@ -73,7 +64,7 @@ public class EmployeesApiControllerTest {
 	 */
 	@Test
 	public void testCreateEmployee() {
-		// Polecam ustawic rozne wartosci do newUser, zeby przechodzilo. Id sie samo generuje
+    
 		String newUser = "{ \"id\": 14, \"name\": \"user14\", \"telephone\": \"teluser13\", \"mail\": \"mail@13.com\", \"password\": \"11311\", \"role\": \"erp\", \"monthSchedule\": 2, \"visibility\": true}";
 		httpRequest.
 				and().
@@ -84,7 +75,7 @@ public class EmployeesApiControllerTest {
 		Response response = httpRequest.when().get("http://localhost:8080/api/employees/14");
 		JsonPath jsonPath = new JsonPath(response.getBody().asString());
 		String usName = jsonPath.getString("name");
-		//System.out.println("Res -> " + jsonPath.getString("name"));
+
 		assertEquals(usName,"user14");
 	}
 

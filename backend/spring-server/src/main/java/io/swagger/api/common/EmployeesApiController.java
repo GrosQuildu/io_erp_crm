@@ -1,7 +1,8 @@
 package io.swagger.api.common;
 
-import io.swagger.ModelHelper;
+import io.swagger.configuration.EmployeeService;
 import io.swagger.model.BaseModel;
+import io.swagger.model.ChangePassword;
 import io.swagger.model.common.Employee;
 
 import io.swagger.annotations.*;
@@ -32,15 +33,22 @@ public class EmployeesApiController implements EmployeesApi {
     EmployeeRepository employeeRepository;
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    EmployeeService userService;
 
     public ResponseEntity<Void> changePassword(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,
-        @ApiParam(value = ""  )  @Valid @RequestBody Employee employee) {
-        // do some magic!
+        @ApiParam(value = ""  )  @Valid @RequestBody ChangePassword changePassword) {
+        Employee employee = employeeRepository.findById(employeeId);
+        if(!userService.matches(changePassword.getOldPassword(), employee.getPassword()))
+            throw new Error("Wrong old password");
+
+        employee.setPassword(changePassword.getNewPassword());
+        userService.save(employee);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    public ResponseEntity<Integer> createEmployee(@ApiParam(value = "Employee to create"  )  @Valid @RequestBody Employee employee) {
-        employee = employeeRepository.save(employee);
+    public ResponseEntity<Integer> createEmployee(@ApiParam(value = "Employee to create")  @Valid @RequestBody Employee employee) {
+        userService.save(employee);
         return new ResponseEntity<Integer>(employee.getId(), HttpStatus.OK);
     }
 
@@ -53,11 +61,13 @@ public class EmployeesApiController implements EmployeesApi {
 
     public ResponseEntity<Employee> getEmployee(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId) {
         Employee employee =  BaseModel.getModelHelper(employeeRepository, employeeId);
+        employee.setPassword("***");
         return new ResponseEntity<Employee>(employee, HttpStatus.OK);
     }
 
     public ResponseEntity<List<Employee>> getEmployees() {
         List<Employee> employees = (List<Employee> ) employeeRepository.findAll();
+        employees.stream().forEach(employee -> employee.setPassword("***"));
         return new ResponseEntity<List<Employee>>(employees, HttpStatus.OK);
     }
 
@@ -66,6 +76,11 @@ public class EmployeesApiController implements EmployeesApi {
         if(employeeId != employee.getId())
             throw new Error("Wrong id");
         employee = BaseModel.combineWithOld(employeeRepository, employee);
+
+        // do not change password with this method
+        String password = employeeRepository.findById(employeeId) .getPassword();
+        employee.setPassword(password);
+
         employee = employeeRepository.save(employee);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

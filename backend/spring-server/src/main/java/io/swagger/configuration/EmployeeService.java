@@ -11,19 +11,22 @@ import org.springframework.stereotype.Service;
  * Created by gros on 22.11.17.
  */
 @Service
-public class UserService {
+public class EmployeeService {
 
     @Autowired
-    private EmployeeRepository repo;
+    private EmployeeRepository employeeRepository;
 
     @Bean
     public PasswordEncoder getPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
-    public void save(Employee user){
-        user.setPassword(getPasswordEncoder().encode(user.getPassword()));
-        repo.save(user);
+    public void save(Employee employee){
+        employee.setPassword(getPasswordEncoder().encode(employee.getPassword()));
+        employeeRepository.save(employee);
     }
 
+    public boolean matches(String oldPassword, String actualPassword) {
+        return getPasswordEncoder().matches(oldPassword, actualPassword);
+    }
 }

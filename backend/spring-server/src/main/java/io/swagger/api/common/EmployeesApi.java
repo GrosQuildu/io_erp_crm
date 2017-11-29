@@ -5,6 +5,7 @@
  */
 package io.swagger.api.common;
 
+import io.swagger.model.ChangePassword;
 import io.swagger.model.common.Employee;
 import io.swagger.model.Error;
 
@@ -34,7 +35,8 @@ public interface EmployeesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> changePassword(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,@ApiParam(value = ""  )  @Valid @RequestBody Employee employee);
+    ResponseEntity<Void> changePassword(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,
+                                        @ApiParam(value = ""  )  @Valid @RequestBody ChangePassword changePassword);
 
 
     @ApiOperation(value = "Create new employee (admin only)", notes = "", response = Integer.class, authorizations = {
@@ -109,6 +111,7 @@ public interface EmployeesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateEmployee(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,@ApiParam(value = "Employee to create"  )  @Valid @RequestBody Employee employee);
+    ResponseEntity<Void> updateEmployee(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,
+                                        @ApiParam(value = "Employee to create"  )  @Valid @RequestBody Employee employee);
 
 }

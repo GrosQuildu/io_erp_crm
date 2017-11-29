@@ -1,7 +1,7 @@
 package io.swagger;
 
 import io.swagger.configuration.CustomUserDetails;
-import io.swagger.configuration.UserService;
+import io.swagger.configuration.EmployeeService;
 import io.swagger.model.common.Employee;
 import io.swagger.model.common.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class Swagger2SpringBoot implements CommandLineRunner {
     }
 
     @Autowired
-    public void authenticationManager(AuthenticationManagerBuilder builder, EmployeeRepository repository, UserService service) throws Exception {
+    public void authenticationManager(AuthenticationManagerBuilder builder, EmployeeRepository repository, EmployeeService service) throws Exception {
         //Setup a default user if db is empty
         if (repository.count()==0) {
             List<String> passwords = Arrays.asList(generatePassword(12), generatePassword(12), generatePassword(12));
@@ -65,7 +65,7 @@ public class Swagger2SpringBoot implements CommandLineRunner {
         }
     }
 
-    protected String generatePassword(Integer length) {
+    private String generatePassword(Integer length) {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder pass = new StringBuilder();
         Random rnd = new Random();
@@ -73,12 +73,11 @@ public class Swagger2SpringBoot implements CommandLineRunner {
             int index = (int) (rnd.nextFloat() * SALTCHARS.length());
             pass.append(SALTCHARS.charAt(index));
         }
-        String passStr = pass.toString();
-        return passStr;
+        return pass.toString();
 
     }
 
     private UserDetailsService userDetailsService(final EmployeeRepository repository) {
-        return username -> new CustomUserDetails(repository.findByMail(username));
+        return mail -> new CustomUserDetails(repository.findByMail(mail));
     }
 }

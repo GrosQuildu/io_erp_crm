@@ -58,7 +58,7 @@ public class UnitsApiController implements UnitsApi {
 
     public ResponseEntity<Void> updateUnit(@ApiParam(value = "",required=true ) @PathVariable("unitId") Integer unitId,
         @ApiParam(value = "Unit to update"  )  @Valid @RequestBody Unit unit) {
-        if(unitId != unit.getId())
+        if(unit.getId() != null && unitId != unit.getId())
             throw new Error("Wrong id");
         unit = BaseModel.combineWithOld(unitRepository, unit);
         unit = unitRepository.save(unit);

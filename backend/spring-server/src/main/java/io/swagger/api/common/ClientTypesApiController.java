@@ -57,7 +57,7 @@ public class ClientTypesApiController implements ClientTypesApi {
 
     public ResponseEntity<Void> updateClientType(@ApiParam(value = "",required=true ) @PathVariable("clientTypeId") Integer clientTypeId,
         @ApiParam(value = "ClientType to update"  )  @Valid @RequestBody ClientType clientType) {
-        if(clientTypeId != clientType.getId())
+        if(clientType.getId() != null && clientTypeId != clientType.getId())
             throw new Error("Wrong id");
         clientType = BaseModel.combineWithOld(clientTypeRepository, clientType);
         clientType = clientTypeRepository.save(clientType);

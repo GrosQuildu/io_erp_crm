@@ -108,7 +108,7 @@ public class OrdersApiController implements OrdersApi {
 
     public ResponseEntity<Void> updateOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,
         @ApiParam(value = "Order_ to create"  )  @Valid @RequestBody Order_ order) {
-        if(orderId != order.getId())
+        if(order.getId() != null && orderId != order.getId())
             throw new Error("Wrong id");
 
         order = BaseModel.combineWithOld(orderRepository, order);

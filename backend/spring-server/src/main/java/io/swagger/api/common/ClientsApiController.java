@@ -62,7 +62,7 @@ public class ClientsApiController implements ClientsApi {
 
     public ResponseEntity<Void> updateClient(@ApiParam(value = "",required=true ) @PathVariable("clientId") Integer clientId,
         @ApiParam(value = "Client to update"  )  @Valid @RequestBody Client client) {
-        if(clientId != client.getId())
+        if(client.getId() != null && clientId != client.getId())
             throw new Error("Wrong id");
         client = BaseModel.combineWithOld(clientRepository, client);
         client = BaseModel.dependsOn(ClientType.class, clientTypeRepository, client);

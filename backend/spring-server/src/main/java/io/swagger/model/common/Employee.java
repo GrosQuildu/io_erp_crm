@@ -42,7 +42,7 @@ public class Employee extends BaseModel {
 
   @JsonProperty("password")
   @NotNull
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false, unique = false)
   private String password;
 
   protected Employee() {}

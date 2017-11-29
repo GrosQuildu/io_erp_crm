@@ -5,11 +5,13 @@
  */
 package io.swagger.api.common;
 
+import io.swagger.model.ChangePassword;
 import io.swagger.model.common.Employee;
 import io.swagger.model.Error;
 
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +36,8 @@ public interface EmployeesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> changePassword(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,@ApiParam(value = ""  )  @Valid @RequestBody Employee employee);
+    ResponseEntity<Void> changePassword(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,
+                                        @ApiParam(value = ""  )  @Valid @RequestBody ChangePassword changePassword);
 
 
     @ApiOperation(value = "Create new employee (admin only)", notes = "", response = Integer.class, authorizations = {
@@ -49,6 +52,7 @@ public interface EmployeesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
+    @PreAuthorize("principal.authorities.contains(ADMIN)")
     ResponseEntity<Integer> createEmployee(@ApiParam(value = "Employee to create"  )  @Valid @RequestBody Employee employee);
 
 
@@ -109,6 +113,7 @@ public interface EmployeesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateEmployee(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,@ApiParam(value = "Employee to create"  )  @Valid @RequestBody Employee employee);
+    ResponseEntity<Void> updateEmployee(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,
+                                        @ApiParam(value = "Employee to create"  )  @Valid @RequestBody Employee employee);
 
 }

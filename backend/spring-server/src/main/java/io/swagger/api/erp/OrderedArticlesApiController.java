@@ -104,7 +104,7 @@ public class OrderedArticlesApiController implements OrderedArticlesApi {
     public ResponseEntity<Void> updateOrderedArticle(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,
                                                      @ApiParam(value = "",required=true ) @PathVariable("OrderedArticleId") Integer orderedArticleId,
                                                      @ApiParam(value = "OrderedArticle to create"  )  @Valid @RequestBody OrderedArticle orderedArticle) {
-        if(orderedArticleId != orderedArticle.getId())
+        if(orderedArticle.getId() != null && orderedArticleId != orderedArticle.getId())
             throw new Error("Wrong id");
 
         OrderedArticle orderedArticleOld = BaseModel.getModelHelper(orderedArticleRepository, orderedArticleId);

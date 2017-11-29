@@ -61,7 +61,7 @@ public class EmployeesApiController implements EmployeesApi {
         Employee currentEmployee = userService.getCurrentUser();
         if(currentEmployee.getRole() != Employee.Role.ADMIN)
             throw new Error("Only admin can create employees");
-        
+
         userService.save(employee);
         return new ResponseEntity<Integer>(employee.getId(), HttpStatus.OK);
     }

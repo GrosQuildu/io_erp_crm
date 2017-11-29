@@ -64,7 +64,7 @@ public class ArticlesApiController implements ArticlesApi {
 
     public ResponseEntity<Void> updateArticle(@ApiParam(value = "",required=true ) @PathVariable("articleId") Integer articleId,
         @ApiParam(value = "Article to create"  )  @Valid @RequestBody Article article) {
-        if(articleId != article.getId())
+        if(article.getId() != null && articleId != article.getId())
             throw new Error("Wrong id");
         article = BaseModel.combineWithOld(articleRepository, article);
         article = BaseModel.dependsOn(Unit.class, unitRepository,   article);

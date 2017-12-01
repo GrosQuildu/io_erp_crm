@@ -9,5 +9,4 @@ import java.util.List;
  */
 public interface MeetingNoteRepository extends CrudRepository<MeetingNote, Integer> {
     public MeetingNote findById(Integer id);
-    public List<MeetingNote> findAllByMeeting_id(Integer id);
 }

@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @Api(value = "taskStatuses", description = "the taskStatuses API")
 public interface TaskStatusesApi {
 
-    @ApiOperation(value = "Create new taskStatuse", notes = "", response = Integer.class, authorizations = {
+    @ApiOperation(value = "Create new taskStatus", notes = "", response = Integer.class, authorizations = {
         @Authorization(value = "Authorization")
     }, tags={ "CRM - taskStatuses", })
     @ApiResponses(value = { 
@@ -34,10 +34,10 @@ public interface TaskStatusesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createTaskStatuse(@ApiParam(value = "TaskStatuse to create"  )  @Valid @RequestBody TaskStatus taskStatuse);
+    ResponseEntity<Integer> createTaskStatus(@ApiParam(value = "TaskStatus to create"  )  @Valid @RequestBody TaskStatus taskStatus);
 
 
-    @ApiOperation(value = "Delete taskStatuse", notes = "", response = Void.class, authorizations = {
+    @ApiOperation(value = "Delete taskStatus", notes = "", response = Void.class, authorizations = {
         @Authorization(value = "Authorization")
     }, tags={ "CRM - taskStatuses", })
     @ApiResponses(value = { 
@@ -45,14 +45,14 @@ public interface TaskStatusesApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/crm/taskStatuses/{taskStatuseId}",
+    @RequestMapping(value = "/crm/taskStatuses/{taskStatusId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteTaskStatuse(@ApiParam(value = "",required=true ) @PathVariable("taskStatuseId") Integer taskStatuseId);
+    ResponseEntity<Void> deleteTaskStatus(@ApiParam(value = "",required=true ) @PathVariable("taskStatusId") Integer taskStatusId);
 
 
-    @ApiOperation(value = "Returns TaskStatuse", notes = "", response = TaskStatus.class, authorizations = {
+    @ApiOperation(value = "Returns TaskStatus", notes = "", response = TaskStatus.class, authorizations = {
         @Authorization(value = "Authorization")
     }, tags={ "CRM - taskStatuses", })
     @ApiResponses(value = { 
@@ -60,11 +60,11 @@ public interface TaskStatusesApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/crm/taskStatuses/{taskStatuseId}",
+    @RequestMapping(value = "/crm/taskStatuses/{taskStatusId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
-    ResponseEntity<TaskStatus> getTaskStatuse(@ApiParam(value = "",required=true ) @PathVariable("taskStatuseId") Integer taskStatuseId);
+    ResponseEntity<TaskStatus> getTaskStatus(@ApiParam(value = "",required=true ) @PathVariable("taskStatusId") Integer taskStatusId);
 
 
     @ApiOperation(value = "Returns list of TaskStatuses", notes = "", response = TaskStatus.class, responseContainer = "List", authorizations = {
@@ -82,7 +82,7 @@ public interface TaskStatusesApi {
     ResponseEntity<List<TaskStatus>> getTaskStatuses();
 
 
-    @ApiOperation(value = "Update existing taskStatuse", notes = "", response = Void.class, authorizations = {
+    @ApiOperation(value = "Update existing taskStatus", notes = "", response = Void.class, authorizations = {
         @Authorization(value = "Authorization")
     }, tags={ "CRM - taskStatuses", })
     @ApiResponses(value = { 
@@ -90,10 +90,10 @@ public interface TaskStatusesApi {
         @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
         @ApiResponse(code = 500, message = "Server error", response = Error.class) })
     
-    @RequestMapping(value = "/crm/taskStatuses/{taskStatuseId}",
+    @RequestMapping(value = "/crm/taskStatuses/{taskStatusId}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateTaskStatuse(@ApiParam(value = "",required=true ) @PathVariable("taskStatuseId") Integer taskStatuseId,@ApiParam(value = "TaskStatuse to create"  )  @Valid @RequestBody TaskStatus taskStatuse);
+    ResponseEntity<Void> updateTaskStatus(@ApiParam(value = "",required=true ) @PathVariable("taskStatusId") Integer taskStatusId,@ApiParam(value = "TaskStatus to create"  )  @Valid @RequestBody TaskStatus taskStatus);
 
 }

@@ -34,7 +34,7 @@ public interface MeetingNotesApi {
             consumes = { "application/json" },
             method = RequestMethod.POST)
     ResponseEntity<Integer> createMeetingNotes(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,
-                                               @ApiParam(value = "MeetingNote to create"  )  @Valid @RequestBody MeetingNote order);
+                                               @ApiParam(value = "MeetingNote to create"  )  @Valid @RequestBody MeetingNote meetingNote);
 
     @ApiOperation(value = "Delete MeetingNote", notes = "", response = Void.class, authorizations = {
             @Authorization(value = "Authorization")

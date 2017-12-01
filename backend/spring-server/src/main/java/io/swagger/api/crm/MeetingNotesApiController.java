@@ -66,7 +66,7 @@ public class MeetingNotesApiController implements MeetingNotesApi {
 
     public ResponseEntity<List<MeetingNote>> getMeetingNotes(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId) {
         Meeting meeting = BaseModel.getModelHelper(meetingRepository, meetingId);
-        List<MeetingNote> meetingNotes = (List<MeetingNote>) meetingNoteRepository.findAllByMeeting_id(meeting.getId());
+        List<MeetingNote> meetingNotes = meeting.getNotes();
         return new ResponseEntity<List<MeetingNote>>(meetingNotes, HttpStatus.OK);
     }
 

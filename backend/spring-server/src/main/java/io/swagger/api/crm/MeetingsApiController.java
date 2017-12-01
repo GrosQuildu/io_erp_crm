@@ -90,7 +90,7 @@ public class MeetingsApiController implements MeetingsApi {
 
     public ResponseEntity<Void> deleteMeeting(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId) {
         Meeting meeting = BaseModel.getModelHelper(meetingRepository, meetingId);
-        meetingNoteRepository.delete(meetingNoteRepository.findAllByMeeting_id(meeting.getId()));
+        meetingNoteRepository.delete(meeting.getNotes());
         meetingRepository.delete(meetingId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

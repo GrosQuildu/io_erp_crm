@@ -4,6 +4,8 @@ import io.swagger.ModelHelper;
 import org.springframework.data.repository.CrudRepository;
 
 import java.lang.*;
+import java.lang.Error;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,9 +83,7 @@ public abstract class BaseModel {
      * @param <R> Class of required objects repository (extends CrudRepository)
      * @return T, model
      */
-    public static <D extends BaseModel, T, R extends CrudRepository> T dependsOn(Class dependencyClass, R repository, T model) {
-        String dependencySimpleName = dependencyClass.getSimpleName();
-
+    public static <D extends BaseModel, T, R extends CrudRepository> T dependsOn(Class dependencyClass, R repository, T model, String dependencySimpleName) {
         String methodGet = "get" + dependencySimpleName;
         String methodSet = "set" + dependencySimpleName;
 
@@ -117,6 +117,11 @@ public abstract class BaseModel {
         } catch (Exception e) { throw new java.lang.Error("Method call error2 in dependsOn: " + e); }
 
         return model;
+    }
+
+    public static <D extends BaseModel, T, R extends CrudRepository> T dependsOn(Class dependencyClass, R repository, T model) {
+        String dependencySimpleName = dependencyClass.getSimpleName();
+        return dependsOn(dependencyClass, repository, model, dependencySimpleName);
     }
 
     public abstract Integer getId();

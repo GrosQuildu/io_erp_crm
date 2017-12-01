@@ -1,855 +1,86 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  title: IO ERP CRM
   description: IO ERP CRM
   version: 1.0.0
-
-host: localhost:8080
+  title: IO ERP CRM
+  contact: {}
+  license:
+    name: GPL
+    url: 'http://unlicense.org'
+host: 'localhost:8080'
 basePath: /api
-schemes:
-  - http
-
-
-securityDefinitions:
-  APIKeyHeader:
-    type: apiKey
-    in: header
-    name: API-KEY
-
-
-security:
-  - APIKeyHeader: []
-
-responses:
-  NotFound:
-    description: The specified resource was not found
-    schema:
-      $ref: "#/definitions/Error"
-  ServerError:
-    description: Server error
-    schema:
-      $ref: "#/definitions/Error"
-  Unauthorized:
-    description: Unauthorized - API key is missing or invalid
-    schema:
-      $ref: "#/definitions/Error"
-
-
-
-
-# /* ---- DEFINITIONS
-#    ----
-#
-
-definitions:
-  Error:
-    type: object
-    properties:
-      message:
-        type: string
-      timestamp:
-        type: string
-      exception:
-        type: string
-      error:
-        type: string
-      path:
-        type: string
-    required:
-      - message
-
-# /* ----- COMMON START ----- */
-  Token:
-    type: object
-    properties:
-      token:
-        type: string
-
-  Employee:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      name:
-        type: string
-        minLength: 5
-        maxLength: 100
-      telephone:
-        type: string
-        minLength: 5
-        maxLength: 15
-      mail:
-        type: string
-        format: email
-      password:
-        type: string
-        format: password
-        description: required on post, ignored on update, "***" on get
-      role:
-        type: string
-        enum: [erp, crm, admin]
-      monthSchedule:
-        type: number
-        format: money
-        default: 0
-      visibility:
-        type: boolean
-        default: true
-    required:
-      - id
-      - name
-      - mail
-      - role
-      - password
-
-  ClientType:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      description:
-        type: string
-        minLength: 5
-        maxLength: 100
-    required:
-      - id
-      - description
-
-  Client:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      name:
-        type: string
-        minLength: 5
-        maxLength: 100
-      street:
-        type: string
-        minLength: 5
-        maxLength: 100
-      city:
-        type: string
-        minLength: 5
-        maxLength: 100
-      postCode:
-        type: string
-        format: ^\d{2}-?\d{3}$
-      nameDelivery:
-        type: string
-        minLength: 5
-        maxLength: 100
-      streetDelivery:
-        type: string
-        minLength: 5
-        maxLength: 100
-      cityDelivery:
-        type: string
-        minLength: 5
-        maxLength: 100
-      postCodeDelivery:
-        type: string
-        format: ^\d{2}-?\d{3}$
-      nip:
-        type: string
-        minLength: 10
-        maxLength: 20
-      telephone:
-        type: string
-        minLength: 5
-        maxLength: 10
-      mail:
-        type: string
-        format: email
-      clientTypeId:
-        type: integer
-        format: int32
-    required:
-      - id
-      - name
-      - mail
-      - clientTypeId
-
-# /* ----- COMMON END ----- */
-
-
-# /* ----- ERP START ----- */
-  Unit:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      name:
-        type: string
-        maxLength: 100
-      nameShort:
-        type: string
-        maxLength: 32
-    required:
-      - id
-      - name
-      - nameShort
-
-  DeliveryCost:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      weightFrom:
-        type: number
-        format: float
-      weightTo:
-        type: number
-        format: float
-      price:
-        type: number
-        format: money
-    required:
-      - id
-      - weightFrom
-      - weightTo
-      - price
-
-  Article:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      availability:
-        type: integer
-        format: int32
-      unitId:
-        type: integer
-        format: int32
-      unitPrice:
-        type: number
-        format: money
-      weight:
-        type: number
-        format: float
-    required:
-      - id
-      - availability
-      - unitId
-      - unitPrice
-
-  Proforma:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      proformaNumber:
-        type: string
-        minLength: 5
-        maxLength: 32
-      orderId:
-        type: integer
-        format: int32
-      issueDate:
-        type: string
-        format: date
-      saleDate:
-        type: string
-        format: date
-      paymentDate:
-        type: string
-        format: date
-      paymentMethod:
-        type: string
-        maxLength: 100
-    required:
-      - id
-      - proformaNumber
-      - orderId
-      - issueDate
-      - saleDate
-      - paymentDate
-      - paymentMethod
-
-  OrderedArticle:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      articleId:
-        type: integer
-        format: int32
-      orderId:
-        type: integer
-        format: int32
-      description:
-        type: string
-      amount:
-        type: integer
-        format: int32
-      unitPrice:
-        type: number
-        format: money
-      netPrice:
-        type: number
-        format: money
-      weight:
-        type: number
-        format: float
-    required:
-      - id
-      - articleId
-      - orderId
-      - description
-      - amount
-      - unitPrice
-      - netPrice
-
-  Order:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      orderNumber:
-        type: string
-        maxLength: 32
-      orderDate:
-        type: string
-        format: date
-      realizationDate:
-        type: string
-        format: date
-      realizationDeadline:
-        type: string
-        maxLength: 100
-      employeeId:
-        type: integer
-        format: int32
-      clientId:
-        type: integer
-        format: int32
-      conditions:
-        type: string
-        default: ""
-      comments:
-        type: string
-        default: ""
-      advance:
-        type: number
-        format: money
-        default: 0
-      vat:
-        type: number
-        format: float
-      state:
-        type: string
-        maxLength: 100
-      deliveryCost:
-        type: number
-        format: money
-      deliveryAddress:
-        type: string
-      isSigned:
-        type: boolean
-        default: false
-      isPaid:
-        type: string
-        maxLength: 100
-        default: false
-      isDone:
-        type: boolean
-        default: false
-    required:
-      - id
-      - orderNumber
-      - orderDate
-      - realizationDeadline
-      - employeeId
-      - clientId
-      - vat
-      - state
-      - deliveryAddress
-
-# /* ----- ERP END ----- */
-
-
-# /* ----- CRM START ----- */
-  Contact:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      clientId:
-        type: integer
-        format: int32
-      employeeId:
-        type: integer
-        format: int32
-      clientTypeId:
-        type: integer
-        format: int32
-      vip:
-        type: boolean
-        default: false
-      name:
-        type: string
-        minLength: 5
-        maxLength: 100
-      street:
-        type: string
-        minLength: 5
-        maxLength: 100
-      city:
-        type: string
-        minLength: 5
-        maxLength: 100
-      postCode:
-        type: string
-        minLength: 5
-        maxLength: 100
-      telephone:
-        type: string
-        minLength: 5
-        maxLength: 100
-      mail:
-        type: string
-        format: email
-    required:
-      - id
-      - employeeId
-      - clientTypeId
-      - name
-      - mail
-
-  ContactGroup:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      description:
-        type: string
-        minLength: 5
-        maxLength: 100
-    required:
-      - id
-      - description
-
-  TaskStatus:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      description:
-        type: string
-        minLength: 5
-        maxLength: 100
-    required:
-      - id
-      - description
-
-  Task:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      title:
-        type: string
-        minLength: 5
-        maxLength: 100
-      taskStatusId:
-        type: integer
-        format: int32
-      employeeId:
-        type: integer
-        format: int32
-      employeeCommissionedId:
-        type: integer
-        format: int32
-      contactId:
-        type: integer
-        format: int32
-      backgroundColor:
-        type: string
-        minLength: 4
-        maxLength: 10
-      description:
-        type: string
-      isArchived:
-        type: boolean
-        default: false
-      endDate:
-        type: string
-        format: date
-    required:
-      - id
-      - title
-      - taskStatusId
-      - employeeId
-
-  TaskComment:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      taskId:
-        type: integer
-        format: int32
-      content:
-        type: string
-      employeeId:
-        type: integer
-        format: int32
-      time:
-        type: string
-        format: date
-    required:
-      - id
-      - taskId
-      - time
-      - employeeId
-      - content
-
-  TaskNote:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      taskId:
-        type: integer
-        format: int32
-      content:
-        type: string
-      backgroundColor:
-        type: string
-        minLength: 4
-        maxLength: 10
-    required:
-      - id
-      - taskId
-      - content
-
-  TaskContact:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      taskId:
-        type: integer
-        format: int32
-      contactId:
-        type: integer
-        format: int32
-    required:
-      - id
-      - taskId
-      - contactId
-
-  Meeting:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      meetingDate:
-        type: string
-        format: date
-      nextMeetingDate:
-        type: string
-        format: date
-      description:
-        type: string
-      purpose:
-        type: string
-      employeeId:
-        type: integer
-        format: int32
-      telephoneMeeting:
-        type: boolean
-        default: false
-    required:
-      - id
-      - meetingDate
-
-  MeetingNote:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      meetingId:
-        type: integer
-        format: int32
-      content:
-        type: string
-      backgroundColor:
-        type: string
-        minLength: 4
-        maxLength: 10
-    required:
-      - id
-      - meetingId
-
-  MeetingContact:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      meetingId:
-        type: integer
-        format: int32
-      contactId:
-        type: integer
-        format: int32
-    required:
-      - id
-      - meetingId
-      - contactId
-
-  MeetingEmployee:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-      meetingId:
-        type: integer
-        format: int32
-      employeeId:
-        type: integer
-        format: int32
-    required:
-      - id
-      - meetingId
-      - employeeId
-# /* ----- CRM END ----- */
-
-
-
-
-# /* ---- PATHS
-#    ----
-#
+tags:
+  - name: task-statuses-api-controller
+    description: the taskStatuses API
+  - name: delivery-costs-api-controller
+    description: the deliveryCosts API
+  - name: contact-groups-api-controller
+    description: the contactGroups API
+  - name: contacts-api-controller
+    description: the contacts API
+  - name: task-notes-api-controller
+    description: the task notes API
+  - name: clients-api-controller
+    description: the clients API
+  - name: ordered-articles-api-controller
+    description: the orders API
+  - name: orders-api-controller
+    description: the orders API
+  - name: proformas-api-controller
+    description: the proformas API
+  - name: articles-api-controller
+    description: the articles API
+  - name: employees-api-controller
+    description: the employees API
+  - name: meeting-notes-api-controller
+    description: the meeting notes API
+  - name: tasks-api-controller
+    description: the tasks API
+  - name: client-types-api-controller
+    description: the clientTypes API
+  - name: units-api-controller
+    description: the units API
+  - name: meetings-api-controller
+    description: the meetings API
+  - name: task-comments-api-controller
+    description: the task comments API
 paths:
-  # /* ----- COMMON PATHS START ----- */
-  /login:
-    post:
-      tags:
-        - employees
-      operationId: login
-      summary: Get authentication token, roles are:crm, erp, admin
-      description: auth
-      security: []
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: user
-          schema:
-            type: object
-            properties:
-              user:
-                type: string
-              password:
-                type: string
-                format: password
-            required:
-              - user
-              - password
-      responses:
-        200:
-          description: "Login successful"
-          schema:
-            $ref: "#/definitions/Token"
-        401:
-          description: "Not authenticated"
-
-  /employees:
-    get:
-      tags:
-        - employees
-      operationId: getEmployees
-      summary: Returns list of Employees
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Employee"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    post:
-      tags:
-        - employees
-      operationId: createEmployee
-      summary: Create new employee (admin only)
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: employee
-          description: Employee to create
-          schema:
-            $ref: "#/definitions/Employee"
-      responses:
-        200:
-          description: ""
-          schema:
-            type: integer
-            format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /employees/{employeeId}:
-    parameters:
-      - in: path
-        name: employeeId
-        type: integer
-        required: true
-    get:
-      tags:
-        - employees
-      operationId: getEmployee
-      summary: Returns Employee
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/Employee"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - employees
-      operationId: updateEmployee
-      summary: Update existing employee (admin or self only)
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: employee
-          description: Employee to create
-          schema:
-            $ref: "#/definitions/Employee"
-      responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-    delete:
-      tags:
-        - employees
-      operationId: deleteEmployee
-      summary: Delete employee (admin only)
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /employees/{employeeId}/changePassword:
-    put:
-      tags:
-        - employees
-      operationId: changePassword
-      summary: Change employee's password (admin or self only)
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: employeeId
-          type: integer
-          required: true
-        - in: body
-          name: employee
-          schema:
-            type: object
-            properties:
-              oldPassword:
-                type: string
-                format: password
-                description: not required for admin
-              newPassword:
-                type: string
-                format: password
-      responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-
   /clientTypes:
     get:
       tags:
         - common - clientTypes
-      operationId: getClientTypes
       summary: Returns list of ClientTypes
+      operationId: getClientTypesUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: array
             items:
-              $ref: "#/definitions/ClientType"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
+              $ref: '#/definitions/ClientType'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     post:
       tags:
         - common - clientTypes
-      operationId: createClientType
       summary: Create new clientType
+      operationId: createClientTypeUsingPOST
       consumes:
         - application/json
       produces:
@@ -858,110 +89,177 @@ paths:
         - in: body
           name: clientType
           description: ClientType to create
+          required: false
           schema:
-            $ref: "#/definitions/ClientType"
+            $ref: '#/definitions/ClientType'
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: integer
             format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /clientTypes/{clientTypeId}:
-    parameters:
-      - in: path
-        name: clientTypeId
-        type: integer
-        required: true
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/clientTypes/{clientTypeId}':
     get:
       tags:
         - common - clientTypes
-      operationId: getClientType
       summary: Returns ClientType
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/ClientType"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - common - clientTypes
-      operationId: updateClientType
-      summary: Update existing clientType
+      operationId: getClientTypeUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
-        - in: body
-          name: clientType
-          description: ClientType to create
-          schema:
-            $ref: "#/definitions/ClientType"
+        - name: clientTypeId
+          in: path
+          description: clientTypeId
+          required: true
+          type: integer
+          format: int32
       responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-    delete:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ClientType'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
       tags:
         - common - clientTypes
-      operationId: deleteClientType
-      summary: Delete clientType
+      summary: Update existing clientType
+      operationId: updateClientTypeUsingPUT
       consumes:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: clientTypeId
+          in: path
+          description: clientTypeId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: clientType
+          description: ClientType to update
+          required: false
+          schema:
+            $ref: '#/definitions/ClientType'
       responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    delete:
+      tags:
+        - common - clientTypes
+      summary: Delete clientType
+      operationId: deleteClientTypeUsingDELETE
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: clientTypeId
+          in: path
+          description: clientTypeId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
   /clients:
     get:
       tags:
         - common - clients
-      operationId: getClients
       summary: Returns list of Clients
+      operationId: getClientsUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: array
             items:
-              $ref: "#/definitions/Client"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
+              $ref: '#/definitions/Client'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     post:
       tags:
         - common - clients
-      operationId: createClient
       summary: Create new client
+      operationId: createClientUsingPOST
       consumes:
         - application/json
       produces:
@@ -970,991 +268,356 @@ paths:
         - in: body
           name: client
           description: Client to create
+          required: false
           schema:
-            $ref: "#/definitions/Client"
+            $ref: '#/definitions/Client'
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: integer
             format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /clients/{clientId}:
-    parameters:
-      - in: path
-        name: clientId
-        type: integer
-        required: true
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/clients/{clientId}':
     get:
       tags:
         - common - clients
-      operationId: getClient
       summary: Returns Client
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/Client"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - common - clients
-      operationId: updateClient
-      summary: Update existing client
+      operationId: getClientUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
+        - name: clientId
+          in: path
+          description: clientId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Client'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - common - clients
+      summary: Update existing client
+      operationId: updateClientUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: clientId
+          in: path
+          description: clientId
+          required: true
+          type: integer
+          format: int32
         - in: body
           name: client
-          description: Client to create
+          description: Client to update
+          required: false
           schema:
-            $ref: "#/definitions/Client"
+            $ref: '#/definitions/Client'
       responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     delete:
       tags:
         - common - clients
-      operationId: deleteClient
       summary: Delete client
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  # /* ----- COMMON PATHS END ----- */
-
-
-  # /* ----- ERP PATHS START ----- */
-  /units:
-    get:
-      tags:
-        - ERP - units
-      operationId: getUnits
-      summary: Returns list of Units
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Unit"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    post:
-      tags:
-        - ERP - units
-      operationId: createUnit
-      summary: Create new unit
+      operationId: deleteClientUsingDELETE
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
-        - in: body
-          name: unit
-          description: Unit to create
-          schema:
-            $ref: "#/definitions/Unit"
-      responses:
-        200:
-          description: ""
-          schema:
-            type: integer
-            format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /units/{unitId}:
-    parameters:
-      - in: path
-        name: unitId
-        type: integer
-        required: true
-    get:
-      tags:
-        - ERP - units
-      operationId: getUnit
-      summary: Returns Unit
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/Unit"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - ERP - units
-      operationId: updateUnit
-      summary: Update existing unit
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: unit
-          description: Unit to update
-          schema:
-            $ref: "#/definitions/Unit"
-      responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-    delete:
-      tags:
-        - ERP - units
-      operationId: deleteUnit
-      summary: Delete unit
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-
-  /deliveryCosts:
-    get:
-      tags:
-        - ERP - deliveryCosts
-      operationId: getDeliveryCosts
-      summary: Returns list of DeliveryCosts
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/DeliveryCost"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    post:
-      tags:
-        - ERP - deliveryCosts
-      operationId: createDeliveryCost
-      summary: Create new deliveryCost
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: deliveryCost
-          description: DeliveryCost to create
-          schema:
-            $ref: "#/definitions/DeliveryCost"
-      responses:
-        200:
-          description: ""
-          schema:
-            type: integer
-            format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /deliveryCosts/{deliveryCostId}:
-    parameters:
-      - in: path
-        name: deliveryCostId
-        type: integer
-        required: true
-    get:
-      tags:
-        - ERP - deliveryCosts
-      operationId: getDeliveryCost
-      summary: Returns DeliveryCost
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/DeliveryCost"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - ERP - deliveryCosts
-      operationId: updateDeliveryCost
-      summary: Update existing deliveryCost
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: deliveryCost
-          description: DeliveryCost to create
-          schema:
-            $ref: "#/definitions/DeliveryCost"
-      responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-    delete:
-      tags:
-        - ERP - deliveryCosts
-      operationId: deleteDeliveryCost
-      summary: Delete deliveryCost
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /articles:
-    get:
-      tags:
-        - ERP - articles
-      operationId: getArticles
-      summary: Returns list of Articles
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Article"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    post:
-      tags:
-        - ERP - articles
-      operationId: createArticle
-      summary: Create new article
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: article
-          description: Article to create
-          schema:
-            $ref: "#/definitions/Article"
-      responses:
-        200:
-          description: ""
-          schema:
-            type: integer
-            format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /articles/{articleId}:
-    parameters:
-      - in: path
-        name: articleId
-        type: integer
-        required: true
-    get:
-      tags:
-        - ERP - articles
-      operationId: getArticle
-      summary: Returns Article
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/Article"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - ERP - articles
-      operationId: updateArticle
-      summary: Update existing article
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: article
-          description: Article to create
-          schema:
-            $ref: "#/definitions/Article"
-      responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-    delete:
-      tags:
-        - ERP - articles
-      operationId: deleteArticle
-      summary: Delete article
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /proformas:
-    get:
-      tags:
-        - ERP - proformas
-      operationId: getProformas
-      summary: Returns list of Proformas
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Proforma"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    post:
-      tags:
-        - ERP - proformas
-      operationId: createProforma
-      summary: Create new proforma
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: proforma
-          description: Proforma to create
-          schema:
-            $ref: "#/definitions/Proforma"
-      responses:
-        200:
-          description: ""
-          schema:
-            type: integer
-            format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /proformas/{proformaId}:
-    parameters:
-      - in: path
-        name: proformaId
-        type: integer
-        required: true
-    get:
-      tags:
-        - ERP - proformas
-      operationId: getProforma
-      summary: Returns Proforma
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/Proforma"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - ERP - proformas
-      operationId: updateProforma
-      summary: Update existing proforma
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: proforma
-          description: Proforma to create
-          schema:
-            $ref: "#/definitions/Proforma"
-      responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-    delete:
-      tags:
-        - ERP - proformas
-      operationId: deleteProforma
-      summary: Delete proforma
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /orders:
-    get:
-      tags:
-        - ERP - orders
-      operationId: getOrders
-      summary: Returns list of Orders
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Order"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    post:
-      tags:
-        - ERP - orders
-      operationId: createOrder
-      summary: Create new order
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: order
-          description: Order to create
-          schema:
-            type: object
-            properties:
-              order:
-                $ref: "#/definitions/Order"
-      responses:
-        200:
-          description: ""
-          schema:
-            type: integer
-            format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /orders/{orderId}:
-    parameters:
-      - in: path
-        name: orderId
-        type: integer
-        required: true
-    get:
-      tags:
-        - ERP - orders
-      operationId: getOrder
-      summary: Returns Order
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/Order"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - ERP - orders
-      operationId: updateOrder
-      summary: Update existing order
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: order
-          description: Order to create
-          schema:
-            $ref: "#/definitions/Order"
-      responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-    delete:
-      tags:
-        - ERP - orders
-      operationId: deleteOrder
-      summary: Delete order
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /orders/{orderId}/deliveryCosts:
-    get:
-      tags:
-        - ERP - orders
-      operationId: getOrderDeliveryCosts
-      summary: Returns order's delivery costs
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: orderId
-          type: integer
+        - name: clientId
+          in: path
+          description: clientId
           required: true
-      responses:
-        200:
-          description: "Get or compute (if null) delivery cost of order"
-          schema:
-            type: number
-            format: money
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /orders/{orderId}/netPrice:
-    get:
-      tags:
-        - ERP - orders
-      operationId: getOrderNetPrice
-      summary: Returns order's net price
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: orderId
           type: integer
-          required: true
+          format: int32
       responses:
-        200:
-          description: "Compute net price of order"
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
           schema:
-            type: number
-            format: money
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-
-  /orders/{orderId}/articles:
-    parameters:
-      - in: path
-        name: orderId
-        type: integer
-        required: true
-    get:
-      tags:
-        - ERP - orderedArticles
-      operationId: getOrderedArticles
-      summary: Returns articles belonging to given order
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/OrderedArticle"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    post:
-      tags:
-        - ERP - orderedArticles
-      operationId: createOrderedArticle
-      summary: Create new OrderedArticle for given order
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: order
-          description: OrderedArticle to create
-          schema:
-            $ref: "#/definitions/OrderedArticle"
-      responses:
-        200:
-          description: ""
-          schema:
-            type: integer
-            format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-
-  /orders/{orderId}/articles/{OrderedArticleId}:
-    parameters:
-      - in: path
-        name: orderId
-        type: integer
-        required: true
-      - in: path
-        name: OrderedArticleId
-        type: integer
-        required: true
-    get:
-      tags:
-        - ERP - orderedArticles
-      operationId: getOrderedArticle
-      summary: Returns article belonging to given order
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/OrderedArticle"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - ERP - orderedArticles
-      operationId: updateOrderedArticle
-      summary: Update existing OrderedArticle
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: OrderedArticle
-          description: OrderedArticle to create
-          schema:
-            $ref: "#/definitions/OrderedArticle"
-      responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-    delete:
-      tags:
-        - ERP - orderedArticles
-      operationId: deleteOrderedArticle
-      summary: Delete OrderedArticle
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /orders/{orderId}/articles/{OrderedArticleId}/netPrice:
-    get:
-      tags:
-        - ERP - orderedArticles
-      operationId: getOrderedArticleNetPrice
-      summary: Returns order's article net price
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: orderId
-          type: integer
-          required: true
-        - in: path
-          name: OrderedArticleId
-          type: integer
-          required: true
-      responses:
-        200:
-          description: "Compute net price of order's article"
-          schema:
-            type: number
-            format: money
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-  # /* ----- ERP PATHS END ----- */
-
-
-
-  # /* ----- CRM PATHS START ----- */
-  /contactGroups:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  /crm/contactGroups:
     get:
       tags:
         - CRM - contactGroups
-      operationId: getContactGroups
       summary: Returns list of ContactGroups
+      operationId: getContactGroupsUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: array
             items:
-              $ref: "#/definitions/ContactGroup"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
+              $ref: '#/definitions/ContactGroup'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     post:
       tags:
         - CRM - contactGroups
-      operationId: createContactGroup
-      summary: Create new contactType
+      summary: Create new contactGroup
+      operationId: createContactGroupUsingPOST
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
         - in: body
-          name: contactType
+          name: contactGroup
           description: ContactGroup to create
+          required: false
           schema:
-            $ref: "#/definitions/ContactGroup"
+            $ref: '#/definitions/ContactGroup'
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: integer
             format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /contactGroups/{contactGroupId}:
-    parameters:
-      - in: path
-        name: contactGroupId
-        type: integer
-        required: true
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/crm/contactGroups/{contactGroupId}':
     get:
       tags:
         - CRM - contactGroups
-      operationId: getContactGroup
       summary: Returns ContactGroup
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/ContactGroup"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - CRM - contactGroups
-      operationId: updateContactGroup
-      summary: Update existing contactType
+      operationId: getContactGroupUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
+        - name: contactGroupId
+          in: path
+          description: contactGroupId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ContactGroup'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - CRM - contactGroups
+      summary: Update existing contactGroup
+      operationId: updateContactGroupUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: contactGroupId
+          in: path
+          description: contactGroupId
+          required: true
+          type: integer
+          format: int32
         - in: body
-          name: contactType
+          name: contactGroup
           description: ContactGroup to create
+          required: false
           schema:
-            $ref: "#/definitions/ContactGroup"
+            $ref: '#/definitions/ContactGroup'
       responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     delete:
       tags:
         - CRM - contactGroups
-      operationId: deleteContactGroup
-      summary: Delete contactType
+      summary: Delete contactGroup
+      operationId: deleteContactGroupUsingDELETE
       consumes:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: contactGroupId
+          in: path
+          description: contactGroupId
+          required: true
+          type: integer
+          format: int32
       responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /contacts:
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  /crm/contacts:
     get:
       tags:
         - CRM - contacts
-      operationId: getContacts
       summary: Returns list of Contacts
+      operationId: getContactsUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: array
             items:
-              $ref: "#/definitions/Contact"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
+              $ref: '#/definitions/Contact'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     post:
       tags:
         - CRM - contacts
-      operationId: createContact
       summary: Create new contact
+      operationId: createContactUsingPOST
       consumes:
         - application/json
       produces:
@@ -1963,591 +626,177 @@ paths:
         - in: body
           name: contact
           description: Contact to create
+          required: false
           schema:
-            $ref: "#/definitions/Contact"
+            $ref: '#/definitions/Contact'
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: integer
             format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /contacts/{contactId}:
-    parameters:
-      - in: path
-        name: contactId
-        type: integer
-        required: true
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/crm/contacts/{contactId}':
     get:
       tags:
         - CRM - contacts
-      operationId: getContact
       summary: Returns Contact
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/Contact"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - CRM - contacts
-      operationId: updateContact
-      summary: Update existing contact
+      operationId: getContactUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
+        - name: contactId
+          in: path
+          description: contactId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Contact'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - CRM - contacts
+      summary: Update existing contact
+      operationId: updateContactUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: contactId
+          in: path
+          description: contactId
+          required: true
+          type: integer
+          format: int32
         - in: body
           name: contact
           description: Contact to create
+          required: false
           schema:
-            $ref: "#/definitions/Contact"
+            $ref: '#/definitions/Contact'
       responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     delete:
       tags:
         - CRM - contacts
-      operationId: deleteContact
       summary: Delete contact
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /taskStatuses:
-    get:
-      tags:
-        - CRM - taskStatuses
-      operationId: getTaskStatuses
-      summary: Returns list of TaskStatuses
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/TaskStatus"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    post:
-      tags:
-        - CRM - taskStatuses
-      operationId: createTaskStatuse
-      summary: Create new taskStatuse
+      operationId: deleteContactUsingDELETE
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
-        - in: body
-          name: taskStatuse
-          description: TaskStatuse to create
-          schema:
-            $ref: "#/definitions/TaskStatus"
+        - name: contactId
+          in: path
+          description: contactId
+          required: true
+          type: integer
+          format: int32
       responses:
-        200:
-          description: ""
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
           schema:
-            type: integer
-            format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /taskStatuses/{taskStatuseId}:
-    parameters:
-      - in: path
-        name: taskStatuseId
-        type: integer
-        required: true
-    get:
-      tags:
-        - CRM - taskStatuses
-      operationId: getTaskStatuse
-      summary: Returns TaskStatuse
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
           schema:
-            $ref: "#/definitions/TaskStatus"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - CRM - taskStatuses
-      operationId: updateTaskStatuse
-      summary: Update existing taskStatuse
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: taskStatuse
-          description: TaskStatuse to create
-          schema:
-            $ref: "#/definitions/TaskStatus"
-      responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-    delete:
-      tags:
-        - CRM - taskStatuses
-      operationId: deleteTaskStatuse
-      summary: Delete taskStatuse
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-
-  /tasks:
-    get:
-      tags:
-        - CRM - tasks
-      operationId: getTasks
-      summary: Returns list of Tasks
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Task"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    post:
-      tags:
-        - CRM - tasks
-      operationId: createTask
-      summary: Create new task
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: task
-          description: Task to create
-          schema:
-            type: object
-            properties:
-              task:
-                $ref: "#/definitions/Task"
-              comments:
-                type: array
-                items:
-                  $ref: "#/definitions/TaskComment"
-              notes:
-                type: array
-                items:
-                  $ref: "#/definitions/TaskNote"
-              contacts:
-                type: array
-                items:
-                  $ref: "#/definitions/TaskContact"
-      responses:
-        200:
-          description: ""
-          schema:
-            type: integer
-            format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /tasks/{taskId}:
-    parameters:
-      - in: path
-        name: taskId
-        type: integer
-        required: true
-    get:
-      tags:
-        - CRM - tasks
-      operationId: getTask
-      summary: Returns Task
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/Task"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - CRM - tasks
-      operationId: updateTask
-      summary: Update existing task
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: task
-          description: Task to update
-          schema:
-            $ref: "#/definitions/Task"
-      responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-    delete:
-      tags:
-        - CRM - tasks
-      operationId: deleteTask
-      summary: Delete task
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /tasks/{taskId}/comments:
-    parameters:
-      - in: path
-        name: taskId
-        type: integer
-        required: true
-    get:
-      tags:
-        - CRM - task comments
-      operationId: getTaskComments
-      summary: Returns comments belonging to given task
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/TaskComment"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    post:
-      tags:
-        - CRM - task comments
-      operationId: createTaskComments
-      summary: Create new TaskComment for given task
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: order
-          description: TaskComment to create
-          schema:
-            $ref: "#/definitions/TaskComment"
-      responses:
-        200:
-          description: ""
-          schema:
-            type: integer
-            format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-
-  /tasks/{taskId}/comments/{TaskCommentId}:
-    parameters:
-      - in: path
-        name: taskId
-        type: integer
-        required: true
-      - in: path
-        name: TaskCommentId
-        type: integer
-        required: true
-    get:
-      tags:
-        - CRM - task comments
-      operationId: getTaskComment
-      summary: Returns comment belonging to given task
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/TaskComment"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - CRM - task comments
-      operationId: updateTaskComment
-      summary: Update existing TaskComment
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: TaskComment
-          description: TaskComment to update
-          schema:
-            $ref: "#/definitions/TaskComment"
-      responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-    delete:
-      tags:
-        - CRM - task comments
-      operationId: deleteTaskComment
-      summary: Delete TaskComment
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /tasks/{taskId}/notes:
-    parameters:
-      - in: path
-        name: taskId
-        type: integer
-        required: true
-    get:
-      tags:
-        - CRM - task notes
-      operationId: getTaskNotes
-      summary: Returns notes belonging to given task
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/TaskNote"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    post:
-      tags:
-        - CRM - task notes
-      operationId: createTaskNotes
-      summary: Create new TaskNote for given task
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: order
-          description: TaskNote to create
-          schema:
-            $ref: "#/definitions/TaskNote"
-      responses:
-        200:
-          description: ""
-          schema:
-            type: integer
-            format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-
-  /tasks/{taskId}/notes/{TaskNoteId}:
-    parameters:
-      - in: path
-        name: taskId
-        type: integer
-        required: true
-      - in: path
-        name: TaskNoteId
-        type: integer
-        required: true
-    get:
-      tags:
-        - CRM - task notes
-      operationId: getTaskNote
-      summary: Returns note belonging to given task
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/TaskNote"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - CRM - task notes
-      operationId: updateTaskNote
-      summary: Update existing TaskNote
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: TaskNote
-          description: TaskNote to update
-          schema:
-            $ref: "#/definitions/TaskNote"
-      responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-    delete:
-      tags:
-        - CRM - task notes
-      operationId: deleteTaskNote
-      summary: Delete TaskNote
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-
-
-  /meetings:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  /crm/meetings:
     get:
       tags:
         - CRM - meetings
-      operationId: getMeetings
       summary: Returns list of Meetings
+      operationId: getMeetingsUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: array
             items:
-              $ref: "#/definitions/Meeting"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
+              $ref: '#/definitions/Meeting'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     post:
       tags:
         - CRM - meetings
-      operationId: createMeeting
       summary: Create new meeting
+      operationId: createMeetingUsingPOST
       consumes:
         - application/json
       produces:
@@ -2556,235 +805,1744 @@ paths:
         - in: body
           name: meeting
           description: Meeting to create
+          required: false
           schema:
-            $ref: "#/definitions/Meeting"
+            $ref: '#/definitions/Meeting'
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: integer
             format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /meetings/{meetingId}:
-    parameters:
-      - in: path
-        name: meetingId
-        type: integer
-        required: true
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/crm/meetings/{meetingId}':
     get:
       tags:
         - CRM - meetings
-      operationId: getMeeting
       summary: Returns Meeting
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/Meeting"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - CRM - meetings
-      operationId: updateMeeting
-      summary: Update existing meeting
+      operationId: getMeetingUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
+        - name: meetingId
+          in: path
+          description: meetingId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Meeting'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - CRM - meetings
+      summary: Update existing meeting
+      operationId: updateMeetingUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: meetingId
+          in: path
+          description: meetingId
+          required: true
+          type: integer
+          format: int32
         - in: body
           name: meeting
           description: Meeting to update
+          required: false
           schema:
-            $ref: "#/definitions/Meeting"
+            $ref: '#/definitions/Meeting'
       responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     delete:
       tags:
         - CRM - meetings
-      operationId: deleteMeeting
       summary: Delete meeting
+      operationId: deleteMeetingUsingDELETE
       consumes:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: meetingId
+          in: path
+          description: meetingId
+          required: true
+          type: integer
+          format: int32
       responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /meetings/{meetingId}/notes:
-    parameters:
-      - in: path
-        name: meetingId
-        type: integer
-        required: true
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/crm/meetings/{meetingId}/notes':
     get:
       tags:
         - CRM - meeting notes
-      operationId: getMeetingNotes
       summary: Returns notes belonging to given meeting
+      operationId: getMeetingNotesUsingGET
       consumes:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: meetingId
+          in: path
+          description: meetingId
+          required: true
+          type: integer
+          format: int32
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: array
             items:
-              $ref: "#/definitions/MeetingNote"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
+              $ref: '#/definitions/MeetingNote'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     post:
       tags:
         - CRM - meeting notes
-      operationId: createMeetingNotes
       summary: Create new MeetingNote for given meeting
+      operationId: createMeetingNotesUsingPOST
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
+        - name: meetingId
+          in: path
+          description: meetingId
+          required: true
+          type: integer
+          format: int32
         - in: body
-          name: order
+          name: meetingNote
           description: MeetingNote to create
+          required: false
           schema:
-            $ref: "#/definitions/MeetingNote"
+            $ref: '#/definitions/MeetingNote'
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: integer
             format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-
-  /meetings/{meetingId}/notes/{MeetingNoteId}:
-    parameters:
-      - in: path
-        name: meetingId
-        type: integer
-        required: true
-      - in: path
-        name: MeetingNoteId
-        type: integer
-        required: true
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/crm/meetings/{meetingId}/notes/{MeetingNoteId}':
     get:
       tags:
         - CRM - meeting notes
-      operationId: getMeetingNote
       summary: Returns note belonging to given meeting
+      operationId: getMeetingNoteUsingGET
       consumes:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: meetingId
+          in: path
+          description: meetingId
+          required: true
+          type: integer
+          format: int32
+        - name: MeetingNoteId
+          in: path
+          description: MeetingNoteId
+          required: true
+          type: integer
+          format: int32
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
-            $ref: "#/definitions/MeetingNote"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
+            $ref: '#/definitions/MeetingNote'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     put:
       tags:
         - CRM - meeting notes
-      operationId: updateMeetingNote
       summary: Update existing MeetingNote
+      operationId: updateMeetingNoteUsingPUT
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
+        - name: meetingId
+          in: path
+          description: meetingId
+          required: true
+          type: integer
+          format: int32
+        - name: MeetingNoteId
+          in: path
+          description: MeetingNoteId
+          required: true
+          type: integer
+          format: int32
         - in: body
-          name: MeetingNote
+          name: meetingNote
           description: MeetingNote to update
+          required: false
           schema:
-            $ref: "#/definitions/MeetingNote"
+            $ref: '#/definitions/MeetingNote'
       responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     delete:
       tags:
         - CRM - meeting notes
-      operationId: deleteMeetingNote
       summary: Delete MeetingNote
+      operationId: deleteMeetingNoteUsingDELETE
       consumes:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: meetingId
+          in: path
+          description: meetingId
+          required: true
+          type: integer
+          format: int32
+        - name: MeetingNoteId
+          in: path
+          description: MeetingNoteId
+          required: true
+          type: integer
+          format: int32
       responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /meetings/{meetingId}/contacts:
-    parameters:
-      - in: path
-        name: meetingId
-        type: integer
-        required: true
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  /crm/taskStatuses:
     get:
       tags:
-        - CRM - meeting contacts
-      operationId: getMeetingContacts
-      summary: Returns contacts belonging to given meeting
+        - CRM - taskStatuses
+      summary: Returns list of TaskStatuses
+      operationId: getTaskStatusesUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: array
             items:
-              $ref: "#/definitions/MeetingContact"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
+              $ref: '#/definitions/TaskStatus'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     post:
       tags:
-        - CRM - meeting contacts
-      operationId: createMeetingContacts
-      summary: Create new MeetingContact for given meeting
+        - CRM - taskStatuses
+      summary: Create new taskStatuse
+      operationId: createTaskStatuseUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: taskStatuse
+          description: TaskStatuse to create
+          required: false
+          schema:
+            $ref: '#/definitions/TaskStatus'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: integer
+            format: int32
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/crm/taskStatuses/{taskStatuseId}':
+    get:
+      tags:
+        - CRM - taskStatuses
+      summary: Returns TaskStatuse
+      operationId: getTaskStatuseUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskStatuseId
+          in: path
+          description: taskStatuseId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/TaskStatus'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - CRM - taskStatuses
+      summary: Update existing taskStatuse
+      operationId: updateTaskStatuseUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskStatuseId
+          in: path
+          description: taskStatuseId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: taskStatuse
+          description: TaskStatuse to create
+          required: false
+          schema:
+            $ref: '#/definitions/TaskStatus'
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    delete:
+      tags:
+        - CRM - taskStatuses
+      summary: Delete taskStatuse
+      operationId: deleteTaskStatuseUsingDELETE
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskStatuseId
+          in: path
+          description: taskStatuseId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  /crm/tasks:
+    get:
+      tags:
+        - CRM - tasks
+      summary: Returns list of Tasks
+      operationId: getTasksUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Task'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    post:
+      tags:
+        - CRM - tasks
+      summary: Create new task
+      operationId: createTaskUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: task
+          description: Task to create
+          required: false
+          schema:
+            $ref: '#/definitions/Task'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: integer
+            format: int32
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/crm/tasks/{taskId}':
+    get:
+      tags:
+        - CRM - tasks
+      summary: Returns Task
+      operationId: getTaskUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Task'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - CRM - tasks
+      summary: Update existing task
+      operationId: updateTaskUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: task
+          description: Task to update
+          required: false
+          schema:
+            $ref: '#/definitions/Task'
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    delete:
+      tags:
+        - CRM - tasks
+      summary: Delete task
+      operationId: deleteTaskUsingDELETE
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/crm/tasks/{taskId}/comments':
+    get:
+      tags:
+        - CRM - task comments
+      summary: Returns comments belonging to given task
+      operationId: getTaskCommentsUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TaskComment'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    post:
+      tags:
+        - CRM - task comments
+      summary: Create new TaskComment for given task
+      operationId: createTaskCommentsUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: order
+          description: TaskComment to create
+          required: false
+          schema:
+            $ref: '#/definitions/TaskComment'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: integer
+            format: int32
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/crm/tasks/{taskId}/comments/{TaskCommentId}':
+    get:
+      tags:
+        - CRM - task comments
+      summary: Returns comment belonging to given task
+      operationId: getTaskCommentUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          type: integer
+          format: int32
+        - name: TaskCommentId
+          in: path
+          description: TaskCommentId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/TaskComment'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - CRM - task comments
+      summary: Update existing TaskComment
+      operationId: updateTaskCommentUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          type: integer
+          format: int32
+        - name: TaskCommentId
+          in: path
+          description: TaskCommentId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: taskComment
+          description: TaskComment to update
+          required: false
+          schema:
+            $ref: '#/definitions/TaskComment'
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    delete:
+      tags:
+        - CRM - task comments
+      summary: Delete TaskComment
+      operationId: deleteTaskCommentUsingDELETE
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          type: integer
+          format: int32
+        - name: TaskCommentId
+          in: path
+          description: TaskCommentId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/crm/tasks/{taskId}/notes':
+    get:
+      tags:
+        - CRM - task notes
+      summary: Returns notes belonging to given task
+      operationId: getTaskNotesUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TaskNote'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    post:
+      tags:
+        - CRM - task notes
+      summary: Create new TaskNote for given task
+      operationId: createTaskNotesUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: order
+          description: TaskNote to create
+          required: false
+          schema:
+            $ref: '#/definitions/TaskNote'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: integer
+            format: int32
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/crm/tasks/{taskId}/notes/{TaskNoteId}':
+    get:
+      tags:
+        - CRM - task notes
+      summary: Returns note belonging to given task
+      operationId: getTaskNoteUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          type: integer
+          format: int32
+        - name: TaskNoteId
+          in: path
+          description: TaskNoteId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/TaskNote'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - CRM - task notes
+      summary: Update existing TaskNote
+      operationId: updateTaskNoteUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          type: integer
+          format: int32
+        - name: TaskNoteId
+          in: path
+          description: TaskNoteId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: taskNote
+          description: TaskNote to update
+          required: false
+          schema:
+            $ref: '#/definitions/TaskNote'
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    delete:
+      tags:
+        - CRM - task notes
+      summary: Delete TaskNote
+      operationId: deleteTaskNoteUsingDELETE
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          type: integer
+          format: int32
+        - name: TaskNoteId
+          in: path
+          description: TaskNoteId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  /employees:
+    get:
+      tags:
+        - common - employees
+      summary: Returns list of Employees
+      operationId: getEmployeesUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Employee'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    post:
+      tags:
+        - common - employees
+      summary: Create new employee (admin only)
+      operationId: createEmployeeUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: employee
+          description: Employee to create
+          required: false
+          schema:
+            $ref: '#/definitions/Employee'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: integer
+            format: int32
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/employees/{employeeId}':
+    get:
+      tags:
+        - common - employees
+      summary: Returns Employee
+      operationId: getEmployeeUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: employeeId
+          in: path
+          description: employeeId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Employee'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - common - employees
+      summary: Update existing employee (admin or self only)
+      operationId: updateEmployeeUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: employeeId
+          in: path
+          description: employeeId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: employee
+          description: Employee to update
+          required: false
+          schema:
+            $ref: '#/definitions/Employee'
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    delete:
+      tags:
+        - common - employees
+      summary: Delete employee (admin only)
+      operationId: deleteEmployeeUsingDELETE
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: employeeId
+          in: path
+          description: employeeId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/employees/{employeeId}/changePassword':
+    put:
+      tags:
+        - common - employees
+      summary: Change employee's password (admin or self only)
+      operationId: changePasswordUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: employeeId
+          in: path
+          description: employeeId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: changePassword
+          description: changePassword
+          required: false
+          schema:
+            $ref: '#/definitions/ChangePassword'
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  /erp/articles:
+    get:
+      tags:
+        - ERP - articles
+      summary: Returns list of Articles
+      operationId: getArticlesUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Article'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    post:
+      tags:
+        - ERP - articles
+      summary: Create new article
+      operationId: createArticleUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: article
+          description: Article to create
+          required: false
+          schema:
+            $ref: '#/definitions/Article'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: integer
+            format: int32
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/erp/articles/{articleId}':
+    get:
+      tags:
+        - ERP - articles
+      summary: Returns Article
+      operationId: getArticleUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: articleId
+          in: path
+          description: articleId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Article'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - ERP - articles
+      summary: Update existing article
+      operationId: updateArticleUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: articleId
+          in: path
+          description: articleId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: article
+          description: Article to create
+          required: false
+          schema:
+            $ref: '#/definitions/Article'
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    delete:
+      tags:
+        - ERP - articles
+      summary: Delete article
+      operationId: deleteArticleUsingDELETE
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: articleId
+          in: path
+          description: articleId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  /erp/deliveryCosts:
+    get:
+      tags:
+        - ERP - deliveryCosts
+      summary: Returns list of DeliveryCosts
+      operationId: getDeliveryCostsUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DeliveryCost'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    post:
+      tags:
+        - ERP - deliveryCosts
+      summary: Create new deliveryCost
+      operationId: createDeliveryCostUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: deliveryCost
+          description: DeliveryCost to create
+          required: false
+          schema:
+            $ref: '#/definitions/DeliveryCost'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: integer
+            format: int32
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/erp/deliveryCosts/{deliveryCostId}':
+    get:
+      tags:
+        - ERP - deliveryCosts
+      summary: Returns DeliveryCost
+      operationId: getDeliveryCostUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: deliveryCostId
+          in: path
+          description: deliveryCostId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DeliveryCost'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - ERP - deliveryCosts
+      summary: Update existing deliveryCost
+      operationId: updateDeliveryCostUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: deliveryCostId
+          in: path
+          description: deliveryCostId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: deliveryCost
+          description: DeliveryCost to create
+          required: false
+          schema:
+            $ref: '#/definitions/DeliveryCost'
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    delete:
+      tags:
+        - ERP - deliveryCosts
+      summary: Delete deliveryCost
+      operationId: deleteDeliveryCostUsingDELETE
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: deliveryCostId
+          in: path
+          description: deliveryCostId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  /erp/orders:
+    get:
+      tags:
+        - ERP - orders
+      summary: Returns list of Orders
+      operationId: getOrdersUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Order_'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    post:
+      tags:
+        - ERP - orders
+      summary: Create new order
+      operationId: createOrderUsingPOST
       consumes:
         - application/json
       produces:
@@ -2792,207 +2550,1325 @@ paths:
       parameters:
         - in: body
           name: order
-          description: MeetingContact to create
+          description: Order_ to create
+          required: false
           schema:
-            $ref: "#/definitions/MeetingContact"
+            $ref: '#/definitions/Order_'
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: integer
             format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-
-  /meetings/{meetingId}/contacts/{MeetingContactId}:
-    parameters:
-      - in: path
-        name: meetingId
-        type: integer
-        required: true
-      - in: path
-        name: MeetingContactId
-        type: integer
-        required: true
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/erp/orders/{orderId}':
     get:
       tags:
-        - CRM - meeting contacts
-      operationId: getMeetingContact
-      summary: Returns contact belonging to given meeting
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        200:
-          description: ""
-          schema:
-            $ref: "#/definitions/MeetingContact"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
-      tags:
-        - CRM - meeting contacts
-      operationId: updateMeetingContact
-      summary: Update existing MeetingContact
+        - ERP - orders
+      summary: Returns Order_
+      operationId: getOrderUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
-        - in: body
-          name: MeetingContact
-          description: MeetingContact to update
-          schema:
-            $ref: "#/definitions/MeetingContact"
+        - name: orderId
+          in: path
+          description: orderId
+          required: true
+          type: integer
+          format: int32
       responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Order_'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - ERP - orders
+      summary: Update existing order
+      operationId: updateOrderUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: orderId
+          in: path
+          description: orderId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: order
+          description: Order_ to create
+          required: false
+          schema:
+            $ref: '#/definitions/Order_'
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     delete:
       tags:
-        - CRM - meeting contacts
-      operationId: deleteMeetingContact
-      summary: Delete MeetingContact
+        - ERP - orders
+      summary: Delete order
+      operationId: deleteOrderUsingDELETE
       consumes:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: orderId
+          in: path
+          description: orderId
+          required: true
+          type: integer
+          format: int32
       responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-  /meetings/{meetingId}/employees:
-    parameters:
-      - in: path
-        name: meetingId
-        type: integer
-        required: true
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/erp/orders/{orderId}/articles':
     get:
       tags:
-        - CRM - meeting employees
-      operationId: getMeetingEmployees
-      summary: Returns employees belonging to given meeting
+        - ERP - orderedArticles
+      summary: Returns articles belonging to given order
+      operationId: getOrderedArticlesUsingGET
       consumes:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: orderId
+          in: path
+          description: orderId
+          required: true
+          type: integer
+          format: int32
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: array
             items:
-              $ref: "#/definitions/MeetingEmployee"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
+              $ref: '#/definitions/OrderedArticle'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     post:
       tags:
-        - CRM - meeting employees
-      operationId: createMeetingEmployees
-      summary: Create new MeetingEmployee for given meeting
+        - ERP - orderedArticles
+      summary: Create new OrderedArticle for given order
+      operationId: createOrderedArticleUsingPOST
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
+        - name: orderId
+          in: path
+          description: orderId
+          required: true
+          type: integer
+          format: int32
         - in: body
-          name: order
-          description: MeetingEmployee to create
+          name: orderedArticle
+          description: OrderedArticle to create
+          required: false
           schema:
-            $ref: "#/definitions/MeetingEmployee"
+            $ref: '#/definitions/OrderedArticle'
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
             type: integer
             format: int32
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
-
-  /meetings/{meetingId}/employees/{MeetingEmployeeId}:
-    parameters:
-      - in: path
-        name: meetingId
-        type: integer
-        required: true
-      - in: path
-        name: MeetingEmployeeId
-        type: integer
-        required: true
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/erp/orders/{orderId}/articles/{OrderedArticleId}':
     get:
       tags:
-        - CRM - meeting employees
-      operationId: getMeetingEmployee
-      summary: Returns employee belonging to given meeting
+        - ERP - orderedArticles
+      summary: Returns article belonging to given order
+      operationId: getOrderedArticleUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: orderId
+          in: path
+          description: orderId
+          required: true
+          type: integer
+          format: int32
+        - name: OrderedArticleId
+          in: path
+          description: OrderedArticleId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/OrderedArticle'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - ERP - orderedArticles
+      summary: Update existing OrderedArticle
+      operationId: updateOrderedArticleUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: orderId
+          in: path
+          description: orderId
+          required: true
+          type: integer
+          format: int32
+        - name: OrderedArticleId
+          in: path
+          description: OrderedArticleId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: orderedArticle
+          description: OrderedArticle to create
+          required: false
+          schema:
+            $ref: '#/definitions/OrderedArticle'
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    delete:
+      tags:
+        - ERP - orderedArticles
+      summary: Delete OrderedArticle
+      operationId: deleteOrderedArticleUsingDELETE
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: orderId
+          in: path
+          description: orderId
+          required: true
+          type: integer
+          format: int32
+        - name: OrderedArticleId
+          in: path
+          description: OrderedArticleId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/erp/orders/{orderId}/articles/{OrderedArticleId}/netPrice':
+    get:
+      tags:
+        - ERP - orderedArticles
+      summary: Returns order's article net price
+      operationId: getOrderedArticleNetPriceUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: orderId
+          in: path
+          description: orderId
+          required: true
+          type: integer
+          format: int32
+        - name: OrderedArticleId
+          in: path
+          description: OrderedArticleId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Compute net price of order's article
+          schema:
+            type: number
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/erp/orders/{orderId}/articles/{OrderedArticleId}/weight':
+    get:
+      tags:
+        - ERP - orderedArticles
+      summary: Returns order's article weight
+      operationId: getOrderedArticleWeightUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: orderId
+          in: path
+          description: orderId
+          required: true
+          type: integer
+          format: int32
+        - name: OrderedArticleId
+          in: path
+          description: OrderedArticleId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Compute weight of order's article
+          schema:
+            type: number
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/erp/orders/{orderId}/deliveryCosts':
+    get:
+      tags:
+        - ERP - orders
+      summary: Returns order's delivery costs
+      operationId: getOrderDeliveryCostsUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: orderId
+          in: path
+          description: orderId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Get or compute (if null) delivery cost of order
+          schema:
+            type: number
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/erp/orders/{orderId}/netPrice':
+    get:
+      tags:
+        - ERP - orders
+      summary: Returns order's net price
+      operationId: getOrderNetPriceUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: orderId
+          in: path
+          description: orderId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Compute net price of order
+          schema:
+            type: number
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  /erp/proformas:
+    get:
+      tags:
+        - ERP - proformas
+      summary: Returns list of Proformas
+      operationId: getProformasUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       responses:
-        200:
-          description: ""
+        '200':
+          description: OK
           schema:
-            $ref: "#/definitions/MeetingEmployee"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-    put:
+            type: array
+            items:
+              $ref: '#/definitions/Proforma'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    post:
       tags:
-        - CRM - meeting employees
-      operationId: updateMeetingEmployee
-      summary: Update existing MeetingEmployee
+        - ERP - proformas
+      summary: Create new proforma
+      operationId: createProformaUsingPOST
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
         - in: body
-          name: MeetingEmployee
-          description: MeetingEmployee to update
+          name: proforma
+          description: Proforma to create
+          required: false
           schema:
-            $ref: "#/definitions/MeetingEmployee"
+            $ref: '#/definitions/Proforma'
       responses:
-        200:
-          description: "Updated"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-
+        '200':
+          description: OK
+          schema:
+            type: integer
+            format: int32
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/erp/proformas/{proformaId}':
+    get:
+      tags:
+        - ERP - proformas
+      summary: Returns Proforma
+      operationId: getProformaUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: proformaId
+          in: path
+          description: proformaId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Proforma'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - ERP - proformas
+      summary: Update existing proforma
+      operationId: updateProformaUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: proformaId
+          in: path
+          description: proformaId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: proforma
+          description: Proforma to create
+          required: false
+          schema:
+            $ref: '#/definitions/Proforma'
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
     delete:
       tags:
-        - CRM - meeting employees
-      operationId: deleteMeetingEmployee
-      summary: Delete MeetingEmployee
+        - ERP - proformas
+      summary: Delete proforma
+      operationId: deleteProformaUsingDELETE
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: proformaId
+          in: path
+          description: proformaId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  /units:
+    get:
+      tags:
+        - ERP - units
+      summary: Returns list of Units
+      operationId: getUnitsUsingGET
       consumes:
         - application/json
       produces:
         - application/json
       responses:
-        200:
-          description: "Deleted"
-        401:
-          $ref: "#/responses/Unauthorized"
-        500:
-          $ref: "#/responses/ServerError"
-  # /* ----- CRM PATHS END ----- */
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Unit'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    post:
+      tags:
+        - ERP - units
+      summary: Create new unit
+      operationId: createUnitUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: unit
+          description: Unit to create
+          required: false
+          schema:
+            $ref: '#/definitions/Unit'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: integer
+            format: int32
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+  '/units/{unitId}':
+    get:
+      tags:
+        - ERP - units
+      summary: Returns Unit
+      operationId: getUnitUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: unitId
+          in: path
+          description: unitId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Unit'
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    put:
+      tags:
+        - ERP - units
+      summary: Update existing unit
+      operationId: updateUnitUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: unitId
+          in: path
+          description: unitId
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: unit
+          description: Unit to update
+          required: false
+          schema:
+            $ref: '#/definitions/Unit'
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+    delete:
+      tags:
+        - ERP - units
+      summary: Delete unit
+      operationId: deleteUnitUsingDELETE
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: unitId
+          in: path
+          description: unitId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Deleted
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - API key is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - Authorization: []
+securityDefinitions:
+  Authorization:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  ChangePassword:
+    type: object
+    properties:
+      newPassword:
+        type: string
+      oldPassword:
+        type: string
+        description: not required for admin
+  ClientType:
+    type: object
+    required:
+      - description
+      - id
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+        format: int32
+  TaskComment:
+    type: object
+    required:
+      - content
+      - employee
+      - id
+      - task
+      - time
+    properties:
+      content:
+        type: string
+      employee:
+        $ref: '#/definitions/Employee'
+      id:
+        type: integer
+        format: int32
+      task:
+        $ref: '#/definitions/Task'
+      time:
+        type: string
+        format: date
+  Task:
+    type: object
+    required:
+      - employee
+      - id
+      - taskStatus
+      - title
+    properties:
+      backgroundColor:
+        type: string
+      comments:
+        type: array
+        items:
+          $ref: '#/definitions/TaskComment'
+      contacts:
+        type: array
+        items:
+          $ref: '#/definitions/Contact'
+      description:
+        type: string
+      employee:
+        $ref: '#/definitions/Employee'
+      employeeCommissioned:
+        $ref: '#/definitions/Employee'
+      endDate:
+        type: string
+        format: date
+      id:
+        type: integer
+        format: int32
+      isArchived:
+        type: boolean
+        example: false
+      notes:
+        type: array
+        items:
+          $ref: '#/definitions/TaskNote'
+      startDate:
+        type: string
+        format: date
+      taskStatus:
+        $ref: '#/definitions/TaskStatus'
+      title:
+        type: string
+  Meeting:
+    type: object
+    required:
+      - id
+      - meetingDate
+    properties:
+      contacts:
+        type: array
+        items:
+          $ref: '#/definitions/Contact'
+      description:
+        type: string
+      employees:
+        type: array
+        items:
+          $ref: '#/definitions/Employee'
+      id:
+        type: integer
+        format: int32
+      mainEmployee:
+        $ref: '#/definitions/Employee'
+      meetingDate:
+        type: string
+        format: date
+      nextMeetingDate:
+        type: string
+        format: date
+      notes:
+        type: array
+        items:
+          $ref: '#/definitions/MeetingNote'
+      purpose:
+        type: string
+      telephoneMeeting:
+        type: boolean
+        example: false
+  Article:
+    type: object
+    required:
+      - availability
+      - id
+      - unit
+      - unitPrice
+    properties:
+      availability:
+        type: integer
+        format: int32
+      id:
+        type: integer
+        format: int32
+      unit:
+        $ref: '#/definitions/Unit'
+      unitPrice:
+        type: number
+      weight:
+        type: number
+        format: float
+  DeliveryCost:
+    type: object
+    required:
+      - id
+      - price
+      - weightFrom
+      - weightTo
+    properties:
+      id:
+        type: integer
+        format: int32
+      price:
+        type: number
+      weightFrom:
+        type: number
+        format: float
+      weightTo:
+        type: number
+        format: float
+  Error:
+    type: object
+    required:
+      - message
+    properties:
+      error:
+        type: string
+      exception:
+        type: string
+      message:
+        type: string
+      path:
+        type: string
+      timestamp:
+        type: string
+  Unit:
+    type: object
+    required:
+      - id
+      - name
+      - nameShort
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+      nameShort:
+        type: string
+  TaskStatus:
+    type: object
+    required:
+      - description
+      - id
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+        format: int32
+  OrderedArticle:
+    type: object
+    required:
+      - amount
+      - article
+      - description
+      - id
+      - netPrice
+      - order
+      - unitPrice
+    properties:
+      amount:
+        type: integer
+        format: int32
+      article:
+        $ref: '#/definitions/Article'
+      description:
+        type: string
+      id:
+        type: integer
+        format: int32
+      netPrice:
+        type: number
+      order:
+        $ref: '#/definitions/Order_'
+      unitPrice:
+        type: number
+      weight:
+        type: number
+        format: float
+  Contact:
+    type: object
+    required:
+      - contactGroup
+      - employee
+      - id
+      - mail
+      - name
+    properties:
+      city:
+        type: string
+      client:
+        $ref: '#/definitions/Client'
+      contactGroup:
+        $ref: '#/definitions/ContactGroup'
+      employee:
+        $ref: '#/definitions/Employee'
+      id:
+        type: integer
+        format: int32
+      mail:
+        type: string
+      name:
+        type: string
+      postCode:
+        type: string
+      street:
+        type: string
+      telephone:
+        type: string
+      vip:
+        type: boolean
+        example: false
+  Proforma:
+    type: object
+    required:
+      - id
+      - issueDate
+      - order
+      - paymentDate
+      - paymentMethod
+      - proformaNumber
+      - saleDate
+    properties:
+      id:
+        type: integer
+        format: int32
+      issueDate:
+        type: string
+        format: date
+      order:
+        $ref: '#/definitions/Order_'
+      paymentDate:
+        type: string
+        format: date
+      paymentMethod:
+        type: string
+      proformaNumber:
+        type: string
+      saleDate:
+        type: string
+        format: date
+  MeetingNote:
+    type: object
+    required:
+      - id
+      - meetingId
+    properties:
+      backgroundColor:
+        type: string
+      content:
+        type: string
+      id:
+        type: integer
+        format: int32
+      meeting:
+        $ref: '#/definitions/Meeting'
+      meetingId:
+        $ref: '#/definitions/Meeting'
+  TaskNote:
+    type: object
+    required:
+      - content
+      - id
+      - task
+    properties:
+      backgroundColor:
+        type: string
+      content:
+        type: string
+      id:
+        type: integer
+        format: int32
+      task:
+        $ref: '#/definitions/Task'
+  Employee:
+    type: object
+    required:
+      - id
+      - mail
+      - name
+      - password
+      - role
+    properties:
+      id:
+        type: integer
+        format: int32
+      mail:
+        type: string
+      monthSchedule:
+        type: number
+      name:
+        type: string
+      password:
+        type: string
+        description: 'required on post, ignored on update, "***" on get'
+      role:
+        type: string
+        enum:
+          - erp
+          - crm
+          - admin
+      telephone:
+        type: string
+      visibility:
+        type: boolean
+        example: false
+  Order_:
+    type: object
+    required:
+      - client
+      - deliveryAddress
+      - employee
+      - id
+      - orderDate
+      - orderNumber
+      - realizationDeadline
+      - state
+      - vat
+    properties:
+      advance:
+        type: number
+      client:
+        $ref: '#/definitions/Client'
+      comments:
+        type: string
+      conditions:
+        type: string
+      deliveryAddress:
+        type: string
+      deliveryCost:
+        type: number
+      employee:
+        $ref: '#/definitions/Employee'
+      id:
+        type: integer
+        format: int32
+      isDone:
+        type: boolean
+        example: false
+      isPaid:
+        type: string
+      isSigned:
+        type: boolean
+        example: false
+      orderDate:
+        type: string
+        format: date
+      orderNumber:
+        type: string
+      realizationDate:
+        type: string
+        format: date
+      realizationDeadline:
+        type: string
+      state:
+        type: string
+      vat:
+        type: number
+        format: float
+  Client:
+    type: object
+    required:
+      - clientType
+      - id
+      - mail
+      - name
+    properties:
+      city:
+        type: string
+      cityDelivery:
+        type: string
+      clientType:
+        $ref: '#/definitions/ClientType'
+      id:
+        type: integer
+        format: int32
+      mail:
+        type: string
+      name:
+        type: string
+      nameDelivery:
+        type: string
+      nip:
+        type: string
+      postCode:
+        type: string
+      postCodeDelivery:
+        type: string
+      street:
+        type: string
+      streetDelivery:
+        type: string
+      telephone:
+        type: string
+  ContactGroup:
+    type: object
+    required:
+      - description
+      - id
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+        format: int32

@@ -24,7 +24,7 @@
 //@Api(value = "meetingContacts", description = "the meeting contacts API")
 //public interface MeetingContactsApi {
 //    @ApiOperation(value = "Create new Contact for given meeting", notes = "", response = Integer.class, authorizations = {
-//            @Authorization(value = "APIKeyHeader")
+//            @Authorization(value = "Authorization")
 //    }, tags={ "CRM - meeting contacts", })
 //    @ApiResponses(value = {
 //            @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -40,7 +40,7 @@
 //
 //
 //    @ApiOperation(value = "Delete Contact", notes = "", response = Void.class, authorizations = {
-//            @Authorization(value = "APIKeyHeader")
+//            @Authorization(value = "Authorization")
 //    }, tags={ "CRM - meeting contacts", })
 //    @ApiResponses(value = {
 //            @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -55,7 +55,7 @@
 //                                              @ApiParam(value = "",required=true ) @PathVariable("ContactId") Integer contactId);
 //
 //    @ApiOperation(value = "Returns contact belonging to given meeting", notes = "", response = Contact.class, authorizations = {
-//            @Authorization(value = "APIKeyHeader")
+//            @Authorization(value = "Authorization")
 //    }, tags={ "CRM - meeting contacts", })
 //    @ApiResponses(value = {
 //            @ApiResponse(code = 200, message = "", response = Contact.class),
@@ -70,7 +70,7 @@
 //                                                     @ApiParam(value = "",required=true ) @PathVariable("ContactId") Integer contactId);
 //
 //    @ApiOperation(value = "Returns contacts belonging to given meeting", notes = "", response = Contact.class, responseContainer = "List",
-//            authorizations = {@Authorization(value = "APIKeyHeader")
+//            authorizations = {@Authorization(value = "Authorization")
 //    }, tags={ "CRM - meeting contacts", })
 //    @ApiResponses(value = {
 //            @ApiResponse(code = 200, message = "", response = Contact.class, responseContainer = "List"),
@@ -84,7 +84,7 @@
 //    ResponseEntity<List<Contact>> getContacts(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId);
 //
 //    @ApiOperation(value = "Update existing Contact", notes = "", response = Void.class, authorizations = {
-//            @Authorization(value = "APIKeyHeader")
+//            @Authorization(value = "Authorization")
 //    }, tags={ "CRM - meeting contacts", })
 //    @ApiResponses(value = {
 //            @ApiResponse(code = 200, message = "Updated", response = Void.class),

@@ -23,7 +23,7 @@ import javax.validation.Valid;
 public interface TaskStatusesApi {
 
     @ApiOperation(value = "Create new taskStatuse", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - taskStatuses", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -38,7 +38,7 @@ public interface TaskStatusesApi {
 
 
     @ApiOperation(value = "Delete taskStatuse", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - taskStatuses", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -53,7 +53,7 @@ public interface TaskStatusesApi {
 
 
     @ApiOperation(value = "Returns TaskStatuse", notes = "", response = TaskStatus.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - taskStatuses", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = TaskStatus.class),
@@ -68,7 +68,7 @@ public interface TaskStatusesApi {
 
 
     @ApiOperation(value = "Returns list of TaskStatuses", notes = "", response = TaskStatus.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - taskStatuses", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = TaskStatus.class, responseContainer = "List"),
@@ -83,7 +83,7 @@ public interface TaskStatusesApi {
 
 
     @ApiOperation(value = "Update existing taskStatuse", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - taskStatuses", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Updated", response = Void.class),

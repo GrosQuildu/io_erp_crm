@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @Api(value = "meetingNotes", description = "the meeting notes API")
 public interface MeetingNotesApi {
     @ApiOperation(value = "Create new MeetingNote for given meeting", notes = "", response = Integer.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - meeting notes", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -37,7 +37,7 @@ public interface MeetingNotesApi {
                                                @ApiParam(value = "MeetingNote to create"  )  @Valid @RequestBody MeetingNote order);
 
     @ApiOperation(value = "Delete MeetingNote", notes = "", response = Void.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - meeting notes", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -53,7 +53,7 @@ public interface MeetingNotesApi {
 
 
     @ApiOperation(value = "Returns note belonging to given meeting", notes = "", response = MeetingNote.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - meeting notes", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "", response = MeetingNote.class),
@@ -68,7 +68,7 @@ public interface MeetingNotesApi {
                                                @ApiParam(value = "",required=true ) @PathVariable("MeetingNoteId") Integer meetingNoteId);
 
     @ApiOperation(value = "Returns notes belonging to given meeting", notes = "", response = MeetingNote.class, responseContainer = "List",
-            authorizations = {@Authorization(value = "APIKeyHeader")
+            authorizations = {@Authorization(value = "Authorization")
     }, tags={ "CRM - meeting notes", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "", response = MeetingNote.class, responseContainer = "List"),
@@ -83,7 +83,7 @@ public interface MeetingNotesApi {
 
 
     @ApiOperation(value = "Update existing MeetingNote", notes = "", response = Void.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - meeting notes", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Updated", response = Void.class),

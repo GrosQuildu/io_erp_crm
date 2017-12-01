@@ -25,7 +25,7 @@ import javax.validation.Valid;
 public interface OrdersApi {
 
     @ApiOperation(value = "Create new order", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - orders", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -40,7 +40,7 @@ public interface OrdersApi {
 
 
     @ApiOperation(value = "Delete order", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - orders", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -55,7 +55,7 @@ public interface OrdersApi {
 
 
     @ApiOperation(value = "Returns Order_", notes = "", response = Order_.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - orders", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Order_.class),
@@ -70,7 +70,7 @@ public interface OrdersApi {
 
 
     @ApiOperation(value = "Returns order's delivery costs", notes = "", response = BigDecimal.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - orders", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Get or compute (if null) delivery cost of order", response = BigDecimal.class),
@@ -85,7 +85,7 @@ public interface OrdersApi {
 
 
     @ApiOperation(value = "Returns order's net price", notes = "", response = BigDecimal.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - orders", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Compute net price of order", response = BigDecimal.class),
@@ -101,7 +101,7 @@ public interface OrdersApi {
 
 
     @ApiOperation(value = "Returns list of Orders", notes = "", response = Order_.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - orders", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Order_.class, responseContainer = "List"),
@@ -116,7 +116,7 @@ public interface OrdersApi {
 
 
     @ApiOperation(value = "Update existing order", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - orders", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Updated", response = Void.class),

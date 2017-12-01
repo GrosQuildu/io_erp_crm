@@ -23,7 +23,7 @@ import javax.validation.Valid;
 public interface ClientsApi {
 
     @ApiOperation(value = "Create new client", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - clients", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -38,7 +38,7 @@ public interface ClientsApi {
 
 
     @ApiOperation(value = "Delete client", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - clients", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -53,7 +53,7 @@ public interface ClientsApi {
 
 
     @ApiOperation(value = "Returns Client", notes = "", response = Client.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - clients", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Client.class),
@@ -68,7 +68,7 @@ public interface ClientsApi {
 
 
     @ApiOperation(value = "Returns list of Clients", notes = "", response = Client.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - clients", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Client.class, responseContainer = "List"),
@@ -83,7 +83,7 @@ public interface ClientsApi {
 
 
     @ApiOperation(value = "Update existing client", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - clients", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Updated", response = Void.class),

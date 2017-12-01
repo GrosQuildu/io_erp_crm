@@ -44,7 +44,7 @@ public class SwaggerDocumentationConfig {
     }
 
     private ApiKey apiKey() {
-        return new ApiKey("APIKeyHeader", "api_key", "header");
+        return new ApiKey("Authorization", "api_key", "header");
     }
 
 

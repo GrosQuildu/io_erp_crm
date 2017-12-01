@@ -25,7 +25,7 @@ import javax.validation.Valid;
 public interface EmployeesApi {
 
     @ApiOperation(value = "Change employee's password (admin or self only)", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - employees", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Updated", response = Void.class),
@@ -41,7 +41,7 @@ public interface EmployeesApi {
 
 
     @ApiOperation(value = "Create new employee (admin only)", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - employees", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -57,7 +57,7 @@ public interface EmployeesApi {
 
 
     @ApiOperation(value = "Delete employee (admin only)", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - employees", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -72,7 +72,7 @@ public interface EmployeesApi {
 
 
     @ApiOperation(value = "Returns Employee", notes = "", response = Employee.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - employees", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Employee.class),
@@ -87,7 +87,7 @@ public interface EmployeesApi {
 
 
     @ApiOperation(value = "Returns list of Employees", notes = "", response = Employee.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - employees", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Employee.class, responseContainer = "List"),
@@ -102,7 +102,7 @@ public interface EmployeesApi {
 
 
     @ApiOperation(value = "Update existing employee (admin or self only)", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - employees", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Updated", response = Void.class),

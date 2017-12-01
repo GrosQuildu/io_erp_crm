@@ -23,7 +23,7 @@ import javax.validation.Valid;
 public interface MeetingsApi {
 
     @ApiOperation(value = "Create new meeting", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - meetings", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -38,7 +38,7 @@ public interface MeetingsApi {
 
 
     @ApiOperation(value = "Delete meeting", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - meetings", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -52,7 +52,7 @@ public interface MeetingsApi {
     ResponseEntity<Void> deleteMeeting(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId);
 
     @ApiOperation(value = "Returns Meeting", notes = "", response = Meeting.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - meetings", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Meeting.class),
@@ -66,7 +66,7 @@ public interface MeetingsApi {
     ResponseEntity<Meeting> getMeeting(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId);
 
     @ApiOperation(value = "Returns list of Meetings", notes = "", response = Meeting.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - meetings", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Meeting.class, responseContainer = "List"),
@@ -80,7 +80,7 @@ public interface MeetingsApi {
     ResponseEntity<List<Meeting>> getMeetings();
 
     @ApiOperation(value = "Update existing meeting", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - meetings", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Updated", response = Void.class),

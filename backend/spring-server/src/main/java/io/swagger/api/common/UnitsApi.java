@@ -23,7 +23,7 @@ import javax.validation.Valid;
 public interface UnitsApi {
 
     @ApiOperation(value = "Create new unit", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - units", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -38,7 +38,7 @@ public interface UnitsApi {
 
 
     @ApiOperation(value = "Delete unit", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - units", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -53,7 +53,7 @@ public interface UnitsApi {
 
 
     @ApiOperation(value = "Returns Unit", notes = "", response = Unit.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - units", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Unit.class),
@@ -68,7 +68,7 @@ public interface UnitsApi {
 
 
     @ApiOperation(value = "Returns list of Units", notes = "", response = Unit.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - units", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Unit.class, responseContainer = "List"),
@@ -83,7 +83,7 @@ public interface UnitsApi {
 
 
     @ApiOperation(value = "Update existing unit", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - units", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Updated", response = Void.class),

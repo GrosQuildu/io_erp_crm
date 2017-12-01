@@ -23,7 +23,7 @@ import javax.validation.Valid;
 public interface ContactGroupsApi {
 
     @ApiOperation(value = "Create new contactGroup", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - contactGroups", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -38,7 +38,7 @@ public interface ContactGroupsApi {
 
 
     @ApiOperation(value = "Delete contactGroup", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - contactGroups", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -53,7 +53,7 @@ public interface ContactGroupsApi {
 
 
     @ApiOperation(value = "Returns ContactGroup", notes = "", response = ContactGroup.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - contactGroups", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = ContactGroup.class),
@@ -68,7 +68,7 @@ public interface ContactGroupsApi {
 
 
     @ApiOperation(value = "Returns list of ContactGroups", notes = "", response = ContactGroup.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - contactGroups", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = ContactGroup.class, responseContainer = "List"),
@@ -83,7 +83,7 @@ public interface ContactGroupsApi {
 
 
     @ApiOperation(value = "Update existing contactGroup", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - contactGroups", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Updated", response = Void.class),

@@ -23,7 +23,7 @@ import javax.validation.Valid;
 public interface ClientTypesApi {
 
     @ApiOperation(value = "Create new clientType", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - clientTypes", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -38,7 +38,7 @@ public interface ClientTypesApi {
 
 
     @ApiOperation(value = "Delete clientType", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - clientTypes", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -53,7 +53,7 @@ public interface ClientTypesApi {
 
 
     @ApiOperation(value = "Returns ClientType", notes = "", response = ClientType.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - clientTypes", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = ClientType.class),
@@ -68,7 +68,7 @@ public interface ClientTypesApi {
 
 
     @ApiOperation(value = "Returns list of ClientTypes", notes = "", response = ClientType.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - clientTypes", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = ClientType.class, responseContainer = "List"),
@@ -83,7 +83,7 @@ public interface ClientTypesApi {
 
 
     @ApiOperation(value = "Update existing clientType", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "common - clientTypes", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Updated", response = Void.class),

@@ -23,7 +23,7 @@ import javax.validation.Valid;
 public interface ContactsApi {
 
     @ApiOperation(value = "Create new contact", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - contacts", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -38,7 +38,7 @@ public interface ContactsApi {
 
 
     @ApiOperation(value = "Delete contact", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - contacts", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -53,7 +53,7 @@ public interface ContactsApi {
 
 
     @ApiOperation(value = "Returns Contact", notes = "", response = Contact.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - contacts", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Contact.class),
@@ -68,7 +68,7 @@ public interface ContactsApi {
 
 
     @ApiOperation(value = "Returns list of Contacts", notes = "", response = Contact.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - contacts", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Contact.class, responseContainer = "List"),
@@ -83,7 +83,7 @@ public interface ContactsApi {
 
 
     @ApiOperation(value = "Update existing contact", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - contacts", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Updated", response = Void.class),

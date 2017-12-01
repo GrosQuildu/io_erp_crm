@@ -23,7 +23,7 @@ import javax.validation.Valid;
 public interface DeliveryCostsApi {
 
     @ApiOperation(value = "Create new deliveryCost", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - deliveryCosts", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -38,7 +38,7 @@ public interface DeliveryCostsApi {
 
 
     @ApiOperation(value = "Delete deliveryCost", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - deliveryCosts", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -53,7 +53,7 @@ public interface DeliveryCostsApi {
 
 
     @ApiOperation(value = "Returns DeliveryCost", notes = "", response = DeliveryCost.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - deliveryCosts", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = DeliveryCost.class),
@@ -68,7 +68,7 @@ public interface DeliveryCostsApi {
 
 
     @ApiOperation(value = "Returns list of DeliveryCosts", notes = "", response = DeliveryCost.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - deliveryCosts", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = DeliveryCost.class, responseContainer = "List"),
@@ -83,7 +83,7 @@ public interface DeliveryCostsApi {
 
 
     @ApiOperation(value = "Update existing deliveryCost", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - deliveryCosts", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Updated", response = Void.class),

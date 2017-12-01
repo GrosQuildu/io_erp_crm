@@ -26,7 +26,7 @@ public interface OrderedArticlesApi {
 
 
     @ApiOperation(value = "Create new OrderedArticle for given order", notes = "", response = Integer.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "ERP - orderedArticles", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -41,7 +41,7 @@ public interface OrderedArticlesApi {
 
 
     @ApiOperation(value = "Delete OrderedArticle", notes = "", response = Void.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "ERP - orderedArticles", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -56,7 +56,7 @@ public interface OrderedArticlesApi {
 
 
     @ApiOperation(value = "Returns article belonging to given order", notes = "", response = OrderedArticle.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "ERP - orderedArticles", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "", response = OrderedArticle.class),
@@ -71,7 +71,7 @@ public interface OrderedArticlesApi {
 
 
     @ApiOperation(value = "Returns order's article net price", notes = "", response = BigDecimal.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "ERP - orderedArticles", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Compute net price of order's article", response = BigDecimal.class),
@@ -85,7 +85,7 @@ public interface OrderedArticlesApi {
     ResponseEntity<BigDecimal> getOrderedArticleNetPrice(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,@ApiParam(value = "",required=true ) @PathVariable("OrderedArticleId") Integer orderedArticleId);
 
     @ApiOperation(value = "Returns order's article weight", notes = "", response = BigDecimal.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "ERP - orderedArticles", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Compute weight of order's article", response = BigDecimal.class),
@@ -100,7 +100,7 @@ public interface OrderedArticlesApi {
 
 
     @ApiOperation(value = "Returns articles belonging to given order", notes = "", response = OrderedArticle.class, responseContainer = "List", authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "ERP - orderedArticles", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "", response = OrderedArticle.class, responseContainer = "List"),
@@ -116,7 +116,7 @@ public interface OrderedArticlesApi {
 
 
     @ApiOperation(value = "Update existing OrderedArticle", notes = "", response = Void.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "ERP - orderedArticles", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Updated", response = Void.class),

@@ -23,7 +23,7 @@
 //public interface MeetingEmployeesApi {
 //
 //    @ApiOperation(value = "Create new Employee for given meeting", notes = "", response = Integer.class, authorizations = {
-//            @Authorization(value = "APIKeyHeader")
+//            @Authorization(value = "Authorization")
 //    }, tags={ "CRM - meeting employees", })
 //    @ApiResponses(value = {
 //            @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -39,7 +39,7 @@
 //
 //
 //    @ApiOperation(value = "Delete Employee", notes = "", response = Void.class, authorizations = {
-//            @Authorization(value = "APIKeyHeader")
+//            @Authorization(value = "Authorization")
 //    }, tags={ "CRM - meeting employees", })
 //    @ApiResponses(value = {
 //            @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -55,7 +55,7 @@
 //
 //
 //    @ApiOperation(value = "Returns employee belonging to given meeting", notes = "", response = Employee.class, authorizations = {
-//            @Authorization(value = "APIKeyHeader")
+//            @Authorization(value = "Authorization")
 //    }, tags={ "CRM - meeting employees", })
 //    @ApiResponses(value = {
 //            @ApiResponse(code = 200, message = "", response = Employee.class),
@@ -71,7 +71,7 @@
 //
 //
 //    @ApiOperation(value = "Returns employees belonging to given meeting", notes = "", response = Employee.class, responseContainer = "List",
-//            authorizations = {@Authorization(value = "APIKeyHeader")
+//            authorizations = {@Authorization(value = "Authorization")
 //    }, tags={ "CRM - meeting employees", })
 //    @ApiResponses(value = {
 //            @ApiResponse(code = 200, message = "", response = Employee.class, responseContainer = "List"),
@@ -86,7 +86,7 @@
 //
 //
 //    @ApiOperation(value = "Update existing Employee", notes = "", response = Void.class, authorizations = {
-//            @Authorization(value = "APIKeyHeader")
+//            @Authorization(value = "Authorization")
 //    }, tags={ "CRM - meeting employees", })
 //    @ApiResponses(value = {
 //            @ApiResponse(code = 200, message = "Updated", response = Void.class),

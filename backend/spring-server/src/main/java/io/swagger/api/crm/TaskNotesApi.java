@@ -23,7 +23,7 @@ import javax.validation.Valid;
 public interface TaskNotesApi {
 
     @ApiOperation(value = "Create new TaskNote for given task", notes = "", response = Integer.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - task notes", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -38,7 +38,7 @@ public interface TaskNotesApi {
                                             @ApiParam(value = "TaskNote to create"  )  @Valid @RequestBody TaskNote order);
 
     @ApiOperation(value = "Delete TaskNote", notes = "", response = Void.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - task notes", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -53,7 +53,7 @@ public interface TaskNotesApi {
                                         @ApiParam(value = "",required=true ) @PathVariable("TaskNoteId") Integer taskNoteId);
 
     @ApiOperation(value = "Returns note belonging to given task", notes = "", response = TaskNote.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - task notes", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "", response = TaskNote.class),
@@ -69,7 +69,7 @@ public interface TaskNotesApi {
 
 
     @ApiOperation(value = "Returns notes belonging to given task", notes = "", response = TaskNote.class, responseContainer = "List", authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - task notes", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "", response = TaskNote.class, responseContainer = "List"),
@@ -83,7 +83,7 @@ public interface TaskNotesApi {
     ResponseEntity<List<TaskNote>> getTaskNotes(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId);
 
     @ApiOperation(value = "Update existing TaskNote", notes = "", response = Void.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - task notes", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Updated", response = Void.class),

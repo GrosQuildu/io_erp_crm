@@ -26,7 +26,7 @@ import java.util.List;
 public interface TasksApi {
 
     @ApiOperation(value = "Create new task", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - tasks", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -41,7 +41,7 @@ public interface TasksApi {
 
 
     @ApiOperation(value = "Delete task", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - tasks", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -56,7 +56,7 @@ public interface TasksApi {
 
 
     @ApiOperation(value = "Returns Task", notes = "", response = Task.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - tasks", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Task.class),
@@ -71,7 +71,7 @@ public interface TasksApi {
 
 
     @ApiOperation(value = "Returns list of Tasks", notes = "", response = Task.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - tasks", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Task.class, responseContainer = "List"),
@@ -86,7 +86,7 @@ public interface TasksApi {
 
 
     @ApiOperation(value = "Update existing task", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "CRM - tasks", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Updated", response = Void.class),

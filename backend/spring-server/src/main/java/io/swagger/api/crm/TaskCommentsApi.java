@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @Api(value = "taskComments", description = "the task comments API")
 public interface TaskCommentsApi {
     @ApiOperation(value = "Create new TaskComment for given task", notes = "", response = Integer.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - task comments", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -37,7 +37,7 @@ public interface TaskCommentsApi {
                                                @ApiParam(value = "TaskComment to create"  )  @Valid @RequestBody TaskComment order);
 
     @ApiOperation(value = "Delete TaskComment", notes = "", response = Void.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - task comments", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -52,7 +52,7 @@ public interface TaskCommentsApi {
                                            @ApiParam(value = "",required=true ) @PathVariable("TaskCommentId") Integer taskCommentId);
 
     @ApiOperation(value = "Returns comment belonging to given task", notes = "", response = TaskComment.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - task comments", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "", response = TaskComment.class),
@@ -67,7 +67,7 @@ public interface TaskCommentsApi {
                                                @ApiParam(value = "",required=true ) @PathVariable("TaskCommentId") Integer taskCommentId);
 
     @ApiOperation(value = "Returns comments belonging to given task", notes = "", response = TaskComment.class, responseContainer = "List", authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - task comments", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "", response = TaskComment.class, responseContainer = "List"),
@@ -81,7 +81,7 @@ public interface TaskCommentsApi {
     ResponseEntity<List<TaskComment>> getTaskComments(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId);
 
     @ApiOperation(value = "Update existing TaskComment", notes = "", response = Void.class, authorizations = {
-            @Authorization(value = "APIKeyHeader")
+            @Authorization(value = "Authorization")
     }, tags={ "CRM - task comments", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Updated", response = Void.class),

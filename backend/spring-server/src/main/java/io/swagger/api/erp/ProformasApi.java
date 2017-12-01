@@ -23,7 +23,7 @@ import javax.validation.Valid;
 public interface ProformasApi {
 
     @ApiOperation(value = "Create new proforma", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - proformas", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Integer.class),
@@ -38,7 +38,7 @@ public interface ProformasApi {
 
 
     @ApiOperation(value = "Delete proforma", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - proformas", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Deleted", response = Void.class),
@@ -53,7 +53,7 @@ public interface ProformasApi {
 
 
     @ApiOperation(value = "Returns Proforma", notes = "", response = Proforma.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - proformas", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Proforma.class),
@@ -68,7 +68,7 @@ public interface ProformasApi {
 
 
     @ApiOperation(value = "Returns list of Proformas", notes = "", response = Proforma.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - proformas", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "", response = Proforma.class, responseContainer = "List"),
@@ -83,7 +83,7 @@ public interface ProformasApi {
 
 
     @ApiOperation(value = "Update existing proforma", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
+        @Authorization(value = "Authorization")
     }, tags={ "ERP - proformas", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Updated", response = Void.class),

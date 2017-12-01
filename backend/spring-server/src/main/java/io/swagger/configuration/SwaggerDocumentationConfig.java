@@ -6,9 +6,13 @@ import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import static com.google.common.collect.Lists.newArrayList;
+import java.util.ArrayList;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-15T00:41:28.115Z")
 
@@ -19,7 +23,7 @@ public class SwaggerDocumentationConfig {
         return new ApiInfoBuilder()
             .title("IO ERP CRM")
             .description("IO ERP CRM")
-            .license("")
+            .license("GPL")
             .licenseUrl("http://unlicense.org")
             .termsOfServiceUrl("")
             .version("1.0.0")
@@ -35,9 +39,13 @@ public class SwaggerDocumentationConfig {
                     .build()
                 .directModelSubstitute(org.joda.time.LocalDate.class, java.sql.Date.class)
                 .directModelSubstitute(org.joda.time.DateTime.class, java.util.Date.class)
-                .apiInfo(apiInfo());
+                .apiInfo(apiInfo())
+                .securitySchemes(newArrayList(apiKey()));
     }
 
+    private ApiKey apiKey() {
+        return new ApiKey("APIKeyHeader", "api_key", "header");
+    }
 
 
 }

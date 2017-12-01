@@ -29,7 +29,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/oauth/token", "/api-docs").permitAll()
                 .antMatchers("/oauth/**").denyAll()
                 .antMatchers("/crm/**").hasAnyAuthority(Employee.Role.ADMIN.toString(),Employee.Role.CRM.toString())
-                .antMatchers("/crm/**").hasAnyAuthority(Employee.Role.ADMIN.toString(),Employee.Role.ERP.toString())
+                .antMatchers("/erp/**").hasAnyAuthority(Employee.Role.ADMIN.toString(),Employee.Role.ERP.toString())
                 .antMatchers("/**").hasAnyAuthority(Employee.Role.ADMIN.toString(),Employee.Role.CRM.toString(),Employee.Role.ERP.toString());
     }
 }

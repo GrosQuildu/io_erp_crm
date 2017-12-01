@@ -4,6 +4,7 @@ import io.swagger.model.crm.ContactGroup;
 
 import io.swagger.annotations.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,11 @@ import javax.validation.Valid;
 @Controller
 public class ContactGroupsApiController implements ContactGroupsApi {
 
-
+    /** Dependent:
+        * orderedArticles (hard, block on delete)
+     * Depends on:
+        * unit (not null)
+     */
 
     public ResponseEntity<Integer> createContactGroup(@ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactType) {
         // do some magic!

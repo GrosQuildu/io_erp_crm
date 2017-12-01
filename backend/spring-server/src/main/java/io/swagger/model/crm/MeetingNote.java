@@ -4,27 +4,44 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.persistence.*;
 import javax.validation.constraints.*;
 
 /**
  * MeetingNote
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-15T00:41:28.115Z")
-
+@Entity
 public class MeetingNote   {
   @JsonProperty("id")
-  private Integer id = null;
+  @Id
+  @GeneratedValue
+  private Integer id ;
 
-  @JsonProperty("meetingId")
-  private Integer meetingId = null;
+  @JsonProperty("meeting")
+  @NotNull
+  @ManyToOne(cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "meeting_id")
+  private Meeting meeting;
 
   @JsonProperty("content")
-  private String content = null;
+  @NotNull
+  private String content;
 
   @JsonProperty("backgroundColor")
-  private String backgroundColor = null;
+  @NotNull
+  private String backgroundColor;
 
-  public MeetingNote id(Integer id) {
+  protected MeetingNote() {}
+
+  public MeetingNote(Integer id, Meeting meeting, String content, String backgroundColor) {
+    this.id = id;
+    this.meeting = meeting;
+    this.content = content;
+    this.backgroundColor = backgroundColor;
+  }
+
+    public MeetingNote id(Integer id) {
     this.id = id;
     return this;
   }
@@ -45,25 +62,25 @@ public class MeetingNote   {
     this.id = id;
   }
 
-  public MeetingNote meetingId(Integer meetingId) {
-    this.meetingId = meetingId;
+  public MeetingNote meeting(Meeting meeting) {
+    this.meeting = meeting;
     return this;
   }
 
    /**
-   * Get meetingId
-   * @return meetingId
+   * Get meeting
+   * @return meeting
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public Integer getMeetingId() {
-    return meetingId;
+  public Meeting getMeetingId() {
+    return meeting;
   }
 
-  public void setMeetingId(Integer meetingId) {
-    this.meetingId = meetingId;
+  public void setMeetingId(Meeting meeting) {
+    this.meeting = meeting;
   }
 
   public MeetingNote content(String content) {
@@ -117,14 +134,14 @@ public class MeetingNote   {
     }
     MeetingNote meetingNote = (MeetingNote) o;
     return Objects.equals(this.id, meetingNote.id) &&
-        Objects.equals(this.meetingId, meetingNote.meetingId) &&
+        Objects.equals(this.meeting, meetingNote.meeting) &&
         Objects.equals(this.content, meetingNote.content) &&
         Objects.equals(this.backgroundColor, meetingNote.backgroundColor);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, meetingId, content, backgroundColor);
+    return Objects.hash(id, meeting, content, backgroundColor);
   }
 
   @Override
@@ -133,7 +150,7 @@ public class MeetingNote   {
     sb.append("class MeetingNote {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    meetingId: ").append(toIndentedString(meetingId)).append("\n");
+    sb.append("    meeting: ").append(toIndentedString(meeting)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    backgroundColor: ").append(toIndentedString(backgroundColor)).append("\n");
     sb.append("}");

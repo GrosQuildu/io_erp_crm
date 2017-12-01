@@ -4,25 +4,44 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.persistence.*;
 import javax.validation.constraints.*;
 
 /**
  * TaskNote
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-15T00:41:28.115Z")
-
+@Entity
 public class TaskNote   {
   @JsonProperty("id")
-  private Integer id = null;
+  @Id
+  @GeneratedValue
+  private Integer id;
 
-  @JsonProperty("taskId")
-  private Integer taskId = null;
+  @JsonProperty("task")
+  @NotNull
+  @ManyToOne(cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "task_id")
+  private Task task;
 
   @JsonProperty("content")
-  private String content = null;
+  @NotNull
+  @Column(nullable = false, unique = false)
+  private String content;
 
   @JsonProperty("backgroundColor")
-  private String backgroundColor = null;
+  @NotNull
+  @Column(nullable = false, unique = false)
+  private String backgroundColor;
+
+  protected TaskNote() {}
+
+  public TaskNote(Integer id, Task task, String content, String backgroundColor) {
+    this.id = id;
+    this.task = task;
+    this.content = content;
+    this.backgroundColor = backgroundColor;
+  }
 
   public TaskNote id(Integer id) {
     this.id = id;
@@ -45,25 +64,25 @@ public class TaskNote   {
     this.id = id;
   }
 
-  public TaskNote taskId(Integer taskId) {
-    this.taskId = taskId;
+  public TaskNote task(Task task) {
+    this.task = task;
     return this;
   }
 
    /**
-   * Get taskId
-   * @return taskId
+   * Get task
+   * @return task
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public Integer getTaskId() {
-    return taskId;
+  public Task getTask() {
+    return task;
   }
 
-  public void setTaskId(Integer taskId) {
-    this.taskId = taskId;
+  public void setTask(Task task) {
+    this.task = task;
   }
 
   public TaskNote content(String content) {
@@ -118,14 +137,14 @@ public class TaskNote   {
     }
     TaskNote taskNote = (TaskNote) o;
     return Objects.equals(this.id, taskNote.id) &&
-        Objects.equals(this.taskId, taskNote.taskId) &&
+        Objects.equals(this.task, taskNote.task) &&
         Objects.equals(this.content, taskNote.content) &&
         Objects.equals(this.backgroundColor, taskNote.backgroundColor);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, taskId, content, backgroundColor);
+    return Objects.hash(id, task, content, backgroundColor);
   }
 
   @Override
@@ -134,7 +153,7 @@ public class TaskNote   {
     sb.append("class TaskNote {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    taskId: ").append(toIndentedString(taskId)).append("\n");
+    sb.append("    task: ").append(toIndentedString(task)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    backgroundColor: ").append(toIndentedString(backgroundColor)).append("\n");
     sb.append("}");

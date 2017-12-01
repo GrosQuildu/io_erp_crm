@@ -3,7 +3,10 @@ package io.swagger.model.crm;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.common.Employee;
 import org.joda.time.LocalDate;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -11,22 +14,44 @@ import javax.validation.constraints.*;
  * TaskComment
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-15T00:41:28.115Z")
-
+@Entity
 public class TaskComment   {
   @JsonProperty("id")
-  private Integer id = null;
+  @Id
+  @GeneratedValue
+  private Integer id;
 
-  @JsonProperty("taskId")
-  private Integer taskId = null;
+  @JsonProperty("task")
+  @NotNull
+  @ManyToOne(cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "task_id")
+  private Task task;
 
   @JsonProperty("content")
-  private String content = null;
+  @NotNull
+  @Column(nullable = false, unique = false)
+  private String content;
 
-  @JsonProperty("employeeId")
-  private Integer employeeId = null;
+  @JsonProperty("employee")
+  @NotNull
+  @ManyToOne(cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "employee_id")
+  private Employee employee;
 
   @JsonProperty("time")
-  private LocalDate time = null;
+  @NotNull
+  @Column(nullable = false, unique = false)
+  private LocalDate time;
+
+  protected TaskComment() {}
+
+  public TaskComment(Integer id, Task task, String content, Employee employee, LocalDate time) {
+    this.id = id;
+    this.task = task;
+    this.content = content;
+    this.employee = employee;
+    this.time = time;
+  }
 
   public TaskComment id(Integer id) {
     this.id = id;
@@ -49,25 +74,25 @@ public class TaskComment   {
     this.id = id;
   }
 
-  public TaskComment taskId(Integer taskId) {
-    this.taskId = taskId;
+  public TaskComment task(Task task) {
+    this.task = task;
     return this;
   }
 
    /**
-   * Get taskId
-   * @return taskId
+   * Get task
+   * @return task
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public Integer getTaskId() {
-    return taskId;
+  public Task getTask() {
+    return task;
   }
 
-  public void setTaskId(Integer taskId) {
-    this.taskId = taskId;
+  public void setTask(Task task) {
+    this.task = task;
   }
 
   public TaskComment content(String content) {
@@ -91,25 +116,25 @@ public class TaskComment   {
     this.content = content;
   }
 
-  public TaskComment employeeId(Integer employeeId) {
-    this.employeeId = employeeId;
+  public TaskComment employee(Employee employee) {
+    this.employee = employee;
     return this;
   }
 
    /**
-   * Get employeeId
-   * @return employeeId
+   * Get employee
+   * @return employee
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public Integer getEmployeeId() {
-    return employeeId;
+  public Employee getEmployee() {
+    return employee;
   }
 
-  public void setEmployeeId(Integer employeeId) {
-    this.employeeId = employeeId;
+  public void setEmployee(Employee employee) {
+    this.employee = employee;
   }
 
   public TaskComment time(LocalDate time) {
@@ -145,15 +170,15 @@ public class TaskComment   {
     }
     TaskComment taskComment = (TaskComment) o;
     return Objects.equals(this.id, taskComment.id) &&
-        Objects.equals(this.taskId, taskComment.taskId) &&
+        Objects.equals(this.task, taskComment.task) &&
         Objects.equals(this.content, taskComment.content) &&
-        Objects.equals(this.employeeId, taskComment.employeeId) &&
+        Objects.equals(this.employee, taskComment.employee) &&
         Objects.equals(this.time, taskComment.time);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, taskId, content, employeeId, time);
+    return Objects.hash(id, task, content, employee, time);
   }
 
   @Override
@@ -162,9 +187,9 @@ public class TaskComment   {
     sb.append("class TaskComment {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    taskId: ").append(toIndentedString(taskId)).append("\n");
+    sb.append("    task: ").append(toIndentedString(task)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
-    sb.append("    employeeId: ").append(toIndentedString(employeeId)).append("\n");
+    sb.append("    employee: ").append(toIndentedString(employee)).append("\n");
     sb.append("    time: ").append(toIndentedString(time)).append("\n");
     sb.append("}");
     return sb.toString();

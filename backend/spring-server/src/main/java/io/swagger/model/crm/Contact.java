@@ -3,32 +3,48 @@ package io.swagger.model.crm;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.common.Client;
+import io.swagger.model.common.ClientType;
+import io.swagger.model.common.Employee;
 
+import javax.persistence.*;
 import javax.validation.constraints.*;
 
 /**
  * Contact
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-15T00:41:28.115Z")
-
+@Entity
 public class Contact   {
   @JsonProperty("id")
-  private Integer id = null;
+  @Id
+  @GeneratedValue
+  private Integer id;
 
-  @JsonProperty("clientId")
-  private Integer clientId = null;
+  @JsonProperty("client")
+  @ManyToOne(cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "client_id")
+  private Client client = null;
 
-  @JsonProperty("employeeId")
-  private Integer employeeId = null;
+  @JsonProperty("employee")
+  @NotNull
+  @ManyToOne(cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "employee_id")
+  private Employee employee;
 
-  @JsonProperty("clientTypeId")
-  private Integer clientTypeId = null;
+  @JsonProperty("clientType")
+  @NotNull
+  @ManyToOne(cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "clientType_id")
+  private ClientType clientType;
 
   @JsonProperty("vip")
   private Boolean vip = false;
 
   @JsonProperty("name")
-  private String name = null;
+  @NotNull
+  @Column(nullable = false, unique = false)
+  private String name;
 
   @JsonProperty("street")
   private String street = null;
@@ -43,7 +59,19 @@ public class Contact   {
   private String telephone = null;
 
   @JsonProperty("mail")
-  private String mail = null;
+  @NotNull
+  @Column(nullable = false, unique = true)
+  private String mail;
+
+  protected Contact() {}
+
+  public Contact(Integer id, Employee employee, ClientType clientType, String name, String mail) {
+      this.id = id;
+      this.employee = employee;
+      this.clientType = clientType;
+      this.name = name;
+      this.mail = mail;
+  }
 
   public Contact id(Integer id) {
     this.id = id;
@@ -66,66 +94,66 @@ public class Contact   {
     this.id = id;
   }
 
-  public Contact clientId(Integer clientId) {
-    this.clientId = clientId;
+  public Contact client(Client client) {
+    this.client = client;
     return this;
   }
 
    /**
-   * Get clientId
-   * @return clientId
+   * Get client
+   * @return client
   **/
   @ApiModelProperty(value = "")
 
 
-  public Integer getClientId() {
-    return clientId;
+  public Client getClient() {
+    return client;
   }
 
-  public void setClientId(Integer clientId) {
-    this.clientId = clientId;
+  public void setClient(Client client) {
+    this.client = client;
   }
 
-  public Contact employeeId(Integer employeeId) {
-    this.employeeId = employeeId;
+  public Contact employee(Employee employee) {
+    this.employee = employee;
     return this;
   }
 
    /**
-   * Get employeeId
-   * @return employeeId
+   * Get employee
+   * @return employee
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public Integer getEmployeeId() {
-    return employeeId;
+  public Employee getEmployee() {
+    return employee;
   }
 
-  public void setEmployeeId(Integer employeeId) {
-    this.employeeId = employeeId;
+  public void setEmployee(Employee employee) {
+    this.employee = employee;
   }
 
-  public Contact clientTypeId(Integer clientTypeId) {
-    this.clientTypeId = clientTypeId;
+  public Contact clientType(ClientType clientType) {
+    this.clientType = clientType;
     return this;
   }
 
    /**
-   * Get clientTypeId
-   * @return clientTypeId
+   * Get clientType
+   * @return clientType
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public Integer getClientTypeId() {
-    return clientTypeId;
+  public ClientType getClientType() {
+    return clientType;
   }
 
-  public void setClientTypeId(Integer clientTypeId) {
-    this.clientTypeId = clientTypeId;
+  public void setClientType(ClientType clientType) {
+    this.clientType = clientType;
   }
 
   public Contact vip(Boolean vip) {
@@ -281,9 +309,9 @@ public class Contact   {
     }
     Contact contact = (Contact) o;
     return Objects.equals(this.id, contact.id) &&
-        Objects.equals(this.clientId, contact.clientId) &&
-        Objects.equals(this.employeeId, contact.employeeId) &&
-        Objects.equals(this.clientTypeId, contact.clientTypeId) &&
+        Objects.equals(this.client, contact.client) &&
+        Objects.equals(this.employee, contact.employee) &&
+        Objects.equals(this.clientType, contact.clientType) &&
         Objects.equals(this.vip, contact.vip) &&
         Objects.equals(this.name, contact.name) &&
         Objects.equals(this.street, contact.street) &&
@@ -295,7 +323,7 @@ public class Contact   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, employeeId, clientTypeId, vip, name, street, city, postCode, telephone, mail);
+    return Objects.hash(id, client, employee, clientType, vip, name, street, city, postCode, telephone, mail);
   }
 
   @Override
@@ -304,9 +332,9 @@ public class Contact   {
     sb.append("class Contact {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    clientId: ").append(toIndentedString(clientId)).append("\n");
-    sb.append("    employeeId: ").append(toIndentedString(employeeId)).append("\n");
-    sb.append("    clientTypeId: ").append(toIndentedString(clientTypeId)).append("\n");
+    sb.append("    client: ").append(toIndentedString(client)).append("\n");
+    sb.append("    employee: ").append(toIndentedString(employee)).append("\n");
+    sb.append("    clientType: ").append(toIndentedString(clientType)).append("\n");
     sb.append("    vip: ").append(toIndentedString(vip)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    street: ").append(toIndentedString(street)).append("\n");

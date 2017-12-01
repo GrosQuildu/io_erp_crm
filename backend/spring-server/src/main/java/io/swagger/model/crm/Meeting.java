@@ -1,9 +1,13 @@
 package io.swagger.model.crm;
 
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.common.Employee;
 import org.joda.time.LocalDate;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -11,13 +15,32 @@ import javax.validation.constraints.*;
  * Meeting
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-15T00:41:28.115Z")
-
+@Entity
 public class Meeting   {
   @JsonProperty("id")
-  private Integer id = null;
+  @Id
+  @GeneratedValue
+  private Integer id;
 
   @JsonProperty("meetingDate")
-  private LocalDate meetingDate = null;
+  @NotNull
+  @Column(nullable = false, unique = false)
+  private LocalDate meetingDate;
+
+  @JsonProperty("employees")
+  @NotNull
+  @OneToMany
+  private List<Employee> employees;
+
+  @JsonProperty("contacts")
+  @NotNull
+  @OneToMany
+  private List<Contact> contacts;
+
+  @JsonProperty("notes")
+  @NotNull
+  @OneToMany(mappedBy = "meeting")
+  private List<MeetingNote> notes;
 
   @JsonProperty("nextMeetingDate")
   private LocalDate nextMeetingDate = null;
@@ -28,11 +51,21 @@ public class Meeting   {
   @JsonProperty("purpose")
   private String purpose = null;
 
-  @JsonProperty("employeeId")
-  private Integer employeeId = null;
+  @JsonProperty("mainEmployee")
+  @NotNull
+  @OneToOne(cascade = CascadeType.PERSIST)
+  private Employee mainEmployee;
 
   @JsonProperty("telephoneMeeting")
   private Boolean telephoneMeeting = false;
+
+  protected Meeting() {}
+
+  public Meeting(Integer id, LocalDate meetingDate, Employee mainEmployee) {
+    this.id = id;
+    this.meetingDate = meetingDate;
+    this.mainEmployee = mainEmployee;
+  }
 
   public Meeting id(Integer id) {
     this.id = id;
@@ -138,24 +171,24 @@ public class Meeting   {
     this.purpose = purpose;
   }
 
-  public Meeting employeeId(Integer employeeId) {
-    this.employeeId = employeeId;
+  public Meeting mainEmployee(Employee mainEmployee) {
+    this.mainEmployee = mainEmployee;
     return this;
   }
 
    /**
-   * Get employeeId
-   * @return employeeId
+   * Get mainEmployee
+   * @return mainEmployee
   **/
   @ApiModelProperty(value = "")
 
 
-  public Integer getEmployeeId() {
-    return employeeId;
+  public Employee getMainEmployee() {
+    return mainEmployee;
   }
 
-  public void setEmployeeId(Integer employeeId) {
-    this.employeeId = employeeId;
+  public void setMainEmployee(Employee mainEmployee) {
+    this.mainEmployee = mainEmployee;
   }
 
   public Meeting telephoneMeeting(Boolean telephoneMeeting) {
@@ -193,13 +226,13 @@ public class Meeting   {
         Objects.equals(this.nextMeetingDate, meeting.nextMeetingDate) &&
         Objects.equals(this.description, meeting.description) &&
         Objects.equals(this.purpose, meeting.purpose) &&
-        Objects.equals(this.employeeId, meeting.employeeId) &&
+        Objects.equals(this.mainEmployee, meeting.mainEmployee) &&
         Objects.equals(this.telephoneMeeting, meeting.telephoneMeeting);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, meetingDate, nextMeetingDate, description, purpose, employeeId, telephoneMeeting);
+    return Objects.hash(id, meetingDate, nextMeetingDate, description, purpose, mainEmployee, telephoneMeeting);
   }
 
   @Override
@@ -212,7 +245,7 @@ public class Meeting   {
     sb.append("    nextMeetingDate: ").append(toIndentedString(nextMeetingDate)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    purpose: ").append(toIndentedString(purpose)).append("\n");
-    sb.append("    employeeId: ").append(toIndentedString(employeeId)).append("\n");
+    sb.append("    mainEmployee: ").append(toIndentedString(mainEmployee)).append("\n");
     sb.append("    telephoneMeeting: ").append(toIndentedString(telephoneMeeting)).append("\n");
     sb.append("}");
     return sb.toString();

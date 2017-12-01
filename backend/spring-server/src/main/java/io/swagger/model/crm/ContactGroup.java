@@ -4,21 +4,36 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.*;
 
 /**
  * ContactGroup
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-15T00:41:28.115Z")
-
+@Entity
 public class ContactGroup   {
   @JsonProperty("id")
-  private Integer id = null;
+  @Id
+  @GeneratedValue
+  private Integer id;
 
   @JsonProperty("description")
-  private String description = null;
+  @NotNull
+  @Column(nullable = false, unique = false)
+  private String description;
 
-  public ContactGroup id(Integer id) {
+  protected ContactGroup() {}
+
+  public ContactGroup(Integer id, String description) {
+      this.id = id;
+      this.description = description;
+  }
+
+    public ContactGroup id(Integer id) {
     this.id = id;
     return this;
   }

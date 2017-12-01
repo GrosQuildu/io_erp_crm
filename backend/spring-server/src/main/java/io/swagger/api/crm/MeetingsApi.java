@@ -7,9 +7,6 @@ package io.swagger.api.crm;
 
 import io.swagger.model.Error;
 import io.swagger.model.crm.Meeting;
-import io.swagger.model.crm.MeetingContact;
-import io.swagger.model.crm.MeetingEmployee;
-import io.swagger.model.crm.MeetingNote;
 
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
@@ -40,51 +37,6 @@ public interface MeetingsApi {
     ResponseEntity<Integer> createMeeting(@ApiParam(value = "Meeting to create"  )  @Valid @RequestBody Meeting meeting);
 
 
-    @ApiOperation(value = "Create new MeetingContact for given meeting", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting contacts", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "", response = Integer.class),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/contacts",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.POST)
-    ResponseEntity<Integer> createMeetingContacts(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,@ApiParam(value = "MeetingContact to create"  )  @Valid @RequestBody MeetingContact order);
-
-
-    @ApiOperation(value = "Create new MeetingEmployee for given meeting", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting employees", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "", response = Integer.class),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/employees",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.POST)
-    ResponseEntity<Integer> createMeetingEmployees(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,@ApiParam(value = "MeetingEmployee to create"  )  @Valid @RequestBody MeetingEmployee order);
-
-
-    @ApiOperation(value = "Create new MeetingNote for given meeting", notes = "", response = Integer.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting notes", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "", response = Integer.class),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/notes",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.POST)
-    ResponseEntity<Integer> createMeetingNotes(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,@ApiParam(value = "MeetingNote to create"  )  @Valid @RequestBody MeetingNote order);
-
-
     @ApiOperation(value = "Delete meeting", notes = "", response = Void.class, authorizations = {
         @Authorization(value = "APIKeyHeader")
     }, tags={ "CRM - meetings", })
@@ -98,52 +50,6 @@ public interface MeetingsApi {
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
     ResponseEntity<Void> deleteMeeting(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId);
-
-
-    @ApiOperation(value = "Delete MeetingContact", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting contacts", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Deleted", response = Void.class),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/contacts/{MeetingContactId}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteMeetingContact(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,@ApiParam(value = "",required=true ) @PathVariable("MeetingContactId") Integer meetingContactId);
-
-
-    @ApiOperation(value = "Delete MeetingEmployee", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting employees", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Deleted", response = Void.class),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/employees/{MeetingEmployeeId}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteMeetingEmployee(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,@ApiParam(value = "",required=true ) @PathVariable("MeetingEmployeeId") Integer meetingEmployeeId);
-
-
-    @ApiOperation(value = "Delete MeetingNote", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting notes", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Deleted", response = Void.class),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/notes/{MeetingNoteId}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteMeetingNote(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,@ApiParam(value = "",required=true ) @PathVariable("MeetingNoteId") Integer meetingNoteId);
-
 
     @ApiOperation(value = "Returns Meeting", notes = "", response = Meeting.class, authorizations = {
         @Authorization(value = "APIKeyHeader")
@@ -159,97 +65,6 @@ public interface MeetingsApi {
         method = RequestMethod.GET)
     ResponseEntity<Meeting> getMeeting(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId);
 
-
-    @ApiOperation(value = "Returns contact belonging to given meeting", notes = "", response = MeetingContact.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting contacts", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "", response = MeetingContact.class),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/contacts/{MeetingContactId}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.GET)
-    ResponseEntity<MeetingContact> getMeetingContact(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,@ApiParam(value = "",required=true ) @PathVariable("MeetingContactId") Integer meetingContactId);
-
-
-    @ApiOperation(value = "Returns contacts belonging to given meeting", notes = "", response = MeetingContact.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting contacts", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "", response = MeetingContact.class, responseContainer = "List"),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/contacts",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.GET)
-    ResponseEntity<List<MeetingContact>> getMeetingContacts(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId);
-
-
-    @ApiOperation(value = "Returns employee belonging to given meeting", notes = "", response = MeetingEmployee.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting employees", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "", response = MeetingEmployee.class),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/employees/{MeetingEmployeeId}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.GET)
-    ResponseEntity<MeetingEmployee> getMeetingEmployee(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,@ApiParam(value = "",required=true ) @PathVariable("MeetingEmployeeId") Integer meetingEmployeeId);
-
-
-    @ApiOperation(value = "Returns employees belonging to given meeting", notes = "", response = MeetingEmployee.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting employees", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "", response = MeetingEmployee.class, responseContainer = "List"),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/employees",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.GET)
-    ResponseEntity<List<MeetingEmployee>> getMeetingEmployees(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId);
-
-
-    @ApiOperation(value = "Returns note belonging to given meeting", notes = "", response = MeetingNote.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting notes", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "", response = MeetingNote.class),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/notes/{MeetingNoteId}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.GET)
-    ResponseEntity<MeetingNote> getMeetingNote(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,@ApiParam(value = "",required=true ) @PathVariable("MeetingNoteId") Integer meetingNoteId);
-
-
-    @ApiOperation(value = "Returns notes belonging to given meeting", notes = "", response = MeetingNote.class, responseContainer = "List", authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting notes", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "", response = MeetingNote.class, responseContainer = "List"),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/notes",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.GET)
-    ResponseEntity<List<MeetingNote>> getMeetingNotes(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId);
-
-
     @ApiOperation(value = "Returns list of Meetings", notes = "", response = Meeting.class, responseContainer = "List", authorizations = {
         @Authorization(value = "APIKeyHeader")
     }, tags={ "CRM - meetings", })
@@ -264,7 +79,6 @@ public interface MeetingsApi {
         method = RequestMethod.GET)
     ResponseEntity<List<Meeting>> getMeetings();
 
-
     @ApiOperation(value = "Update existing meeting", notes = "", response = Void.class, authorizations = {
         @Authorization(value = "APIKeyHeader")
     }, tags={ "CRM - meetings", })
@@ -277,51 +91,7 @@ public interface MeetingsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateMeeting(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,@ApiParam(value = "Meeting to update"  )  @Valid @RequestBody Meeting meeting);
-
-
-    @ApiOperation(value = "Update existing MeetingContact", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting contacts", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Updated", response = Void.class),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/contacts/{MeetingContactId}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.PUT)
-    ResponseEntity<Void> updateMeetingContact(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,@ApiParam(value = "",required=true ) @PathVariable("MeetingContactId") Integer meetingContactId,@ApiParam(value = "MeetingContact to update"  )  @Valid @RequestBody MeetingContact meetingContact);
-
-
-    @ApiOperation(value = "Update existing MeetingEmployee", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting employees", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Updated", response = Void.class),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/employees/{MeetingEmployeeId}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.PUT)
-    ResponseEntity<Void> updateMeetingEmployee(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,@ApiParam(value = "",required=true ) @PathVariable("MeetingEmployeeId") Integer meetingEmployeeId,@ApiParam(value = "MeetingEmployee to update"  )  @Valid @RequestBody MeetingEmployee meetingEmployee);
-
-
-    @ApiOperation(value = "Update existing MeetingNote", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "APIKeyHeader")
-    }, tags={ "CRM - meeting notes", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Updated", response = Void.class),
-        @ApiResponse(code = 401, message = "Unauthorized - API key is missing or invalid", response = Error.class),
-        @ApiResponse(code = 500, message = "Server error", response = Error.class) })
-    
-    @RequestMapping(value = "/crm/meetings/{meetingId}/notes/{MeetingNoteId}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.PUT)
-    ResponseEntity<Void> updateMeetingNote(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,@ApiParam(value = "",required=true ) @PathVariable("MeetingNoteId") Integer meetingNoteId,@ApiParam(value = "MeetingNote to update"  )  @Valid @RequestBody MeetingNote meetingNote);
+    ResponseEntity<Void> updateMeeting(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,
+                                       @ApiParam(value = "Meeting to update"  )  @Valid @RequestBody Meeting meeting);
 
 }

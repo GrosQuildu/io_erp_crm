@@ -1,9 +1,12 @@
 package io.swagger.api.crm;
 
+import io.swagger.model.BaseModel;
 import io.swagger.model.crm.ContactGroup;
 
 import io.swagger.annotations.*;
 
+import io.swagger.model.crm.ContactGroupRepository;
+import io.swagger.model.crm.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,34 +23,43 @@ import javax.validation.Valid;
 public class ContactGroupsApiController implements ContactGroupsApi {
 
     /** Dependent:
-        * orderedArticles (hard, block on delete)
+        * contacts (hard, block on delete)
      * Depends on:
-        * unit (not null)
+        * none
      */
+    @Autowired
+    ContactGroupRepository contactGroupRepository;
+    @Autowired
+    ContactRepository clientRepository;
 
-    public ResponseEntity<Integer> createContactGroup(@ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactType) {
-        // do some magic!
-        return new ResponseEntity<Integer>(HttpStatus.OK);
+    public ResponseEntity<Integer> createContactGroup(@ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactGroup) {
+        contactGroup = contactGroupRepository.save(contactGroup);
+        return new ResponseEntity<Integer>(contactGroup.getId(), HttpStatus.OK);
     }
 
     public ResponseEntity<Void> deleteContactGroup(@ApiParam(value = "",required=true ) @PathVariable("contactGroupId") Integer contactGroupId) {
-        // do some magic!
+        ContactGroup contactGroup = BaseModel.getModelHelper(clientRepository, contactGroupId);
+        BaseModel.dependent(clientRepository, contactGroup);
+        contactGroupRepository.delete(contactGroupId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<ContactGroup> getContactGroup(@ApiParam(value = "",required=true ) @PathVariable("contactGroupId") Integer contactGroupId) {
-        // do some magic!
-        return new ResponseEntity<ContactGroup>(HttpStatus.OK);
+        ContactGroup contactGroup = BaseModel.getModelHelper(clientRepository, contactGroupId);
+        return new ResponseEntity<ContactGroup>(contactGroup, HttpStatus.OK);
     }
 
     public ResponseEntity<List<ContactGroup>> getContactGroups() {
-        // do some magic!
-        return new ResponseEntity<List<ContactGroup>>(HttpStatus.OK);
+        List<ContactGroup> contactGroups = (List<ContactGroup> ) contactGroupRepository.findAll();
+        return new ResponseEntity<List<ContactGroup>>(contactGroups, HttpStatus.OK);
     }
 
     public ResponseEntity<Void> updateContactGroup(@ApiParam(value = "",required=true ) @PathVariable("contactGroupId") Integer contactGroupId,
-        @ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactType) {
-        // do some magic!
+        @ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactGroup) {
+        if(contactGroup.getId() != null && contactGroupId != contactGroup.getId())
+            throw new Error("Wrong id");
+        contactGroup = BaseModel.combineWithOld(contactGroupRepository, contactGroup);
+        contactGroup = contactGroupRepository.save(contactGroup);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 

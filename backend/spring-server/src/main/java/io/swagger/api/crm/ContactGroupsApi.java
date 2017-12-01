@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @Api(value = "contactGroups", description = "the contactGroups API")
 public interface ContactGroupsApi {
 
-    @ApiOperation(value = "Create new contactType", notes = "", response = Integer.class, authorizations = {
+    @ApiOperation(value = "Create new contactGroup", notes = "", response = Integer.class, authorizations = {
         @Authorization(value = "APIKeyHeader")
     }, tags={ "CRM - contactGroups", })
     @ApiResponses(value = { 
@@ -34,10 +34,10 @@ public interface ContactGroupsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createContactGroup(@ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactType);
+    ResponseEntity<Integer> createContactGroup(@ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactGroup);
 
 
-    @ApiOperation(value = "Delete contactType", notes = "", response = Void.class, authorizations = {
+    @ApiOperation(value = "Delete contactGroup", notes = "", response = Void.class, authorizations = {
         @Authorization(value = "APIKeyHeader")
     }, tags={ "CRM - contactGroups", })
     @ApiResponses(value = { 
@@ -82,7 +82,7 @@ public interface ContactGroupsApi {
     ResponseEntity<List<ContactGroup>> getContactGroups();
 
 
-    @ApiOperation(value = "Update existing contactType", notes = "", response = Void.class, authorizations = {
+    @ApiOperation(value = "Update existing contactGroup", notes = "", response = Void.class, authorizations = {
         @Authorization(value = "APIKeyHeader")
     }, tags={ "CRM - contactGroups", })
     @ApiResponses(value = { 
@@ -94,6 +94,6 @@ public interface ContactGroupsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateContactGroup(@ApiParam(value = "",required=true ) @PathVariable("contactGroupId") Integer contactGroupId,@ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactType);
+    ResponseEntity<Void> updateContactGroup(@ApiParam(value = "",required=true ) @PathVariable("contactGroupId") Integer contactGroupId,@ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactGroup);
 
 }

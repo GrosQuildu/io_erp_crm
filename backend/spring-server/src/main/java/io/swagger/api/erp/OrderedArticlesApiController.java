@@ -111,7 +111,7 @@ public class OrderedArticlesApiController implements OrderedArticlesApi {
         checkOrder(orderId, orderedArticle);
 
         orderedArticle = BaseModel.combineWithOld(orderedArticleRepository, orderedArticle);
-        orderedArticle = BaseModel.dependsOn(Order.class, orderRepository, orderedArticle);
+        orderedArticle = BaseModel.dependsOn(Order_.class, orderRepository, orderedArticle);
         orderedArticle = BaseModel.dependsOn(Article.class, articleRepository, orderedArticle);
 
         orderedArticleRepository.save(orderedArticle);

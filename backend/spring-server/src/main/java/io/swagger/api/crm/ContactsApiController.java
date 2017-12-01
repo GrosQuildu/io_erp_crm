@@ -1,9 +1,15 @@
 package io.swagger.api.crm;
 
-import io.swagger.model.crm.Contact;
+import io.swagger.model.BaseModel;
+import io.swagger.model.common.Client;
+import io.swagger.model.common.ClientRepository;
+import io.swagger.model.common.Employee;
+import io.swagger.model.crm.*;
 
 import io.swagger.annotations.*;
 
+import io.swagger.model.crm.Contact;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,31 +24,65 @@ import javax.validation.Valid;
 @Controller
 public class ContactsApiController implements ContactsApi {
 
-
+    /** Dependent:
+        * meetings (hard, block on delete)
+        * tasks (hard, block on delete)
+     * Depends on:
+        * contact group (not null)
+        * employee (not null)
+        * client (may be null)
+     */
+    @Autowired
+    ContactRepository contactRepository;
+    @Autowired
+    ContactGroupRepository contactGroupRepository;
+    @Autowired
+    MeetingRepository meetingRepository;
+    @Autowired
+    TaskRepository taskRepository;
+    @Autowired
+    ClientRepository clientRepository;
 
     public ResponseEntity<Integer> createContact(@ApiParam(value = "Contact to create"  )  @Valid @RequestBody Contact contact) {
-        // do some magic!
-        return new ResponseEntity<Integer>(HttpStatus.OK);
+        contact = BaseModel.dependsOn(ContactGroup.class, contactGroupRepository, contact);
+        contact = BaseModel.dependsOn(Employee.class, contactGroupRepository, contact);
+        if(contact.getClient() != null)
+            contact = BaseModel.dependsOn(Client.class, clientRepository, contact);
+
+        contact = contactRepository.save(contact);
+        return new ResponseEntity<Integer>(contact.getId(), HttpStatus.OK);
     }
 
     public ResponseEntity<Void> deleteContact(@ApiParam(value = "",required=true ) @PathVariable("contactId") Integer contactId) {
-        // do some magic!
+        Contact contact = BaseModel.getModelHelper(contactRepository, contactId);
+        BaseModel.dependent(meetingRepository, contact);
+        BaseModel.dependent(taskRepository, contact);
+        contactRepository.delete(contactId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<Contact> getContact(@ApiParam(value = "",required=true ) @PathVariable("contactId") Integer contactId) {
-        // do some magic!
-        return new ResponseEntity<Contact>(HttpStatus.OK);
+        Contact contact = BaseModel.getModelHelper(contactRepository, contactId);
+        return new ResponseEntity<Contact>(contact, HttpStatus.OK);
     }
 
     public ResponseEntity<List<Contact>> getContacts() {
-        // do some magic!
-        return new ResponseEntity<List<Contact>>(HttpStatus.OK);
+        List<Contact> contacts = (List<Contact>) contactRepository.findAll();
+        return new ResponseEntity<List<Contact>>(contacts, HttpStatus.OK);
     }
 
     public ResponseEntity<Void> updateContact(@ApiParam(value = "",required=true ) @PathVariable("contactId") Integer contactId,
         @ApiParam(value = "Contact to create"  )  @Valid @RequestBody Contact contact) {
-        // do some magic!
+        if(contact.getId() != null && contactId != contact.getId())
+            throw new Error("Wrong id");
+
+        contact = BaseModel.combineWithOld(contactRepository, contact);
+        contact = BaseModel.dependsOn(ContactGroup.class, contactGroupRepository, contact);
+        contact = BaseModel.dependsOn(Employee.class, contactGroupRepository, contact);
+        if(contact.getClient() != null)
+            contact = BaseModel.dependsOn(Client.class, clientRepository, contact);
+
+        contact = contactRepository.save(contact);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 

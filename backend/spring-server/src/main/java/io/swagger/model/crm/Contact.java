@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.BaseModel;
 import io.swagger.model.common.Client;
-import io.swagger.model.common.ClientType;
 import io.swagger.model.common.Employee;
 
 import javax.persistence.*;
@@ -33,11 +32,11 @@ public class Contact extends BaseModel {
   @JoinColumn(name = "employee_id")
   private Employee employee;
 
-  @JsonProperty("clientType")
+  @JsonProperty("contactGroup")
   @NotNull
   @ManyToOne(cascade = CascadeType.PERSIST)
-  @JoinColumn(name = "clientType_id")
-  private ClientType clientType;
+  @JoinColumn(name = "contact_group_id")
+  private ContactGroup contactGroup;
 
   @JsonProperty("vip")
   private Boolean vip = false;
@@ -66,10 +65,10 @@ public class Contact extends BaseModel {
 
   protected Contact() {}
 
-  public Contact(Integer id, Employee employee, ClientType clientType, String name, String mail) {
+  public Contact(Integer id, Employee employee, ContactGroup contactGroup, String name, String mail) {
       this.id = id;
       this.employee = employee;
-      this.clientType = clientType;
+      this.contactGroup = contactGroup;
       this.name = name;
       this.mail = mail;
   }
@@ -136,25 +135,25 @@ public class Contact extends BaseModel {
     this.employee = employee;
   }
 
-  public Contact clientType(ClientType clientType) {
-    this.clientType = clientType;
+  public Contact contactGroup(ContactGroup contactGroup) {
+    this.contactGroup = contactGroup;
     return this;
   }
 
    /**
-   * Get clientType
-   * @return clientType
+   * Get contactGroup
+   * @return contactGroup
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public ClientType getClientType() {
-    return clientType;
+  public ContactGroup getContactGroup() {
+    return contactGroup;
   }
 
-  public void setClientType(ClientType clientType) {
-    this.clientType = clientType;
+  public void setContactGroup(ContactGroup contactGroup) {
+    this.contactGroup = contactGroup;
   }
 
   public Contact vip(Boolean vip) {
@@ -312,7 +311,7 @@ public class Contact extends BaseModel {
     return Objects.equals(this.id, contact.id) &&
         Objects.equals(this.client, contact.client) &&
         Objects.equals(this.employee, contact.employee) &&
-        Objects.equals(this.clientType, contact.clientType) &&
+        Objects.equals(this.contactGroup, contact.contactGroup) &&
         Objects.equals(this.vip, contact.vip) &&
         Objects.equals(this.name, contact.name) &&
         Objects.equals(this.street, contact.street) &&
@@ -324,7 +323,7 @@ public class Contact extends BaseModel {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, client, employee, clientType, vip, name, street, city, postCode, telephone, mail);
+    return Objects.hash(id, client, employee, contactGroup, vip, name, street, city, postCode, telephone, mail);
   }
 
   @Override
@@ -335,7 +334,7 @@ public class Contact extends BaseModel {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    client: ").append(toIndentedString(client)).append("\n");
     sb.append("    employee: ").append(toIndentedString(employee)).append("\n");
-    sb.append("    clientType: ").append(toIndentedString(clientType)).append("\n");
+    sb.append("    contactGroup: ").append(toIndentedString(contactGroup)).append("\n");
     sb.append("    vip: ").append(toIndentedString(vip)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    street: ").append(toIndentedString(street)).append("\n");

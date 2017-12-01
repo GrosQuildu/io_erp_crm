@@ -1,5 +1,6 @@
 package io.swagger.model.crm;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -39,9 +40,8 @@ public class Meeting extends BaseModel {
   private List<Contact> contacts;
 
   @JsonProperty("notes")
-  @NotNull
   @OneToMany(mappedBy = "meeting")
-  private List<MeetingNote> notes;
+  private List<MeetingNote> notes = null;
 
   @JsonProperty("nextMeetingDate")
   private LocalDate nextMeetingDate = null;
@@ -62,10 +62,12 @@ public class Meeting extends BaseModel {
 
   protected Meeting() {}
 
-  public Meeting(Integer id, LocalDate meetingDate, Employee mainEmployee) {
+  public Meeting(Integer id, LocalDate meetingDate, Employee mainEmployee, List<Contact> contacts, List<Employee> employees) {
     this.id = id;
     this.meetingDate = meetingDate;
     this.mainEmployee = mainEmployee;
+    this.employees = employees;
+    this.contacts = contacts;
   }
 
   public Meeting id(Integer id) {
@@ -88,6 +90,94 @@ public class Meeting extends BaseModel {
   public void setId(Integer id) {
     this.id = id;
   }
+
+
+  public Meeting notes(List<MeetingNote> notes) {
+    this.notes = notes;
+    return this;
+  }
+
+  public Meeting addNotesItem(MeetingNote notesItem) {
+    if (this.notes == null) {
+      this.notes = new ArrayList<MeetingNote>();
+    }
+    this.notes.add(notesItem);
+    return this;
+  }
+
+  /**
+   * Get notes
+   * @return notes
+   **/
+  @ApiModelProperty(value = "")
+  @Valid
+
+  public List<MeetingNote> getNotes() {
+    return notes;
+  }
+
+  public void setNotes(List<MeetingNote> notes) {
+    this.notes = notes;
+  }
+
+
+  public Meeting employees(List<Employee> employees) {
+    this.employees = employees;
+    return this;
+  }
+
+  public Meeting addEmployeeItem(Employee employeesItem) {
+    if (this.employees == null) {
+      this.employees = new ArrayList<Employee>();
+    }
+    this.employees.add(employeesItem);
+    return this;
+  }
+
+  /**
+   * Get employee
+   * @return employee
+   **/
+  @ApiModelProperty(value = "")
+  @Valid
+
+  public List<Employee> getEmployees() {
+    return employees;
+  }
+
+  public void setEmployees(List<Employee> employees) {
+    this.employees = employees;
+  }
+
+
+  public Meeting contacts(List<Contact> contacts) {
+    this.contacts = contacts;
+    return this;
+  }
+
+  public Meeting addContactItem(Contact contactsItem) {
+    if (this.contacts == null) {
+      this.contacts = new ArrayList<Contact>();
+    }
+    this.contacts.add(contactsItem);
+    return this;
+  }
+
+  /**
+   * Get contacts
+   * @return contacts
+   **/
+  @ApiModelProperty(value = "")
+  @Valid
+
+  public List<Contact> getContacts() {
+    return contacts;
+  }
+
+  public void setContacts(List<Contact> contacts) {
+    this.contacts = contacts;
+  }
+
 
   public Meeting meetingDate(LocalDate meetingDate) {
     this.meetingDate = meetingDate;
@@ -223,6 +313,9 @@ public class Meeting extends BaseModel {
     }
     Meeting meeting = (Meeting) o;
     return Objects.equals(this.id, meeting.id) &&
+        Objects.equals(this.employees, meeting.employees) &&
+        Objects.equals(this.contacts, meeting.contacts) &&
+        Objects.equals(this.notes, meeting.notes) &&
         Objects.equals(this.meetingDate, meeting.meetingDate) &&
         Objects.equals(this.nextMeetingDate, meeting.nextMeetingDate) &&
         Objects.equals(this.description, meeting.description) &&
@@ -233,15 +326,18 @@ public class Meeting extends BaseModel {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, meetingDate, nextMeetingDate, description, purpose, mainEmployee, telephoneMeeting);
+    return Objects.hash(id, employees, contacts, notes, meetingDate, nextMeetingDate, description, purpose, mainEmployee, telephoneMeeting);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Meeting {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    employees: ").append(toIndentedString(employees)).append("\n");
+    sb.append("    contacts: ").append(toIndentedString(contacts)).append("\n");
+    sb.append("    notes: ").append(toIndentedString(notes)).append("\n");
     sb.append("    meetingDate: ").append(toIndentedString(meetingDate)).append("\n");
     sb.append("    nextMeetingDate: ").append(toIndentedString(nextMeetingDate)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");

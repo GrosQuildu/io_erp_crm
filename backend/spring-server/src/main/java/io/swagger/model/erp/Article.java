@@ -23,6 +23,11 @@ public class Article extends BaseModel {
   @GeneratedValue
   private Integer id;
 
+  @JsonProperty("name")
+  @NotNull
+  @Column(nullable = false, unique = true)
+  private String name;
+
   @JsonProperty("availability")
   @NotNull
   @Column(nullable = false, unique = false)
@@ -44,8 +49,9 @@ public class Article extends BaseModel {
 
   protected Article(){}
 
-  public Article(Integer id, Integer availability, Unit unit, BigDecimal unitPrice) {
+  public Article(Integer id, String name, Integer availability, Unit unit, BigDecimal unitPrice) {
     this.id = id;
+    this.name = name;
     this.availability = availability;
     this.unit = unit;
     this.unitPrice = unitPrice;
@@ -75,6 +81,30 @@ public class Article extends BaseModel {
   public void setId(Integer id) {
     this.id = id;
   }
+
+
+  public Article name(String name) {
+    this.name = name;
+    return this;
+  }
+
+
+  /**
+   * Get availability
+   * @return availability
+   **/
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
+
+  public Integer getName() {
+    return availability;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+
 
   public Article availability(Integer availability) {
     this.availability = availability;
@@ -181,15 +211,16 @@ public class Article extends BaseModel {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, availability, unit, unitPrice, weight);
+    return Objects.hash(id, name, availability, unit, unitPrice, weight);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Article {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    availability: ").append(toIndentedString(availability)).append("\n");
     sb.append("    unit: ").append(toIndentedString(unit)).append("\n");
     sb.append("    unitPrice: ").append(toIndentedString(unitPrice)).append("\n");

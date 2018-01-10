@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="main.java.erp.frontend.orders.SendMailController"
+          prefHeight="600.0" prefWidth="800.0" vgap="10" hgap="10" fx:id="mainPane" styleClass="mainBackground2">
+
+    <padding><Insets top="10" bottom="10" left="10" right="10" /></padding>
+
+    <Label text="Visible addresses" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+    <TextField fx:id="visibleAddressesField"  GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+    <Label text="Hidden addresses (CC)"  GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+    <TextField fx:id="hiddenAddressesField" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+    <Label text="Subject" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+    <TextField fx:id="subjectField"  GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+    <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="6">
+        <Label text="Content"/>
+        <TextArea fx:id="contentArea" VBox.vgrow="ALWAYS"/>
+    </VBox>
+    <VBox  GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.rowSpan="7" spacing="10">
+        <Label text="Attachments"/>
+        <CheckBox fx:id="orderBox" text="Order"/>
+        <CheckBox fx:id="proformaBox" text="Proforma"/>
+        <ListView fx:id="attachmentList"/>
+        <HBox spacing="10">
+            <Button fx:id="addAttachmentBtn" text="Add..."/>
+            <Button fx:id="deleteAttachmentBtn" text="Delete"/>
+        </HBox>
+    </VBox>
+
+
+    <HBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.columnSpan="3">
+        <Button text="Send" fx:id="sendBtn"/>
+        <Button text="Cancel" fx:id="cancelBtn"/>
+    </HBox>
+</GridPane>

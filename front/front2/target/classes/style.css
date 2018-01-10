@@ -1,0 +1,431 @@
+.text-field {
+    -fx-padding: 2;
+}
+/*
+
+#sidebar {
+    -fx-background-color: #284B63;
+}
+*/
+
+#sidebar .button.active {
+    -fx-background-color: rgba(0,0,0,0);
+}
+#sidebar .button {
+    -fx-background-color: #284B63;
+    -fx-border-size: 0;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 5;
+    -fx-effect: none;
+    -fx-text-fill: #ffffff;
+}
+
+#sidebar .button:hover {
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.menuLeft {
+    -fx-background-color: rgba(106,129,153, 0.6);
+    -fx-background-color: linear-gradient(rgba(106,129,153, 0.6) 0%, rgba(56,79,103, 0.6) 100%);
+    /*-fx-effect: innershadow( gaussian, rgba( 0, 0, 0, 0.5 ), 10, 0, -3, 0 );*/
+}
+#sidebar {
+    -fx-background-color: rgba(106,129,153, 1);
+    -fx-background-color: linear-gradient(rgba(106,129,153, 1) 0%, rgba(56,79,103, 1) 100%);
+    /*-fx-effect: innershadow( gaussian, rgba( 0, 0, 0, 0.5 ), 10, 0, -3, 0 );*/
+}
+
+.contentBackground {
+    -fx-background-color: rgba(106,129,153, 1);
+    -fx-background-color: linear-gradient(rgba(240,240,240, 1) 0%, rgba(220,220,220, 1) 100%);
+    -fx-effect: innershadow( gaussian, rgba( 0, 0, 0, 0.5 ), 10, 0, -3, 0 );
+}
+
+.text-field, .menuRight .text-field, .menuRight .combo-box, .menuRight .date-picker, .combo-box {
+    -fx-background-color: rgba(255,255,255,0.9);
+    -fx-background-radius: 0;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: transparent transparent #ffffff transparent;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: rgba(255,255,255,1);
+    -fx-background-radius: 0;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: rgba(255,255,255,1);
+    -fx-background-radius: 0;
+    -fx-text-fill: black;
+}
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: rgba(106,129,153, 1);
+    -fx-background-radius: 0;
+    -fx-text-fill: white;
+}
+.menuRight .label, .menuRight .text {
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+.mainBackground {
+    -fx-background-color: linear-gradient(rgba(250,250,250, 1) 0%, rgba(230,230,230, 1) 100%);
+}
+.web-view {
+    -fx-background-color: rgba(0,0,0,0);
+}
+.mainBackground2 {
+    -fx-background-color: linear-gradient(rgba(230,230,230, 1) 0%, rgba(250,250,250, 1) 100% );
+}
+.menuBtn {
+  -fx-background-image: url('/images/menuBtnNormal.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+     -fx-background-color: rgba(0,0,0,0);
+}
+
+.menuBtn:hover {
+  -fx-background-image: url('/images/menuBtn.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+
+}
+
+.menuHide {
+  -fx-background-image: url('/images/menuHideNormal.jpg');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+     -fx-background-color: rgba(0,0,0,0);
+}
+
+.menuHide:hover {
+  -fx-background-image: url('/images/menuHide.jpg');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+
+}
+
+.menuZadania {
+  -fx-background-image: url('/images/menuZadania.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+.menuZadania:hover {
+  -fx-background-image: url('/images/menuZadaniaNormal.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+
+.menuFirmy {
+  -fx-background-image: url('/images/firmy.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+.menuFirmy:hover {
+  -fx-background-image: url('/images/firmyNormal.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+.menuProjekty {
+  -fx-background-image: url('/images/menuProjekty.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+.menuProjekty:hover {
+  -fx-background-image: url('/images/menuProjektyNormal.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+
+.menuKlienci {
+  -fx-background-image: url('/images/menuKlienci.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+.menuKlienci:hover {
+  -fx-background-image: url('/images/menuKlienciNormal.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+
+.menuSpotkania {
+  -fx-background-image: url('/images/menuSpotkania.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+}
+.menuAdmin{
+  -fx-background-image: url('/images/adminNormal.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.menuAdmin:hover{
+  -fx-background-image: url('/images/admin.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+}
+.menuSpotkania:hover {
+  -fx-background-image: url('/images/menuSpotkaniaNormal.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+
+.menuRaporty {
+  -fx-background-image: url('/images/menuRaporty.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+.menuRaporty:hover {
+  -fx-background-image: url('/images/menuRaportyNormal.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+
+.menuNotatki {
+  -fx-background-image: url('/images/menuNotatki.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+.menuNotatki:hover {
+  -fx-background-image: url('/images/menuNotatkiNormal.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+
+.menuWiadomosci {
+  -fx-background-image: url('/images/menuWiadomosci.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+.menuWiadomosci:hover {
+  -fx-background-image: url('/images/menuWiadomosciNormal.png');
+  -fx-background-repeat: no-repeat;
+    -fx-background-position: left top, center;
+    -fx-background-size: cover, auto;
+    -fx-background-color: rgba(0,0,0,0);
+
+}
+
+
+.noteBox {
+}
+.noteArea, .noteArea .content {
+    -fx-border-size: 0;
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.invisibleBackground{
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.taskItem {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+.taskItem:hover {
+    -fx-opacity: 0.8;
+}
+
+.taskTable {
+    -fx-background-color: rgba(255,255,255,0);
+}
+.table-view .column-header-background{
+    -fx-background-color: #284B63;
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.titlePane {
+    -fx-background-color: #284B63;
+    -fx-text-fill: #ffffff;
+}
+.list-view {
+    -fx-padding: 3px ;
+}
+
+.list-cell {
+    -fx-padding: 2px ;
+    -fx-background-color: transparent, -fx-background ;
+    -fx-background-insets: 0px, 2px ;
+}
+
+.list-cell:empty {
+    -fx-padding: 2px ;
+    -fx-background-color: transparent ;
+    -fx-background-insets: 0 ;
+}
+.list-cell .toolBtn {
+    -fx-text-fill: #aaaaaa;
+}
+.list-cell .toolBtn:hover {
+    -fx-background-color: #eeeeee;
+}
+.list-view .list-cell:filled:selected:focused, .list-view .list-cell:filled:selected{
+    -fx-background-color: #284B63;
+    -fx-text-fill: #ffffff;
+}
+.list-cell:filled:selected:focused, .list-cell:filled:selected{
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #284B63;
+}
+
+
+.taskItemRed{
+    -fx-background-color: rgba(237, 106, 90, 1);
+}
+
+.taskItemBlue{
+    -fx-background-color: rgba(45, 199, 255, 1);
+}
+
+.taskItemGray{
+    -fx-background-color: rgba(211, 211, 211, 1);
+}
+
+.taskItemGreen{
+    -fx-background-color: rgba(212, 224, 155, 1);
+}
+
+.taskItemWhite{
+    -fx-background-color: rgba(255, 255, 255, 1);
+}
+
+.list-cell:filled:selected:focused .taskItem, .list-cell:filled:selected .taskItem{
+    -fx-background-color: rgba(51, 102, 153, 1);
+}
+.list-cell:filled:selected:focused *, .list-cell:filled:selected * {
+    -fx-text-fill: white;
+}
+
+.list-cell:filled:selected:focused .toolBtn, .list-cell:filled:selected .toolBtn,
+.list-cell:filled:selected:focused .text-field, .list-cell:filled:selected .text-field,
+ .list-cell:filled:selected:focused .date-picker *, .list-cell:filled:selected .date-picker *{
+    -fx-text-fill: black;
+}
+
+
+
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}
+
+.button {
+    -fx-background-color: #ffffff;
+    -fx-border-size: 0;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 3, 0, 0, 0);
+}
+.button.active {
+    -fx-background-color: #dddddd;
+    -fx-border-size: 0;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 5;
+    -fx-effect: none;
+}
+.button:hover {
+    -fx-background-color: #eeeeee;
+    -fx-border-size: 0;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 3, 0, 0, 0);
+}
+.toolBtn .text {
+    -fx-font-weight: normal;
+}
+.toolBtn:hover {
+    -fx-background-color: rgba(255,255,255,0.8);
+    -fx-border-size: 0;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
+
+.toolBtn:selected, .toolBtn:focused{
+    -fx-background-insets: 0;
+}
+
+
+
+.toolCloseBtn {
+    -fx-background-color: #ffffff;
+    -fx-border-size: 0;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 10;
+}
+
+.toolCloseBtn .text {
+    -fx-font-weight: normal;
+}
+.toolCloseBtn:hover {
+    -fx-background-color: rgba(255,255,255,0.8);
+    -fx-border-size: 0;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
+
+.toolCloseBtn:selected, .toolCloseBtn:focused{
+    -fx-background-insets: 0;
+}

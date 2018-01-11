@@ -1,6 +1,7 @@
 package main.java.erp.backend.model.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.*;
 import io.swagger.annotations.ApiModelProperty;
 import main.java.erp.backend.model.BaseModel;
 
@@ -10,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.lang.reflect.Type;
 import java.util.Objects;
 
 /**
@@ -151,5 +153,10 @@ public class Unit extends BaseModel {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+    public String serialize(){
+        return new Gson().toJson(this);
+    }
+
 }
 

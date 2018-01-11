@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp.Main;
 import main.java.erp.backend.api.erp.ArticlesApiController;
+import main.java.erp.backend.api.erp.DeliveryCostControllerApi;
 import main.java.erp.backend.api.erp.DeliveryCostsApi;
 import main.java.erp.backend.model.erp.DeliveryCost;
 
@@ -26,20 +27,18 @@ public class AddEditDeliveryCostController implements Initializable{
     public Button cancelBtn;
     private DeliveryCost deliveryCost;
     private DeliveryCostsController deliveryCostsController;
-    //private DeliveryCostsApi controller = new DeliveryCostsApi();
+    private DeliveryCostControllerApi controller = new DeliveryCostControllerApi();
 
 
     private void setEvents() {
         saveBtn.setOnAction(e -> {
             if(deliveryCost!=null){
                 fillDeliveryCost();
-                //controller.updateArticle(article.getId(), article);
-                //controller.updateDeliveryCost(deliveryCost.getId(), deliveryCost);
+                controller.updateDeliveryCost(deliveryCost.getId(), deliveryCost);
             } else {
                 deliveryCost = new DeliveryCost();
                 fillDeliveryCost();
-                //controller.createArticle(article);
-                //controller.createDeliveryCost(deliveryCost);
+                controller.createDeliveryCost(deliveryCost);
             }
             deliveryCostsController.refresh();
             stage.close();

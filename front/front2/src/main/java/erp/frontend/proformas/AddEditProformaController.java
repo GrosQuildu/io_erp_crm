@@ -40,9 +40,6 @@ public class AddEditProformaController implements Initializable {
     private OrdersController ordersController;
     private ProformasController proformasController;
 
-    public AddEditProformaController(){
-        setEvents();
-    }
 
     public void show(Order order){
         this.order = order;
@@ -137,7 +134,7 @@ public class AddEditProformaController implements Initializable {
             eksportTask.setOnSucceeded(eve -> {
                 ld.close();
                 if(ordersController!=null)
-                    ordersController.updateTable();
+                    ordersController.refresh();
                 if(proformasController!=null)
                     proformasController.updateTable();
             });
@@ -148,6 +145,6 @@ public class AddEditProformaController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        setEvents();
     }
 }

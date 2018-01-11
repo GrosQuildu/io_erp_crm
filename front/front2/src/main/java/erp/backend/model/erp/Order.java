@@ -1,6 +1,7 @@
 package main.java.erp.backend.model.erp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.*;
 import io.swagger.annotations.ApiModelProperty;
 import main.java.erp.backend.model.BaseModel;
 import main.java.erp.backend.model.common.Client;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -523,5 +525,41 @@ public class Order extends BaseModel {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
+  }
+
+  public String serialize(){
+    final GsonBuilder gsonBuilder = new GsonBuilder();
+    gsonBuilder.registerTypeAdapter(Order.class, new OrderSerializer());
+    gsonBuilder.setPrettyPrinting();
+    final Gson gson = gsonBuilder.create();
+    return gson.toJson(this);
+  }
+
+  class OrderSerializer implements JsonSerializer<Order> {
+
+    @Override
+    public JsonElement serialize(final Order order, final Type typeOfSrc, final JsonSerializationContext context) {
+      JsonObject object = new JsonObject();
+      object.addProperty("id", id);
+      object.addProperty("orderNumber", orderNumber);
+      object.addProperty("orderDate", orderDate.toString());
+      object.addProperty("realizationDate", realizationDate.toString());
+      object.addProperty("realizationDeadline", realizationDeadline.toString());
+      object.addProperty("conditions", conditions);
+      object.addProperty("comments", comments);
+      object.addProperty("advance", advance);
+      object.addProperty("vat", vat);
+      object.addProperty("state", state);
+      object.addProperty("deliveryCost", deliveryCost);
+      object.addProperty("deliveryAddress", deliveryAddress);
+      object.addProperty("isPaid", isPaid);
+      object.addProperty("isSigned", isSigned);
+      object.addProperty("isDone", isDone);
+      JsonElement jsonEmployee = context.serialize(employee);
+      object.add("employee", jsonEmployee);
+      JsonElement jsonClient = context.serialize(client);
+      object.add("client", jsonClient);
+      return object;
+    }
   }
 }

@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.java.erp.Main;
+import main.java.erp.backend.api.erp.OrderControllerApi;
 import main.java.erp.backend.api.erp.OrderedArticlesApiController;
 import main.java.erp.backend.api.erp.OrdersApiController;
 import main.java.erp.backend.model.common.Client;
@@ -31,6 +32,7 @@ import static javafx.scene.input.KeyCode.ENTER;
 import static javafx.scene.input.KeyCode.ESCAPE;
 
 public class AddEditOrderController implements Initializable {
+    public DatePicker realizationDeadlinePicker;
     private Stage stage = new Stage();
     public Button saveBtn;
     public Button cancelBtn;
@@ -64,7 +66,7 @@ public class AddEditOrderController implements Initializable {
     private OrdersController ordersController;
     private AddArticleToOrderController addArticleToOrderController;
     private Order order;
-    private OrdersApiController controller = new OrdersApiController();
+    private OrderControllerApi controller = new OrderControllerApi();
     private OrderedArticlesApiController controllerOrderedArticle = new OrderedArticlesApiController();
 
     public AddEditOrderController() {
@@ -187,6 +189,7 @@ public class AddEditOrderController implements Initializable {
         order.setOrderDate(LocalDate.fromDateFields(Date.valueOf(orderDatePicker.getValue())));
         order.setOrderNumber(orderNumberText.getText());
         order.setRealizationDate(LocalDate.fromDateFields(Date.valueOf(realizationDatePicker.getValue())));
+        order.setRealizationDeadline(realizationDeadlinePicker.toString());
         order.setState(stateComboBox.getValue());
         order.setVat(0.23f);
     }

@@ -14,6 +14,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import main.java.erp.Main;
 import main.java.erp.backend.SharedData;
+import main.java.erp.backend.api.ConnectionApi;
 import main.java.erp.frontend.mainView.MainController;
 import main.java.erp.frontend.settings.SettingsController;
 
@@ -31,6 +32,7 @@ public class Login {
     private Stage st;
     private Stage primaryStage;
     Boolean res=false;
+    public static ConnectionApi connection;
     public Login(Stage primaryStage){
         this.primaryStage = primaryStage;
     }
@@ -106,6 +108,7 @@ public class Login {
     }
 
     private void startMain() {
+        connection = new ConnectionApi(loginField.getText(), passField.getText());
         saveLoginData(loginField.getText(),passField.getText());
         SharedData.setMail(loginField.getText());
         SharedData.setHaslo(passField.getText());

@@ -1,13 +1,13 @@
 package main.java.erp.frontend.deliveryCosts;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import main.java.erp.backend.api.erp.DeliveryCostsApi;
+import main.java.erp.backend.api.erp.DeliveryCostControllerApi;
 import main.java.erp.backend.model.erp.DeliveryCost;
 
 import java.io.IOException;
@@ -18,8 +18,6 @@ import java.util.ResourceBundle;
 public class DeliveryCostsController implements Initializable{
     @FXML
     private TableView<DeliveryCost> transportTable;
-    @FXML
-    private TextField basePriceField;
     @FXML
     private TableColumn<DeliveryCost, Float> weightFromColumn;
     @FXML
@@ -32,9 +30,8 @@ public class DeliveryCostsController implements Initializable{
     private Button editBtn;
     @FXML
     private Button deleteBtn;
-    private ObservableList<DeliveryCost> data = FXCollections.observableArrayList();
     private AddEditDeliveryCostController addEditDeliveryCostController;
-    //private DeliveryCostsApi controller = new DeliveryCostsApi();
+    private DeliveryCostControllerApi controller = new DeliveryCostControllerApi();
 
     private FXMLLoader loader;
 
@@ -52,11 +49,11 @@ public class DeliveryCostsController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         transportTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        weightFromColumn.setCellValueFactory(new PropertyValueFactory<>("wagaOd"));
-        weightToColumn.setCellValueFactory(new PropertyValueFactory<>("wagaDo"));
-        priceColumn.setCellValueFactory(new PropertyValueFactory<>("cena"));
-        updateTable();
+        weightFromColumn.setCellValueFactory(new PropertyValueFactory<>("weightFrom"));
+        weightToColumn.setCellValueFactory(new PropertyValueFactory<>("weightTo"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         setEvents();
+        refresh();
     }
 
     private void setEvents() {
@@ -65,25 +62,20 @@ public class DeliveryCostsController implements Initializable{
         editBtn.setOnAction(e -> {
             DeliveryCost item = transportTable.getSelectionModel().getSelectedItem();
             if(item!=null)
-                addEditDeliveryCostController.show();
+                addEditDeliveryCostController.show(item);
         });
         deleteBtn.setOnAction(e -> {
             DeliveryCost item = transportTable.getSelectionModel().getSelectedItem();
-            //if(item!=null)
-                //controller.deleteDeliveryCost(item);
-        });
-        basePriceField.setOnAction(e -> {
-            //aktualizacja stawki wg wartosci stawkaField
-            //controller.updateBasePrice(Double.parseDouble(basePriceField.getText()));
+            if(item!=null) {
+                controller.deleteDeliveryCost(item);
+                refresh();
+            }
         });
     }
 
-    private void updateTable() {
-        DeliveryCost toUpdate = transportTable.getSelectionModel().getSelectedItem();
-        //controller.updateDeliveryCost(toUpdate.getId(),toUpdate);
-    }
 
     public void refresh() {
-        //transportTable.getItems().setAll(controller.getDeliveryCosts().getBody());
+        transportTable.getItems().clear();
+        transportTable.getItems().setAll(controller.getDeliveryCosts());
     }
 }

@@ -17,6 +17,8 @@
     <!-- 1. row -->
     <Text fx:id="orderNumberText" GridPane.columnIndex="0" GridPane.rowIndex="0" />
     <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="10">
+        <Label text="Realization deadline" />
+        <DatePicker fx:id="realizationDeadlinePicker"/>
         <Label text="Order date" />
         <DatePicker fx:id="orderDatePicker"/>
     </VBox>

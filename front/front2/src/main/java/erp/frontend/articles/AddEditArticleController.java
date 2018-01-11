@@ -8,7 +8,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp.Main;
+import main.java.erp.backend.api.ConnectionApi;
 import main.java.erp.backend.api.erp.ArticlesApiController;
+import main.java.erp.backend.api.erp.ArticlesControllerApi;
 import main.java.erp.backend.model.common.Unit;
 import main.java.erp.backend.model.erp.Article;
 
@@ -18,6 +20,7 @@ import java.util.ResourceBundle;
 
 public class AddEditArticleController implements Initializable {
     public VBox mainBox;
+    public TextField nameField;
     private Stage stage = new Stage();
     private Scene scene;
     public TextField availabilityField;
@@ -27,7 +30,7 @@ public class AddEditArticleController implements Initializable {
     public Button cancelBtn;
     public TextField weightField;
     private Article article;
-    private ArticlesApiController controller = new ArticlesApiController();
+    private ArticlesControllerApi controller = new ArticlesControllerApi();
     private ArticlesController articlesController;
 
 
@@ -36,7 +39,7 @@ public class AddEditArticleController implements Initializable {
         saveBtn.setOnAction(e -> {
             if(article!=null){
                 fillArticle();
-                controller.updateArticle(article.getId(), article);
+                //controller.updateArticle(article.getId(), article);
 
             } else {
                 article = new Article();
@@ -51,7 +54,11 @@ public class AddEditArticleController implements Initializable {
 
     private void fillArticle() {
         article.setAvailability(Integer.parseInt(availabilityField.getText()));
-        article.setUnit(unitComboBox.getValue());
+        Unit unit = new Unit();
+        unit.setId(1);
+        unit.setName("Sztuk");
+        unit.setNameShort("szt.");
+        article.setUnit(unit);
         article.setUnitPrice(new BigDecimal(unitPriceField.getText()));
         article.setWeight(new BigDecimal(weightField.getText()).floatValue());
     }
@@ -67,6 +74,7 @@ public class AddEditArticleController implements Initializable {
 
     private void fillFields(Article article) {
         this.article = article;
+        nameField.setText(article.getName());
         availabilityField.setText(article.getAvailability().toString());
         unitComboBox.setValue(article.getUnit());
         unitPriceField.setText(article.getUnitPrice().toString());
@@ -86,4 +94,5 @@ public class AddEditArticleController implements Initializable {
     public void setArticlesController(ArticlesController articlesController) {
         this.articlesController = articlesController;
     }
+
 }

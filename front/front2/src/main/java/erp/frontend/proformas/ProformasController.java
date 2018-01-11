@@ -127,10 +127,10 @@ public class ProformasController implements Initializable{
 
 
     public void updateTable() {
-        controller.updateProforma(
+        /*controller.updateProforma(
                 proformasTable.getSelectionModel().getSelectedItem().getId(),
                 proformasTable.getSelectionModel().getSelectedItem()
-        );
+        );*/
     }
 
     private void find(String s) {

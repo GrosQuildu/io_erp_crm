@@ -1,13 +1,17 @@
 package main.java.erp.backend.model.erp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.*;
 import io.swagger.annotations.ApiModelProperty;
 import main.java.erp.backend.model.BaseModel;
+import main.java.erp.backend.model.common.Client;
 import main.java.erp.backend.model.common.Unit;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -30,7 +34,7 @@ public class Article extends BaseModel {
   @JsonProperty("name")
   @NotNull
   @Column(nullable = false, unique = false)
-  private Integer name;
+  private String name;
 
   @JsonProperty("unit")
   @NotNull
@@ -101,11 +105,11 @@ public class Article extends BaseModel {
     this.availability = availability;
   }
 
-  public Integer getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Integer name) {
+  public void setName(String name) {
     this.name = name;
   }
 
@@ -217,6 +221,29 @@ public class Article extends BaseModel {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
+  }
+  public String serialize(){
+    final GsonBuilder gsonBuilder = new GsonBuilder();
+    gsonBuilder.registerTypeAdapter(Article.class, new ArticleSerializer());
+    gsonBuilder.setPrettyPrinting();
+    final Gson gson = gsonBuilder.create();
+    return gson.toJson(this);
+  }
+
+  class ArticleSerializer implements JsonSerializer<Article> {
+
+    @Override
+    public JsonElement serialize(final Article article, final Type typeOfSrc, final JsonSerializationContext context) {
+      JsonObject object = new JsonObject();
+      object.addProperty("id", id);
+      object.addProperty("availability", availability);
+      object.addProperty("name", name);
+      object.addProperty("unitPrice", unitPrice);
+      object.addProperty("weight", weight);
+      JsonElement jsonUnit = context.serialize(unit);
+      object.add("Unit", jsonUnit);
+      return object;
+    }
   }
 }
 

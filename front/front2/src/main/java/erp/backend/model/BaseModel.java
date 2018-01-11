@@ -119,4 +119,5 @@ public abstract class BaseModel {
     }
 
     public abstract Integer getId();
+
 }

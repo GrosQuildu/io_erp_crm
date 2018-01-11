@@ -9,7 +9,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp.Main;
 import main.java.erp.backend.api.common.ClientsApiController;
+import main.java.erp.backend.api.common.ClientsControllerApi;
 import main.java.erp.backend.model.common.Client;
+import main.java.erp.backend.model.common.ClientType;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -33,7 +35,7 @@ public class AddEditClientController implements Initializable {
     public Button saveBtn;
     public Button cancelBtn;
     private ClientsController clientsController;
-    private ClientsApiController controller = new ClientsApiController();
+    private ClientsControllerApi controller = new ClientsControllerApi();
     private Client client = null;
 
     /*
@@ -54,7 +56,7 @@ public class AddEditClientController implements Initializable {
         saveBtn.setOnAction(e -> {
             if(client!=null){
                 fillClient();
-                controller.updateClient(client.getId(), client);
+                //controller.updateClient(client.getId(), client);
             } else {
                 client = new Client();
                 fillClient();
@@ -78,6 +80,7 @@ public class AddEditClientController implements Initializable {
         client.setNip(nipField.getText());
         client.setTelephone(telephoneField.getText());
         client.setMail(mailField.getText());
+        client.setClientType(new ClientType(1, "Osoba prywatna"));
     }
 
     public void show(){

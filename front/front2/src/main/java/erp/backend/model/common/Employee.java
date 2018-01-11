@@ -3,6 +3,7 @@ package main.java.erp.backend.model.common;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.*;
 import io.swagger.annotations.ApiModelProperty;
 import main.java.erp.backend.model.BaseModel;
 
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -320,4 +322,9 @@ public class Employee extends BaseModel {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+  public String serialize(){
+    return new Gson().toJson(this);
+  }
+
 }

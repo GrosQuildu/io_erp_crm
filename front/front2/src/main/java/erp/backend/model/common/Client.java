@@ -1,12 +1,15 @@
 package main.java.erp.backend.model.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.primitives.UnsignedInts;
+import com.google.gson.*;
 import io.swagger.annotations.ApiModelProperty;
 import main.java.erp.backend.model.BaseModel;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.lang.reflect.Type;
 import java.util.Objects;
 
 /**
@@ -399,5 +402,36 @@ public class Client extends BaseModel {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+    public String serialize(){
+        final GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Client.class, new ClientSerializer());
+        gsonBuilder.setPrettyPrinting();
+        final Gson gson = gsonBuilder.create();
+        return gson.toJson(this);
+    }
+
+    class ClientSerializer implements JsonSerializer<Client> {
+
+        @Override
+        public JsonElement serialize(final Client client, final Type typeOfSrc, final JsonSerializationContext context) {
+            JsonObject object = new JsonObject();
+            object.addProperty("id", id);
+            object.addProperty("name", name);
+            object.addProperty("street", street);
+            object.addProperty("city", city);
+            object.addProperty("postCode", postCode);
+            object.addProperty("nameDelivery", nameDelivery);
+            object.addProperty("streetDelivery", streetDelivery);
+            object.addProperty("cityDelivery", cityDelivery);
+            object.addProperty("postCodeDelivery", postCodeDelivery);
+            object.addProperty("nip", nip);
+            object.addProperty("telephone", telephone);
+            object.addProperty("mail", mail);
+            JsonElement jsonClientType = context.serialize(clientType);
+            object.add("clientType", jsonClientType);
+            return object;
+        }
+    }
 }
 

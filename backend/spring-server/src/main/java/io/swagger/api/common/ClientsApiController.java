@@ -45,7 +45,7 @@ public class ClientsApiController implements ClientsApi {
 
     public ResponseEntity<Void> deleteClient(@ApiParam(value = "",required=true ) @PathVariable("clientId") Integer clientId) {
         Client client = BaseModel.getModelHelper(clientRepository, clientId);
-//        BaseModel.dependent(orderRepository, client);
+        BaseModel.dependent(orderRepository, client);
         clientRepository.delete(clientId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

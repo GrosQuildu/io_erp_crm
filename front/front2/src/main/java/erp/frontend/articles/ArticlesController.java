@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import main.java.erp.backend.api.ConnectionApi;
 import main.java.erp.backend.api.erp.ArticlesControllerApi;
 import main.java.erp.backend.model.erp.Article;
 
@@ -33,6 +34,7 @@ public class ArticlesController implements Initializable{
     private ArticlesControllerApi controller = new ArticlesControllerApi();
     private AddEditArticleController addEditArticleController;
     private FXMLLoader loader;
+
 
     public ArticlesController(){
 

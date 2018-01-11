@@ -1,6 +1,7 @@
 package main.java.erp.backend.model.erp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.Gson;
 import io.swagger.annotations.ApiModelProperty;
 import main.java.erp.backend.model.BaseModel;
 
@@ -181,5 +182,9 @@ public class DeliveryCost extends BaseModel {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+    public String serialize() {
+      return new Gson().toJson(this);
+    }
 }
 

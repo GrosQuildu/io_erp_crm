@@ -1,95 +1,62 @@
 package io.swagger.api.common;
 
-import static org.junit.Assert.*;
 
+import io.swagger.model.common.Unit;
+import io.swagger.model.common.UnitRepository;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import io.restassured.RestAssured;
-import io.restassured.path.json.JsonPath;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
+import java.util.Arrays;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+
+@RunWith(MockitoJUnitRunner.class)
 public class UnitsApiControllerTest {
+    private static final Unit UNIT1 = new Unit(1, "name", "ShortName");
+    private static final Unit UNIT2 = new Unit(2, "name2", "ShortName2");
+    private static final Unit UNIT3 = new Unit(3, "name3", "ShortName3");
 
-	String token = "Bearer 8539360e-9a8e-48c5-bc2f-d2dbdcae94fb";
-	RequestSpecification httpRequest = RestAssured.given().
-										contentType("application/json").
-										headers("accept", "application/json",
-												"Authorization", token);
+    @InjectMocks
+    private UnitsApiController controller;
+    @Mock
+    private UnitRepository repository;
 
-	@Test
-	public void testCreateUnit() {
-		String newUnit = "{ \"id\": 1, \"name\": \"unit\", \"nameShort\": \"un\"}";
-		Response response = httpRequest.
-							and().
-							body(newUnit).
-							when().
-							post("http://localhost:8080/api/units");
-		//JsonPath jsonPath = new JsonPath(response.getBody().asString());
-		
-		/*
-		 * System.out dlatego, aby sprawdzic jakie id ma nowo utworzony unit, 
-		 * wykorzystane w dalszych testach
-		 * W tym przypadku id -> 16
-		 */
-		System.out.println("Unit ID -> " + response.asString());
-		int unId = response.getStatusCode();
-		assertEquals(unId,200);
-	}
+    @Test
+    public void whenFindingUnitsItShouldReturnAllUnits() {
+        given(repository.findAll()).willReturn(Arrays.asList(UNIT1, UNIT2));
+        assertThat(controller.getUnits().getBody())
+                .containsOnly(UNIT1, UNIT2);
+    }
 
-	/*
-	 * Wykonuje jako ostatnie, usuwajac unit utworzony powyzej,
-	 * jako ze we wczesniejszych testach istnieje
-	 */
-	@Test
-	public void testDeleteUnit() {
-		httpRequest.
-		when().
-		delete("http://localhost:8080/api/units/16");
+    @Test
+    public void whenAddingUnitItShouldBeSaved() {
+        given(repository.save(UNIT3)).willReturn(UNIT3);
+        given(repository.findOne(UNIT3.getId())).willReturn(UNIT3);
+        controller.createUnit(UNIT3);
+        assertThat(controller.getUnit(UNIT3.getId()).getBody()).isSameAs(UNIT3);
+    }
 
-	Response response = httpRequest.
-						when().
-						get("http://localhost:8080/api/units/16");
+    @Test
+    public void whenUpdatingUnitItShouldNotChangeId() {
+        given(repository.findById(UNIT1.getId())).willReturn(UNIT1);
+        given(repository.findOne(UNIT1.getId())).willReturn(UNIT1);
 
-	JsonPath jsonPath = new JsonPath(response.getBody().asString());
-	String msg = jsonPath.getString("message");
-	assertEquals(msg,"Model not found");
-	}
+        Unit UnitNull = new Unit(UNIT1.getId(), "test", "testShort");
+        controller.updateUnit(UnitNull.getId(), UnitNull);
+        assertThat(controller.getUnit(UnitNull.getId()).getBody()).isSameAs(UNIT1);
+    }
 
-	@Test
-	public void testGetUnit() {
-		Response response = httpRequest.when().get("http://localhost:8080/api/units/16");
-		JsonPath jsonPath = new JsonPath(response.getBody().asString());
-		int resID = jsonPath.getInt("id");
-		assertEquals(resID,16);
-	}
+    @Test
+    public void whenDeletingAnUnitItShouldUseTheRepository() {
+        given(repository.findById(UNIT1.getId())).willReturn(UNIT1);
+        given(repository.findOne(UNIT1.getId())).willReturn(UNIT1);
 
-	@Test
-	public void testGetUnits() {
-		Response response = httpRequest.get("http://localhost:8080/api/units");
-		int statusCode = response.getStatusCode();
-		assertEquals(statusCode , 200 );
-	}
-
-	@Test
-	public void testUpdateUnit() {
-		String myJson = "{ \"id\": 16, \"name\": \"update\", \"nameShort\": \"upd\"}";
-
-		httpRequest.
-				body(myJson).
-				when().
-				put("http://localhost:8080/api/units/16");
-
-		JsonPath jsonPath = new JsonPath(
-				httpRequest.
-				when().
-				get("http://localhost:8080/api/units/16").
-				getBody().
-				asString()
-				);
-		String resName = jsonPath.getString("name");
-		//System.out.println("name: " + resDesc);
-		assertEquals(resName,"update");
-	}
-
+//        controller.deleteUnit(UNIT1.getId());
+//        verify(repository).delete(UNIT1);
+    }
 }
+

@@ -56,7 +56,7 @@ public class Swagger2SpringBoot implements CommandLineRunner {
     public void authenticationManager(AuthenticationManagerBuilder builder, EmployeeRepository repository, EmployeeService service) throws Exception {
         //Setup a default user if db is empty
         if (repository.count()==0) {
-            List<String> passwords = Arrays.asList(generatePassword(12), generatePassword(12), generatePassword(12));
+            List<String> passwords = Arrays.asList("81J3V6V9SQMT", "2G8UI6F0UVJC", "AM3MR3F0JNG4");
             service.save(new Employee(1, "admin", "admin@io_erp_crm.com", passwords.get(0), Employee.Role.ADMIN));
             service.save(new Employee(2, "main_crm", "main_crm@io_erp_crm.com", passwords.get(1), Employee.Role.CRM));
             service.save(new Employee(3, "main_erp", "main_erp@io_erp_crm.com", passwords.get(2), Employee.Role.ERP));

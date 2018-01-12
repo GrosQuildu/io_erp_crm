@@ -26,7 +26,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.headers().frameOptions().disable().and()
                 .authorizeRequests()
-                .antMatchers("/oauth/token", "/api-docs", "/swagger-ui.html").permitAll()
+                .antMatchers("/oauth/token", "/api-docs", "/swagger-ui.html", "/swagger-resources/**").permitAll()
                 .antMatchers("/oauth/**").denyAll()
                 .antMatchers("/crm/**").hasAnyAuthority(Employee.Role.ADMIN.toString(),Employee.Role.CRM.toString())
                 .antMatchers("/erp/**").hasAnyAuthority(Employee.Role.ADMIN.toString(),Employee.Role.ERP.toString())

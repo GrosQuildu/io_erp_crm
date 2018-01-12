@@ -1,5 +1,6 @@
 package main.java.erp.frontend.settings;
 
+import javafx.fxml.FXMLLoader;
 import main.java.erp.backend.SharedData;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,6 +8,12 @@ import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import main.java.erp.backend.api.common.ClientTypesApi;
+import main.java.erp.backend.api.erp.UnitControllerApi;
+import main.java.erp.backend.model.common.ClientType;
+import main.java.erp.backend.model.common.Unit;
+import main.java.erp.frontend.clients.AddClientTypeController;
+import main.java.erp.frontend.units.AddUnitController;
 
 import java.io.*;
 import java.net.URL;
@@ -14,6 +21,12 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class SettingsController implements Initializable {
+    public TableView<ClientType> clientTypesTableView;
+    public Button addClientTypeBtn;
+    public Button deleteClientTypeBtn;
+    public Button addUnitBtn;
+    public Button deleteUnitBtn;
+    public TableView<Unit> unitsTableView;
     @FXML
     private TextField senderField;
     @FXML
@@ -51,6 +64,17 @@ public class SettingsController implements Initializable {
     @FXML
     private TextField scanField;
 
+    private ClientTypesApi clientTypesApi = new ClientTypesApi();
+    private UnitControllerApi unitControllerApi = new UnitControllerApi();
+
+    private AddClientTypeController addClientTypeController;
+
+    private AddUnitController addUnitController;
+    public void refresh() {
+        unitsTableView.getItems().setAll(unitControllerApi.getUnits());
+        clientTypesTableView.getItems().setAll(clientTypesApi.getClientTypes());
+    }
+
 
     private enum DefaultText {WARUNKI,UWAGI,TRESC,ADRES_PROFORMY, ADRES_ZAMOWIENIA, SKAN_PODPISU, ADRES_PROTOKOLU, DW, NADAWCA}
     @Override
@@ -83,6 +107,35 @@ public class SettingsController implements Initializable {
         paths = getDefaultText(DefaultText.DW);
         ccField.setText(paths);
         SharedData.setDw(paths);
+        setEvents();
+        refresh();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlFiles/addUnit.fxml"));
+            loader.load();
+            addUnitController = loader.getController();
+            addUnitController.setSettingsController(this);
+
+            loader = new FXMLLoader(getClass().getResource("/fxmlFiles/addClientType.fxml"));
+            loader.load();
+            addClientTypeController = loader.getController();
+            addClientTypeController.setSettingsController(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setEvents() {
+        deleteClientTypeBtn.setOnAction(e -> {
+            ClientType item = clientTypesTableView.getSelectionModel().getSelectedItem();
+            if(item!=null) clientTypesApi.deleteClientType(item);
+        });
+        deleteUnitBtn.setOnAction(e ->{
+            Unit item = unitsTableView.getSelectionModel().getSelectedItem();
+            if(item!=null) unitControllerApi.deleteUnit(item);
+        });
+        addClientTypeBtn.setOnAction(e -> addClientTypeController.show());
+        addUnitBtn.setOnAction(e -> addUnitController.show());
         saveSettingsBtn.setOnAction(e -> {
             //zapis ustawień
         });
@@ -106,6 +159,7 @@ public class SettingsController implements Initializable {
             //zapis domyślnych ustawień
         });
     }
+
     //zgarnięcie ścieżki katalogu ustawień
     public static String getUserDataDirectory() {
         String path = System.getProperty("user.home") + File.separator + ".ERP-MB" + File.separator;

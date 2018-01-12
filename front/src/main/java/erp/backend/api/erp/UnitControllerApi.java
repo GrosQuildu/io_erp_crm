@@ -27,4 +27,8 @@ public class UnitControllerApi {
     public Integer createUnit(Unit unit){
         return connection.createObject(unit.serialize(), ConnectionApi.ObjectType.UNITS);
     }
+
+    public void deleteUnit(Unit item) {
+        connection.deleteObject(item.getId(), ConnectionApi.ObjectType.UNITS);
+    }
 }

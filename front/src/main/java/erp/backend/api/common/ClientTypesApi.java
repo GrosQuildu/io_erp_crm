@@ -26,4 +26,8 @@ public class ClientTypesApi {
     public Integer createClientType(ClientType clientType){
         return connection.createObject(clientType.serialize(), ConnectionApi.ObjectType.CLIENT_TYPES);
     }
+
+    public void deleteClientType(ClientType item) {
+        connection.deleteObject(item.getId(), ConnectionApi.ObjectType.CLIENT_TYPES);
+    }
 }

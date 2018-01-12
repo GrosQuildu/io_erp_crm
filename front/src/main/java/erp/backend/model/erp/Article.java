@@ -36,7 +36,7 @@ public class Article extends BaseModel {
   @Column(nullable = false, unique = false)
   private String name;
 
-  @JsonProperty("unit")
+  @JsonProperty("units")
   @NotNull
   @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "unit_id")
@@ -119,8 +119,8 @@ public class Article extends BaseModel {
   }
 
    /**
-   * Get unit
-   * @return unit
+   * Get units
+   * @return units
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
@@ -206,7 +206,7 @@ public class Article extends BaseModel {
 
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    availability: ").append(toIndentedString(availability)).append("\n");
-    sb.append("    unit: ").append(toIndentedString(unit)).append("\n");
+    sb.append("    units: ").append(toIndentedString(units)).append("\n");
     sb.append("    unitPrice: ").append(toIndentedString(unitPrice)).append("\n");
     sb.append("    weight: ").append(toIndentedString(weight)).append("\n");
     sb.append("}");
@@ -241,7 +241,7 @@ public class Article extends BaseModel {
       object.addProperty("name", name);
       object.addProperty("unitPrice", unitPrice);
       object.addProperty("weight", weight);
-      object.addProperty("unit", unit.getId());
+      object.addProperty("units", unit.getId());
       return object;
     }
   }

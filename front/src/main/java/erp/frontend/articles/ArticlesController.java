@@ -53,7 +53,7 @@ public class ArticlesController implements Initializable{
 
         articleTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        unitColumn.setCellValueFactory(new PropertyValueFactory<>("unit"));
+        unitColumn.setCellValueFactory(new PropertyValueFactory<>("units"));
         availabilityColumn.setCellValueFactory(new PropertyValueFactory<>("availability"));
         unitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
         weightColumn.setCellValueFactory(new PropertyValueFactory<>("weight"));

@@ -555,10 +555,8 @@ public class Order extends BaseModel {
       object.addProperty("isPaid", isPaid);
       object.addProperty("isSigned", isSigned);
       object.addProperty("isDone", isDone);
-      JsonElement jsonEmployee = context.serialize(employee);
-      object.add("employee", jsonEmployee);
-      JsonElement jsonClient = context.serialize(client);
-      object.add("client", jsonClient);
+      object.addProperty("employee", employee.getId());
+      object.addProperty("client", client.getId());
       return object;
     }
   }

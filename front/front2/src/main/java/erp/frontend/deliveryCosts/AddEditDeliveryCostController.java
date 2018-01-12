@@ -7,9 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp.Main;
-import main.java.erp.backend.api.erp.ArticlesApiController;
 import main.java.erp.backend.api.erp.DeliveryCostControllerApi;
-import main.java.erp.backend.api.erp.DeliveryCostsApi;
 import main.java.erp.backend.model.erp.DeliveryCost;
 
 import java.math.BigDecimal;

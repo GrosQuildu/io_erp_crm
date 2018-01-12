@@ -21,7 +21,7 @@ import java.util.Map;
 public class ConnectionApi {
 
 
-    public enum ObjectType {ARTICLES, DELIVERY_COSTS, ORDERS, CLIENTS}
+    public enum ObjectType {ARTICLES, DELIVERY_COSTS, ORDERS, CLIENT_TYPES, UNITS, CLIENTS}
     private String token = "";
     private String clientId = "javafx-client";
     private String clientSecret = "R3GMPX2DQHD1234VFG929ABW";
@@ -38,8 +38,10 @@ public class ConnectionApi {
         token = receiveToken();
         urlMap.put(ObjectType.ARTICLES, "/erp/articles");
         urlMap.put(ObjectType.CLIENTS, "/clients");
+        urlMap.put(ObjectType.CLIENT_TYPES, "/clientTypes");
         urlMap.put(ObjectType.DELIVERY_COSTS, "/erp/deliveryCosts");
         urlMap.put(ObjectType.ORDERS, "/erp/orders");
+        urlMap.put(ObjectType.UNITS, "/units");
     }
 
     private String receiveToken() {

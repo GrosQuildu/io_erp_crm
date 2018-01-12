@@ -372,7 +372,8 @@ public class Client extends BaseModel {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+      return name;
+    /*StringBuilder sb = new StringBuilder();
     sb.append("class Client {\n");
 
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
@@ -389,7 +390,7 @@ public class Client extends BaseModel {
     sb.append("    mailField: ").append(toIndentedString(mail)).append("\n");
     sb.append("    clientType: ").append(toIndentedString(clientType)).append("\n");
     sb.append("}");
-    return sb.toString();
+    return sb.toString();*/
   }
 
   /**
@@ -428,8 +429,7 @@ public class Client extends BaseModel {
             object.addProperty("nip", nip);
             object.addProperty("telephone", telephone);
             object.addProperty("mail", mail);
-            JsonElement jsonClientType = context.serialize(clientType);
-            object.add("clientType", jsonClientType);
+            object.addProperty("clientType", clientType.getId());
             return object;
         }
     }

@@ -1,6 +1,7 @@
 package main.java.erp.backend.model.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.Gson;
 import io.swagger.annotations.ApiModelProperty;
 import main.java.erp.backend.model.BaseModel;
 
@@ -103,13 +104,14 @@ public class ClientType extends BaseModel {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+      return description;
+    /*StringBuilder sb = new StringBuilder();
     sb.append("class ClientType {\n");
 
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
-    return sb.toString();
+    return sb.toString();*/
   }
 
   /**
@@ -122,5 +124,9 @@ public class ClientType extends BaseModel {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+    public String serialize() {
+      return new Gson().toJson(this);
+    }
 }
 

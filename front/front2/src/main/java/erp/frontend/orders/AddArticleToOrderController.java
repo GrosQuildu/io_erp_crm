@@ -6,9 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp.Main;
+import main.java.erp.backend.api.erp.ArticlesControllerApi;
 import main.java.erp.backend.model.erp.Article;
 import main.java.erp.backend.model.erp.OrderedArticle;
 
@@ -27,6 +29,7 @@ public class AddArticleToOrderController implements Initializable {
     public Button addBtn;
     public Button cancelBtn;
     private AddEditOrderController addEditOrderController;
+    private ArticlesControllerApi articlesControllerApi = new ArticlesControllerApi();
 
     private void setEvents() {
         addBtn.setOnAction(e -> {
@@ -49,7 +52,15 @@ public class AddArticleToOrderController implements Initializable {
         Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(Main.css);
         stage.setScene(scene);
+        setColumns();
+        articleTableView.getItems().setAll(articlesControllerApi.getArticles());
         setEvents();
+    }
+
+    private void setColumns() {
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        unitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        weightColumn.setCellValueFactory(new PropertyValueFactory<>("weight"));
     }
 
     public void setAddEditOrderController(AddEditOrderController addEditOrderController) {

@@ -10,8 +10,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.java.erp.Main;
 import main.java.erp.backend.api.erp.OrderControllerApi;
-import main.java.erp.backend.api.erp.OrderedArticlesApiController;
-import main.java.erp.backend.api.erp.OrdersApiController;
 import main.java.erp.backend.model.common.Client;
 import main.java.erp.backend.model.common.Employee;
 import main.java.erp.backend.model.erp.Order;
@@ -41,7 +39,6 @@ public class AddEditOrderController implements Initializable {
     public TableView<OrderedArticle> articleTableView;
     public TableColumn articleColumn;
     public TableColumn amountColumn;
-    public TableColumn unitPriceColumn;
     public TableColumn netPriceColumn;
     public TableColumn weightColumn;
     public TextField deliveryCostField;
@@ -65,9 +62,11 @@ public class AddEditOrderController implements Initializable {
 
     private OrdersController ordersController;
     private AddArticleToOrderController addArticleToOrderController;
+    private AddClientToOrderController addClientToOrderController;
     private Order order;
+    private Client client;
     private OrderControllerApi controller = new OrderControllerApi();
-    private OrderedArticlesApiController controllerOrderedArticle = new OrderedArticlesApiController();
+    //private OrderedArticlesApiController controllerOrderedArticle = new OrderedArticlesApiController();
 
     public AddEditOrderController() {
 
@@ -76,6 +75,12 @@ public class AddEditOrderController implements Initializable {
             loader.load();
             addArticleToOrderController = loader.getController();
             addArticleToOrderController.setAddEditOrderController(this);
+
+
+            loader = new FXMLLoader(getClass().getResource("/fxmlFiles/addClientToOrder.fxml"));
+            loader.load();
+            addClientToOrderController = loader.getController();
+            addClientToOrderController.setAddEditOrderController(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,11 +91,12 @@ public class AddEditOrderController implements Initializable {
     }
 
     private void setEvents() {
+        chooseClientBtn.setOnAction(e -> addClientToOrderController.show());
         saveBtn.setOnAction(e -> {
             if(order!=null){
                 fillOrder();
                 controller.updateOrder(order.getId(), order);
-                //controller.updateClient(client.getId(), client);
+                ordersController.refresh();
             } else {
                 order = new Order();
                 fillOrder();
@@ -177,7 +183,7 @@ public class AddEditOrderController implements Initializable {
 
     private void fillOrder() {
         order.setAdvance(new BigDecimal(advanceField.getText()));
-        order.setClient(new Client());
+        order.setClient(client);
         order.setComments(commentsArea.getText());
         order.setConditions(conditionsArea.getText());
         order.setDeliveryAddress(deliveryAddressArea.getText());
@@ -196,6 +202,7 @@ public class AddEditOrderController implements Initializable {
 
     public void show(){
         this.order = null;
+        this.client = null;
         stage.setMaximized(true);
         stage.show();
     }
@@ -255,5 +262,10 @@ public class AddEditOrderController implements Initializable {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public void addClient(Client item) {
+        client = item;
+        clientField.setText(item.toString());
     }
 }

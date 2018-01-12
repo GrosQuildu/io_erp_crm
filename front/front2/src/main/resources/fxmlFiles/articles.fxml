@@ -13,6 +13,7 @@
           <TableColumn fx:id="availabilityColumn" prefWidth="100.0" text="Availability" />
             <TableColumn fx:id="unitColumn" prefWidth="100.0" text="Unit" />
             <TableColumn fx:id="unitPriceColumn" prefWidth="150.0" text="Unit price" />
+            <TableColumn fx:id="weightColumn" prefWidth="150.0" text="Weight" />
         </columns>
       </TableView>
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">

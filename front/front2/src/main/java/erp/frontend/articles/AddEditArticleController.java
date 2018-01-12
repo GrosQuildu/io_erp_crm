@@ -8,8 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp.Main;
-import main.java.erp.backend.api.ConnectionApi;
-import main.java.erp.backend.api.erp.ArticlesApiController;
 import main.java.erp.backend.api.erp.ArticlesControllerApi;
 import main.java.erp.backend.model.common.Unit;
 import main.java.erp.backend.model.erp.Article;
@@ -54,11 +52,8 @@ public class AddEditArticleController implements Initializable {
 
     private void fillArticle() {
         article.setAvailability(Integer.parseInt(availabilityField.getText()));
-        Unit unit = new Unit();
-        unit.setId(1);
-        unit.setName("Sztuk");
-        unit.setNameShort("szt.");
-        article.setUnit(unit);
+        article.setUnit(unitComboBox.getValue());
+        article.setName(nameField.getText());
         article.setUnitPrice(new BigDecimal(unitPriceField.getText()));
         article.setWeight(new BigDecimal(weightField.getText()).floatValue());
     }
@@ -89,6 +84,8 @@ public class AddEditArticleController implements Initializable {
         scene.getStylesheets().add(Main.css);
         stage.setWidth(300);
         stage.setScene(scene);
+        unitComboBox.getItems().addAll(controller.getUnits());
+        if(unitComboBox.getItems().size()>0) unitComboBox.getSelectionModel().select(0);
     }
 
     public void setArticlesController(ArticlesController articlesController) {

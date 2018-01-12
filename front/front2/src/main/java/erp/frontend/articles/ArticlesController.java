@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 
 
 public class ArticlesController implements Initializable{
+    public TableColumn weightColumn;
     @FXML
     private Button addArticleBtn;
     @FXML
@@ -51,10 +52,11 @@ public class ArticlesController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
 
         articleTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("nazwa"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         unitColumn.setCellValueFactory(new PropertyValueFactory<>("unit"));
         availabilityColumn.setCellValueFactory(new PropertyValueFactory<>("availability"));
         unitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        weightColumn.setCellValueFactory(new PropertyValueFactory<>("weight"));
         refresh();
         setEvents();
     }

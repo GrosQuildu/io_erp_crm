@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp.Main;
-import main.java.erp.backend.api.common.ClientsApiController;
 import main.java.erp.backend.api.common.ClientsControllerApi;
 import main.java.erp.backend.model.common.Client;
 import main.java.erp.backend.model.common.ClientType;
@@ -31,7 +30,7 @@ public class AddEditClientController implements Initializable {
     public TextField nipField;
     public TextField telephoneField;
     public TextField mailField;
-    public ComboBox clientTypeBox;
+    public ComboBox<ClientType> clientTypeBox;
     public Button saveBtn;
     public Button cancelBtn;
     private ClientsController clientsController;
@@ -104,6 +103,8 @@ public class AddEditClientController implements Initializable {
         nipField.setText(client.getNip());
         telephoneField.setText(client.getTelephone());
         mailField.setText(client.getMail());
+        if(client.getClientType()!=null)
+            clientTypeBox.setValue(client.getClientType());
     }
 
     @Override
@@ -113,6 +114,8 @@ public class AddEditClientController implements Initializable {
         scene.getStylesheets().add(Main.css);
         stage.setWidth(300);
         stage.setScene(scene);
+        clientTypeBox.getItems().addAll(controller.getClientTypes());
+        if(clientTypeBox.getItems().size()>0) clientTypeBox.getSelectionModel().select(0);
     }
 
     public void setClientsController(ClientsController clientsController) {

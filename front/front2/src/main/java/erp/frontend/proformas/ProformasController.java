@@ -1,37 +1,20 @@
 package main.java.erp.frontend.proformas;
 
 import javafx.fxml.FXMLLoader;
-import main.java.erp.backend.SharedData;
-import main.java.erp.backend.api.erp.ProformasApiController;
 import main.java.erp.backend.model.erp.Proforma;
-import main.java.erp.frontend.loading.LoadingDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.Window;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Locale;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -59,7 +42,7 @@ public class ProformasController implements Initializable{
     private AddEditProformaController addEditProformaController;
     private ObservableList<Proforma> dane = FXCollections.observableArrayList();
     private FXMLLoader loader;
-    private ProformasApiController controller = new ProformasApiController();
+    //private ProformasApiController controller = new ProformasApiController();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -113,7 +96,7 @@ public class ProformasController implements Initializable{
                 addEditProformaController.show(proformasTable.getSelectionModel().getSelectedItem());
         });
         deleteBtn.setOnAction(e -> {
-            controller.deleteProforma(proformasTable.getSelectionModel().getSelectedItem().getId());
+            //controller.deleteProforma(proformasTable.getSelectionModel().getSelectedItem().getId());
         });
     }
 

@@ -6,7 +6,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import main.java.erp.backend.api.common.ClientsApiController;
 import main.java.erp.backend.api.common.ClientsControllerApi;
 import main.java.erp.backend.model.common.Client;
 
@@ -82,14 +81,17 @@ public class ClientsController implements Initializable {
     private void setEvents() {
         addClientBtn.setOnAction(e -> addEditClientController.show());
         refreshBtn.setOnAction(e -> refresh());
-        clientsTable.setOnMouseClicked(e -> editClient());
-
+        clientsTable.setOnMouseClicked(e -> {
+                if(e.getClickCount() == 2)
+                    editClient();
+            }
+        );
         editClientBtn.setOnAction(e -> editClient());
 
         deleteClientBtn.setOnAction(e -> {
             Client selected = clientsTable.getSelectionModel().getSelectedItem();
             if(selected != null){
-                //controller.deleteClient(selected.getId());
+                controller.deleteClient(selected);
             }
         });
     }

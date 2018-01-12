@@ -133,14 +133,15 @@ public class Unit extends BaseModel {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+      return name;
+    /*StringBuilder sb = new StringBuilder();
     sb.append("class Unit {\n");
 
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    nameShort: ").append(toIndentedString(nameShort)).append("\n");
     sb.append("}");
-    return sb.toString();
+    return sb.toString();*/
   }
 
   /**

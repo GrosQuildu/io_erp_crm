@@ -200,7 +200,8 @@ public class Article extends BaseModel {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    return name;
+    /*StringBuilder sb = new StringBuilder();
     sb.append("class Article {\n");
 
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
@@ -209,7 +210,7 @@ public class Article extends BaseModel {
     sb.append("    unitPrice: ").append(toIndentedString(unitPrice)).append("\n");
     sb.append("    weight: ").append(toIndentedString(weight)).append("\n");
     sb.append("}");
-    return sb.toString();
+    return sb.toString();*/
   }
 
   /**
@@ -240,8 +241,7 @@ public class Article extends BaseModel {
       object.addProperty("name", name);
       object.addProperty("unitPrice", unitPrice);
       object.addProperty("weight", weight);
-      JsonElement jsonUnit = context.serialize(unit);
-      object.add("Unit", jsonUnit);
+      object.addProperty("unit", unit.getId());
       return object;
     }
   }

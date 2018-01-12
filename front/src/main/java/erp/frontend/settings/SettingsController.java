@@ -128,11 +128,17 @@ public class SettingsController implements Initializable {
     private void setEvents() {
         deleteClientTypeBtn.setOnAction(e -> {
             ClientType item = clientTypesTableView.getSelectionModel().getSelectedItem();
-            if(item!=null) clientTypesApi.deleteClientType(item);
+            if(item!=null) {
+                clientTypesApi.deleteClientType(item);
+                refresh();
+            }
         });
         deleteUnitBtn.setOnAction(e ->{
             Unit item = unitsTableView.getSelectionModel().getSelectedItem();
-            if(item!=null) unitControllerApi.deleteUnit(item);
+            if(item!=null) {
+                unitControllerApi.deleteUnit(item);
+                refresh();
+            }
         });
         addClientTypeBtn.setOnAction(e -> addClientTypeController.show());
         addUnitBtn.setOnAction(e -> addUnitController.show());

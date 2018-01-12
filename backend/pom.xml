@@ -20,7 +20,7 @@
         <profile>
             <id>integration</id>
             <properties>
-                <unit-tests.skip>true</unit-tests.skip>
+                <unit-tests.skip>false</unit-tests.skip>
                 <integration-tests.skip>false</integration-tests.skip>
             </properties>
         </profile>

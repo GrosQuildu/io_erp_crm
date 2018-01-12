@@ -69,14 +69,17 @@ public class EmployeesApiControllerIT {
 
 	@Test
 	public void getEmployeesShouldReturnDefaultEmployees() {
-		given()
+		Response response = given()
 				.header("Authorization", "Bearer " + adminToken)
+			.contentType("application/json\r\n")
 		.when()
 				.get(GET_ALL_RESOURCE)
 				.then()
 				.statusCode(HttpStatus.SC_OK)
-				.body("name", hasItems("admin", "erp", "crm"))
-				.body("visibility", hasItems(true, true, true));
+				.body("name", hasItems("admin", "main_erp", "main_crm"))
+				.body("visibility", hasItems(true, true, true))
+		.extract().response();
+		System.out.println(response.getBody().toString());
 	}
 
 

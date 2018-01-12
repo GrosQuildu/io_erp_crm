@@ -1,10 +1,6 @@
-
 package io.swagger.api.common;
 
 
-import io.swagger.configuration.EmployeeService;
-import io.swagger.model.common.Employee;
-import io.swagger.model.common.EmployeeRepository;
 import io.swagger.model.common.Unit;
 import io.swagger.model.common.UnitRepository;
 import org.junit.Test;
@@ -37,22 +33,30 @@ public class UnitsApiControllerTest {
     }
 
     @Test
-    public void whenAddingUnitItShouldReturnTheSavedUnit() {
+    public void whenAddingUnitItShouldBeSaved() {
         given(repository.save(UNIT3)).willReturn(UNIT3);
-        assertThat(controller.createUnit(UNIT3))
-                .isSameAs(UNIT3);
+        given(repository.findOne(UNIT3.getId())).willReturn(UNIT3);
+        controller.createUnit(UNIT3);
+        assertThat(controller.getUnit(UNIT3.getId()).getBody()).isSameAs(UNIT3);
     }
 
     @Test
-    public void whenUpdatingUnitItShouldReturnTheSavedUnit() {
-        // Given that CHECKED_ITEM is returned when one is requested with CHECKED_ITEM_ID
-        given(repository.getOne(CHECKED_ITEM_ID)).willReturn(CHECKED_ITEM);
-        // Given that a CHECKED_ITEM is saved and flushed, a CHECKED_ITEM is returned
-        given(repository.saveAndFlush(CHECKED_ITEM)).willReturn(CHECKED_ITEM);
-        // When updating a CHECKED_ITEM
-        assertThat(controller.updateUnit(CHECKED_ITEM, CHECKED_ITEM_ID))
-                // Then it should return the CHECKED_ITEM
-                .isSameAs(CHECKED_ITEM);
+    public void whenUpdatingUnitItShouldNotChangeId() {
+        given(repository.findById(UNIT1.getId())).willReturn(UNIT1);
+        given(repository.findOne(UNIT1.getId())).willReturn(UNIT1);
+
+        Unit UnitNull = new Unit(UNIT1.getId(), "test", "testShort");
+        controller.updateUnit(UnitNull.getId(), UnitNull);
+        assertThat(controller.getUnit(UnitNull.getId()).getBody()).isSameAs(UNIT1);
+    }
+
+    @Test
+    public void whenDeletingAnUnitItShouldUseTheRepository() {
+        given(repository.findById(UNIT1.getId())).willReturn(UNIT1);
+        given(repository.findOne(UNIT1.getId())).willReturn(UNIT1);
+
+//        controller.deleteUnit(UNIT1.getId());
+//        verify(repository).delete(UNIT1);
     }
 }
 

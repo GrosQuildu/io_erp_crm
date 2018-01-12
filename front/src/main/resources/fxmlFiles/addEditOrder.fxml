@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="main.java.erp.frontend.orders.AddEditOrderController"
+          fx:id="mainPane" vgap="10" hgap="10" minWidth="600" styleClass="mainBackground2">
+    <padding><Insets top="10" bottom="10" left="10" right="10" /></padding>
+    <!-- 1. row -->
+    <Text fx:id="orderNumberText" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+    <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="10">
+        <Label text="Realization deadline" />
+        <DatePicker fx:id="realizationDeadlinePicker"/>
+        <Label text="Order date" />
+        <DatePicker fx:id="orderDatePicker"/>
+    </VBox>
+    <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="10">
+        <Label text="Realization date" />
+        <DatePicker fx:id="realizationDatePicker"/>
+    </VBox>
+    <Text fx:id="employeeText" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+    <!-- 2. row -->
+    <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="10">
+        <Label text="Client" />
+        <TextField fx:id="clientField"/>
+        <HBox spacing="10" maxWidth="Infinity">
+            <Button fx:id="chooseClientBtn" text="Choose..." maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            <Button fx:id="clearClientBtn" text="Clear" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+        </HBox>
+    </VBox>
+    <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="10">
+        <Label text="Advance" />
+        <TextField fx:id="advanceField" />
+    </VBox>
+    <VBox GridPane.columnIndex="2" GridPane.rowIndex="1" spacing="10">
+        <Label text="VAT" />
+        <TextField fx:id="vatField" />
+    </VBox>
+    <VBox GridPane.columnIndex="3" GridPane.rowIndex="1" spacing="10">
+        <Label text="State"/>
+        <ComboBox fx:id="stateComboBox"/>
+    </VBox>
+
+    <!-- 3. row -->
+    <VBox GridPane.columnIndex="0" GridPane.rowIndex="2" spacing="10">
+        <Label text="Comments"/>
+        <TextArea fx:id="commentsArea" />
+    </VBox>
+    <VBox GridPane.columnIndex="1" GridPane.rowIndex="2" spacing="10">
+        <Label text="Conditions"/>
+        <TextArea fx:id="conditionsArea" />
+    </VBox>
+    <VBox GridPane.columnIndex="2" GridPane.rowIndex="2" spacing="10" >
+        <Label text="Delivery address"/>
+        <TextArea fx:id="deliveryAddressArea" />
+    </VBox>
+    <VBox GridPane.columnIndex="3" GridPane.rowIndex="2" spacing="10" >
+        <Label text="Delivery cost"/>
+        <TextField fx:id="deliveryCostField"/>
+        <CheckBox fx:id="isSignedBox" text="Is signed" />
+        <CheckBox fx:id="isPaid" text="Is paid"/>
+        <CheckBox fx:id="isDone" text="Is done"/>
+    </VBox>
+
+
+    <!-- 4. row -->
+
+    <VBox GridPane.columnIndex="0" GridPane.rowIndex="3" spacing="10" GridPane.columnSpan="4">
+        <Label text="Articles"/>
+        <TableView fx:id="articleTableView" >
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+            <columns>
+                <TableColumn fx:id="articleColumn" text="Article" prefWidth="200">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="article" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="amountColumn" text="Amount" prefWidth="200">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="amount" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="netPriceColumn" text="Net price" prefWidth="200">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="netPrice" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="weightColumn" text="Weight" prefWidth="200">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="weight" />
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+        <HBox spacing="10">
+            <Button fx:id="addArticleBtn" text="Add..."/>
+            <Button fx:id="deleteArticleBtn" text="Delete"/>
+        </HBox>
+    </VBox>
+
+
+    <!-- 5. row -->
+
+    <HBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="4">
+        <Button fx:id="saveBtn" text="Save"/>
+        <Button fx:id="cancelBtn" text="Cancel"/>
+
+    </HBox>
+</GridPane>

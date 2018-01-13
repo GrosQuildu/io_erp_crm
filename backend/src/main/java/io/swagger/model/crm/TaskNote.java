@@ -20,18 +20,15 @@ public class TaskNote extends BaseModel {
   private Integer id;
 
   @JsonProperty("task")
-  @NotNull
-  @ManyToOne(cascade = CascadeType.PERSIST)
+  @ManyToOne
   @JoinColumn(name = "task_id")
   private Task task;
 
   @JsonProperty("content")
-  @NotNull
   @Column(nullable = false, unique = false)
   private String content;
 
   @JsonProperty("backgroundColor")
-  @NotNull
   @Column(nullable = false, unique = false)
   private String backgroundColor;
 
@@ -54,7 +51,6 @@ public class TaskNote extends BaseModel {
    * @return id
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
 
 
   public Integer getId() {
@@ -75,7 +71,6 @@ public class TaskNote extends BaseModel {
    * @return task
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
 
 
   public Task getTask() {
@@ -96,8 +91,6 @@ public class TaskNote extends BaseModel {
    * @return content
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
-
 
   public String getContent() {
     return content;

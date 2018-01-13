@@ -24,12 +24,12 @@ public class Unit extends BaseModel {
   private Integer id;
 
   @JsonProperty("name")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private String name;
 
   @JsonProperty("nameShort")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private String nameShort;
 
@@ -55,8 +55,6 @@ public class Unit extends BaseModel {
    * @return id
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
-
 
   public Integer getId() {
     return id;
@@ -76,7 +74,7 @@ public class Unit extends BaseModel {
    * @return name
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
  @Size(max=100)
   public String getName() {
@@ -97,7 +95,7 @@ public class Unit extends BaseModel {
    * @return nameShort
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
  @Size(max=32)
   public String getNameShort() {

@@ -25,13 +25,13 @@ public class Task extends BaseModel {
   private Integer id;
 
   @JsonProperty("title")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private String title;
 
   @JsonProperty("taskStatus")
-  @NotNull
-  @ManyToOne(cascade = CascadeType.PERSIST)
+
+  @ManyToOne
   @JoinColumn(name = "task_status_id")
   private TaskStatus taskStatus;
 
@@ -48,16 +48,16 @@ public class Task extends BaseModel {
   private List<Contact> contacts = null;
 
   @JsonProperty("employee")
-  @NotNull
-  @OneToOne(cascade = CascadeType.PERSIST)
+
+  @OneToOne
   private Employee employee;
 
   @JsonProperty("employeeCommissioned")
-  @OneToOne(cascade = CascadeType.PERSIST)
+  @OneToOne
   private Employee employeeCommissioned = null;
 
   @JsonProperty("backgroundColor")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private String backgroundColor;
 
@@ -68,12 +68,12 @@ public class Task extends BaseModel {
   private Boolean isArchived = false;
 
   @JsonProperty("endDate")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private LocalDate endDate;
 
   @JsonProperty("startDate")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private LocalDate startDate;
 
@@ -99,8 +99,6 @@ public class Task extends BaseModel {
    * @return id
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
-
 
   public Integer getId() {
     return id;
@@ -120,7 +118,7 @@ public class Task extends BaseModel {
    * @return title
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Size(min=5,max=100)
   public String getTitle() {
@@ -229,7 +227,7 @@ public class Task extends BaseModel {
    * @return taskStatus
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public TaskStatus getTaskStatus() {
@@ -250,7 +248,7 @@ public class Task extends BaseModel {
    * @return employee
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Employee getEmployee() {

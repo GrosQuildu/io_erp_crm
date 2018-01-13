@@ -28,7 +28,7 @@ public class Employee extends BaseModel {
   private Integer id;
 
   @JsonProperty("name")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private String name;
 
@@ -36,12 +36,12 @@ public class Employee extends BaseModel {
   private String telephone = null;
 
   @JsonProperty("mail")
-  @NotNull
+
   @Column(nullable = false, unique = true)
   private String mail;
 
   @JsonProperty("password")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private String password;
 
@@ -91,14 +91,14 @@ public class Employee extends BaseModel {
   }
 
   @JsonProperty("role")
-  @NotNull
+
   private Role role;
 
   @JsonProperty("monthSchedule")
   private BigDecimal monthSchedule = null;
 
   @JsonProperty("visibility")
-  @NotNull
+
   private Boolean visibility = true;
 
   public Employee id(Integer id) {
@@ -111,7 +111,7 @@ public class Employee extends BaseModel {
    * @return id
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Integer getId() {
@@ -132,7 +132,7 @@ public class Employee extends BaseModel {
    * @return name
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Size(min=5,max=100)
   public String getName() {
@@ -173,7 +173,7 @@ public class Employee extends BaseModel {
    * @return mail
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public String getMail() {
@@ -194,7 +194,7 @@ public class Employee extends BaseModel {
    * @return password
    **/
   @ApiModelProperty(required = true, value = "required on post, ignored on update, \"***\" on get")
-  @NotNull
+
 
 
   public String getPassword() {
@@ -215,7 +215,7 @@ public class Employee extends BaseModel {
    * @return role
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Role getRole() {

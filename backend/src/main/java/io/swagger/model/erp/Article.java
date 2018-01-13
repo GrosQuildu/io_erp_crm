@@ -24,23 +24,23 @@ public class Article extends BaseModel {
   private Integer id;
 
   @JsonProperty("name")
-  @NotNull
+
   @Column(nullable = false, unique = true)
   private String name;
 
   @JsonProperty("availability")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private Integer availability;
 
   @JsonProperty("unit")
-  @NotNull
-  @ManyToOne(cascade = CascadeType.PERSIST)
+
+  @ManyToOne
   @JoinColumn(name = "unit_id")
   private Unit unit;
 
   @JsonProperty("unitPrice")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private BigDecimal unitPrice;
 
@@ -71,8 +71,6 @@ public class Article extends BaseModel {
    * @return id
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
-
 
   public Integer getId() {
     return id;
@@ -94,7 +92,7 @@ public class Article extends BaseModel {
    * @return availability
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   public Integer getName() {
     return availability;
@@ -116,7 +114,7 @@ public class Article extends BaseModel {
    * @return availability
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Integer getAvailability() {
@@ -138,8 +136,8 @@ public class Article extends BaseModel {
    * Get unit
    * @return unit
   **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
+  @ApiModelProperty(required = true, value = "Not null")
+
 
 
   public Unit getUnit() {
@@ -160,7 +158,7 @@ public class Article extends BaseModel {
    * @return unitPrice
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Valid
 

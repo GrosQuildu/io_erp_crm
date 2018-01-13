@@ -25,17 +25,17 @@ public class Meeting extends BaseModel {
   private Integer id;
 
   @JsonProperty("meetingDate")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private LocalDate meetingDate;
 
   @JsonProperty("employees")
-  @NotNull
+
   @OneToMany
   private List<Employee> employees;
 
   @JsonProperty("contacts")
-  @NotNull
+
   @OneToMany
   private List<Contact> contacts;
 
@@ -53,8 +53,8 @@ public class Meeting extends BaseModel {
   private String purpose = null;
 
   @JsonProperty("mainEmployee")
-  @NotNull
-  @OneToOne(cascade = CascadeType.PERSIST)
+
+  @OneToOne
   private Employee mainEmployee;
 
   @JsonProperty("telephoneMeeting")
@@ -80,7 +80,7 @@ public class Meeting extends BaseModel {
    * @return id
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Integer getId() {
@@ -189,7 +189,7 @@ public class Meeting extends BaseModel {
    * @return meetingDate
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Valid
 

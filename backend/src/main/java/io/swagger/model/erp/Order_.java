@@ -26,12 +26,12 @@ public class Order_ extends BaseModel {
   private Integer id;
 
   @JsonProperty("orderNumber")
-  @NotNull
+
   @Column(nullable = false, unique = true)
   private String orderNumber;
 
   @JsonProperty("orderDate")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private LocalDate orderDate;
 
@@ -42,13 +42,13 @@ public class Order_ extends BaseModel {
   private String realizationDeadline = null;
 
   @JsonProperty("employee")
-  @ManyToOne(cascade = CascadeType.PERSIST)
+  @ManyToOne
   @JoinColumn(name = "employee_id")
   private Employee employee = null;
 
   @JsonProperty("client")
-  @NotNull
-  @ManyToOne(cascade = CascadeType.PERSIST)
+
+  @ManyToOne
   @JoinColumn(name = "client_id")
   private Client client;
 
@@ -62,12 +62,12 @@ public class Order_ extends BaseModel {
   private BigDecimal advance = null;
 
   @JsonProperty("vat")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private Float vat;
 
   @JsonProperty("state")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private String state;
 
@@ -111,8 +111,6 @@ public class Order_ extends BaseModel {
    * @return id
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
-
 
   public Integer getId() {
     return id;
@@ -132,7 +130,7 @@ public class Order_ extends BaseModel {
    * @return orderNumber
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Size(max=32)
   public String getOrderNumber() {
@@ -153,7 +151,7 @@ public class Order_ extends BaseModel {
    * @return orderDate
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Valid
 
@@ -196,7 +194,7 @@ public class Order_ extends BaseModel {
    * @return realizationDeadline
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Size(max=100)
   public String getRealizationDeadline() {
@@ -217,7 +215,7 @@ public class Order_ extends BaseModel {
    * @return employee
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Employee getEmployee() {
@@ -238,7 +236,7 @@ public class Order_ extends BaseModel {
    * @return client
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Client getClient() {
@@ -320,7 +318,7 @@ public class Order_ extends BaseModel {
    * @return vat
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Float getVat() {
@@ -341,7 +339,7 @@ public class Order_ extends BaseModel {
    * @return state
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Size(max=100)
   public String getState() {
@@ -383,7 +381,7 @@ public class Order_ extends BaseModel {
    * @return deliveryAddress
    **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public String getDeliveryAddress() {

@@ -26,17 +26,17 @@ public class DeliveryCost extends BaseModel {
   private Integer id = null;
 
   @JsonProperty("weightFrom")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private Float weightFrom;
 
   @JsonProperty("weightTo")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private Float weightTo;
 
   @JsonProperty("price")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private BigDecimal price;
 
@@ -63,7 +63,7 @@ public class DeliveryCost extends BaseModel {
    * @return id
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Integer getId() {
@@ -84,7 +84,7 @@ public class DeliveryCost extends BaseModel {
    * @return weightFrom
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Float getWeightFrom() {
@@ -105,7 +105,7 @@ public class DeliveryCost extends BaseModel {
    * @return weightTo
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Float getWeightTo() {
@@ -126,7 +126,7 @@ public class DeliveryCost extends BaseModel {
    * @return price
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Valid
 

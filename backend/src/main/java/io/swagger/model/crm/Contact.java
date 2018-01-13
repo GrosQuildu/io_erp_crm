@@ -22,19 +22,19 @@ public class Contact extends BaseModel {
   private Integer id;
 
   @JsonProperty("client")
-  @ManyToOne(cascade = CascadeType.PERSIST)
+  @ManyToOne
   @JoinColumn(name = "client_id")
   private Client client = null;
 
   @JsonProperty("employee")
-  @NotNull
-  @ManyToOne(cascade = CascadeType.PERSIST)
+
+  @ManyToOne
   @JoinColumn(name = "employee_id")
   private Employee employee;
 
   @JsonProperty("contactGroup")
-  @NotNull
-  @ManyToOne(cascade = CascadeType.PERSIST)
+
+  @ManyToOne
   @JoinColumn(name = "contact_group_id")
   private ContactGroup contactGroup;
 
@@ -42,7 +42,7 @@ public class Contact extends BaseModel {
   private Boolean vip = false;
 
   @JsonProperty("name")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private String name;
 
@@ -59,7 +59,7 @@ public class Contact extends BaseModel {
   private String telephone = null;
 
   @JsonProperty("mail")
-  @NotNull
+
   @Column(nullable = false, unique = true)
   private String mail;
 
@@ -83,7 +83,7 @@ public class Contact extends BaseModel {
    * @return id
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Integer getId() {
@@ -124,7 +124,7 @@ public class Contact extends BaseModel {
    * @return employee
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Employee getEmployee() {
@@ -145,7 +145,7 @@ public class Contact extends BaseModel {
    * @return contactGroup
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public ContactGroup getContactGroup() {
@@ -186,7 +186,7 @@ public class Contact extends BaseModel {
    * @return name
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
  @Size(min=5,max=100)
   public String getName() {
@@ -287,7 +287,7 @@ public class Contact extends BaseModel {
    * @return mail
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public String getMail() {

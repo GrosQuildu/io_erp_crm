@@ -21,7 +21,7 @@ public class Client extends BaseModel {
   private Integer id;
 
   @JsonProperty("name")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private String name;
 
@@ -53,13 +53,13 @@ public class Client extends BaseModel {
   private String telephone = null;
 
   @JsonProperty("mail")
-  @NotNull
+
   @Column(nullable = false, unique = true)
   private String mail;
 
   @JsonProperty("clientType")
-  @NotNull
-  @ManyToOne(cascade = CascadeType.PERSIST)
+
+  @ManyToOne
   @JoinColumn(name = "client_type_id")
   private ClientType clientType;
 
@@ -82,7 +82,7 @@ public class Client extends BaseModel {
    * @return id
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Integer getId() {
@@ -103,7 +103,7 @@ public class Client extends BaseModel {
    * @return name
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
  @Size(min=5,max=100)
   public String getName() {
@@ -304,7 +304,7 @@ public class Client extends BaseModel {
    * @return mail
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public String getMail() {
@@ -325,7 +325,7 @@ public class Client extends BaseModel {
    * @return clientType
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public ClientType getClientType() {

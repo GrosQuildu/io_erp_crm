@@ -39,7 +39,7 @@ public class Error   {
    * @return message
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public String getMessage() {

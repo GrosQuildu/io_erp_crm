@@ -24,7 +24,7 @@ public class ClientType extends BaseModel {
   private Integer id;
 
   @JsonProperty("description")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private String description;
 
@@ -49,7 +49,7 @@ public class ClientType extends BaseModel {
    * @return id
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Integer getId() {
@@ -70,7 +70,7 @@ public class ClientType extends BaseModel {
    * @return description
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
  @Size(min=5,max=100)
   public String getDescription() {

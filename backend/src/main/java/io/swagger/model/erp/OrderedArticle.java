@@ -23,14 +23,14 @@ public class OrderedArticle extends BaseModel {
   private Integer id;
 
   @JsonProperty("article")
-  @NotNull
-  @ManyToOne(cascade = CascadeType.PERSIST)
+
+  @ManyToOne
   @JoinColumn(name = "article_id")
   private Article article;
 
   @JsonProperty("order")
-  @NotNull
-  @ManyToOne(cascade = CascadeType.PERSIST)
+
+  @ManyToOne
   @JoinColumn(name = "order_id")
   private Order_ order;
 
@@ -38,7 +38,7 @@ public class OrderedArticle extends BaseModel {
   private String description = "";
 
   @JsonProperty("amount")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private Integer amount;
 
@@ -75,7 +75,6 @@ public class OrderedArticle extends BaseModel {
    * @return id
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
 
 
   public Integer getId() {
@@ -96,7 +95,7 @@ public class OrderedArticle extends BaseModel {
    * @return article
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Article getArticle() {
@@ -117,7 +116,7 @@ public class OrderedArticle extends BaseModel {
    * @return order
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Order_ getOrder() {
@@ -138,7 +137,7 @@ public class OrderedArticle extends BaseModel {
    * @return description
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public String getDescription() {
@@ -159,7 +158,7 @@ public class OrderedArticle extends BaseModel {
    * @return amount
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Integer getAmount() {
@@ -180,7 +179,7 @@ public class OrderedArticle extends BaseModel {
    * @return unitPrice
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Valid
 
@@ -202,7 +201,7 @@ public class OrderedArticle extends BaseModel {
    * @return netPrice
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Valid
 

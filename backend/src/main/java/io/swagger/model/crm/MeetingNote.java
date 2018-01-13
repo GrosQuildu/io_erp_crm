@@ -20,17 +20,17 @@ public class MeetingNote extends BaseModel {
   private Integer id ;
 
   @JsonProperty("meeting")
-  @NotNull
-  @ManyToOne(cascade = CascadeType.PERSIST)
+
+  @ManyToOne
   @JoinColumn(name = "meeting_id")
   private Meeting meeting;
 
   @JsonProperty("content")
-  @NotNull
+
   private String content;
 
   @JsonProperty("backgroundColor")
-  @NotNull
+
   private String backgroundColor;
 
   protected MeetingNote() {}
@@ -52,7 +52,7 @@ public class MeetingNote extends BaseModel {
    * @return id
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Integer getId() {
@@ -73,7 +73,7 @@ public class MeetingNote extends BaseModel {
    * @return meeting
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Meeting getMeetingId() {

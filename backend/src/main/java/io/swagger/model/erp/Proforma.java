@@ -22,30 +22,30 @@ public class Proforma extends BaseModel {
   private Integer id;
 
   @JsonProperty("proformaNumber")
-  @NotNull
+
   @Column(nullable = false, unique = true)
   private String proformaNumber;
 
   @JsonProperty("order")
-  @NotNull
-  @OneToOne(cascade = CascadeType.PERSIST)
+
+  @OneToOne
   @JoinColumn(name = "order_id", unique = true)
   private Order_ order;
 
   @JsonProperty("issueDate")
-  @NotNull
+
   private LocalDate issueDate ;
 
   @JsonProperty("saleDate")
-  @NotNull
+
   private LocalDate saleDate;
 
   @JsonProperty("paymentDate")
-  @NotNull
+
   private LocalDate paymentDate;
 
   @JsonProperty("paymentMethod")
-  @NotNull
+
   private String paymentMethod;
 
   public Proforma id(Integer id) {
@@ -74,7 +74,6 @@ public class Proforma extends BaseModel {
    * @return id
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
 
 
   public Integer getId() {
@@ -95,7 +94,7 @@ public class Proforma extends BaseModel {
    * @return proformaNumber
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
  @Size(min=5,max=32)
   public String getProformaNumber() {
@@ -116,7 +115,7 @@ public class Proforma extends BaseModel {
    * @return order
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Order_ getOrder() {
@@ -137,7 +136,7 @@ public class Proforma extends BaseModel {
    * @return issueDate
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Valid
 
@@ -159,7 +158,7 @@ public class Proforma extends BaseModel {
    * @return saleDate
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Valid
 
@@ -181,7 +180,7 @@ public class Proforma extends BaseModel {
    * @return paymentDate
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Valid
 
@@ -203,7 +202,7 @@ public class Proforma extends BaseModel {
    * @return paymentMethod
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
  @Size(max=100)
   public String getPaymentMethod() {

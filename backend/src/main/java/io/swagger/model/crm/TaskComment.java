@@ -23,24 +23,24 @@ public class TaskComment extends BaseModel {
   private Integer id;
 
   @JsonProperty("task")
-  @NotNull
-  @ManyToOne(cascade = CascadeType.PERSIST)
+
+  @ManyToOne
   @JoinColumn(name = "task_id")
   private Task task;
 
   @JsonProperty("content")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private String content;
 
   @JsonProperty("employee")
-  @NotNull
-  @ManyToOne(cascade = CascadeType.PERSIST)
+
+  @ManyToOne
   @JoinColumn(name = "employee_id")
   private Employee employee;
 
   @JsonProperty("time")
-  @NotNull
+
   @Column(nullable = false, unique = false)
   private LocalDate time;
 
@@ -64,7 +64,7 @@ public class TaskComment extends BaseModel {
    * @return id
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Integer getId() {
@@ -85,7 +85,7 @@ public class TaskComment extends BaseModel {
    * @return task
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Task getTask() {
@@ -106,7 +106,7 @@ public class TaskComment extends BaseModel {
    * @return content
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public String getContent() {
@@ -127,7 +127,7 @@ public class TaskComment extends BaseModel {
    * @return employee
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
 
   public Employee getEmployee() {
@@ -148,7 +148,7 @@ public class TaskComment extends BaseModel {
    * @return time
   **/
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+
 
   @Valid
 

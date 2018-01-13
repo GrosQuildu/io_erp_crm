@@ -73,7 +73,7 @@ public class ContactsApiController implements ContactsApi {
 
     public ResponseEntity<Void> updateContact(@ApiParam(value = "",required=true ) @PathVariable("contactId") Integer contactId,
         @ApiParam(value = "Contact to create"  )  @Valid @RequestBody Contact contact) {
-        if(contact.getId() != null && contactId != contact.getId())
+        if(contact.getId() == null || contactId != contact.getId())
             throw new Error("Wrong id");
 
         contact = BaseModel.combineWithOld(contactRepository, contact);

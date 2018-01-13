@@ -19,11 +19,6 @@ public class TaskNote extends BaseModel {
   @GeneratedValue
   private Integer id;
 
-  @JsonProperty("task")
-  @ManyToOne
-  @JoinColumn(name = "task_id")
-  private Task task;
-
   @JsonProperty("content")
   @Column(nullable = false, unique = false)
   private String content;
@@ -34,9 +29,8 @@ public class TaskNote extends BaseModel {
 
   protected TaskNote() {}
 
-  public TaskNote(Integer id, Task task, String content, String backgroundColor) {
-    this.id = id;
-    this.task = task;
+  public TaskNote(Integer id, String content, String backgroundColor) {
+    this.id = id;;
     this.content = content;
     this.backgroundColor = backgroundColor;
   }
@@ -61,25 +55,6 @@ public class TaskNote extends BaseModel {
     this.id = id;
   }
 
-  public TaskNote task(Task task) {
-    this.task = task;
-    return this;
-  }
-
-   /**
-   * Get task
-   * @return task
-  **/
-  @ApiModelProperty(required = true, value = "")
-
-
-  public Task getTask() {
-    return task;
-  }
-
-  public void setTask(Task task) {
-    this.task = task;
-  }
 
   public TaskNote content(String content) {
     this.content = content;
@@ -131,14 +106,13 @@ public class TaskNote extends BaseModel {
     }
     TaskNote taskNote = (TaskNote) o;
     return Objects.equals(this.id, taskNote.id) &&
-        Objects.equals(this.task, taskNote.task) &&
         Objects.equals(this.content, taskNote.content) &&
         Objects.equals(this.backgroundColor, taskNote.backgroundColor);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, task, content, backgroundColor);
+    return Objects.hash(id, content, backgroundColor);
   }
 
   @Override
@@ -147,7 +121,6 @@ public class TaskNote extends BaseModel {
     sb.append("class TaskNote {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    task: ").append(toIndentedString(task)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    backgroundColor: ").append(toIndentedString(backgroundColor)).append("\n");
     sb.append("}");

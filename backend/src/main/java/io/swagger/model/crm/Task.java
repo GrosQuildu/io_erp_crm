@@ -7,9 +7,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.BaseModel;
 import io.swagger.model.common.Employee;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 import org.joda.time.LocalDate;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -25,30 +28,29 @@ public class Task extends BaseModel {
   private Integer id;
 
   @JsonProperty("title")
-
   @Column(nullable = false, unique = false)
   private String title;
 
   @JsonProperty("taskStatus")
-
   @ManyToOne
   @JoinColumn(name = "task_status_id")
   private TaskStatus taskStatus;
 
   @JsonProperty("comments")
-  @OneToMany(mappedBy = "task")
+  @OneToMany(orphanRemoval=true)
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private List<TaskComment> comments = null;
 
   @JsonProperty("notes")
-  @OneToMany(mappedBy = "task")
+  @OneToMany(orphanRemoval=true)
+  @Cascade(CascadeType.ALL)
   private List<TaskNote> notes = null;
 
   @JsonProperty("contacts")
-  @OneToMany()
+  @OneToMany
   private List<Contact> contacts = null;
 
   @JsonProperty("employee")
-
   @OneToOne
   private Employee employee;
 
@@ -57,7 +59,6 @@ public class Task extends BaseModel {
   private Employee employeeCommissioned = null;
 
   @JsonProperty("backgroundColor")
-
   @Column(nullable = false, unique = false)
   private String backgroundColor;
 
@@ -68,12 +69,10 @@ public class Task extends BaseModel {
   private Boolean isArchived = false;
 
   @JsonProperty("endDate")
-
   @Column(nullable = false, unique = false)
   private LocalDate endDate;
 
   @JsonProperty("startDate")
-
   @Column(nullable = false, unique = false)
   private LocalDate startDate;
 

@@ -12,5 +12,4 @@ import java.util.List;
 public interface OrderedArticleRepository extends CrudRepository<OrderedArticle, Integer> {
     public OrderedArticle findById(Integer id);
     public List<Article> findAllByArticleId(Integer id);
-    public List<OrderedArticle> findAllByOrderId(Integer id);
 }

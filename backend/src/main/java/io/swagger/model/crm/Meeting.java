@@ -7,9 +7,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.BaseModel;
 import io.swagger.model.common.Employee;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 import org.joda.time.LocalDate;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -25,22 +28,20 @@ public class Meeting extends BaseModel {
   private Integer id;
 
   @JsonProperty("meetingDate")
-
   @Column(nullable = false, unique = false)
   private LocalDate meetingDate;
 
   @JsonProperty("employees")
-
   @OneToMany
   private List<Employee> employees;
 
   @JsonProperty("contacts")
-
   @OneToMany
   private List<Contact> contacts;
 
   @JsonProperty("notes")
-  @OneToMany(mappedBy = "meeting")
+  @OneToMany(orphanRemoval=true)
+  @Cascade(CascadeType.ALL)
   private List<MeetingNote> notes = null;
 
   @JsonProperty("nextMeetingDate")
@@ -53,7 +54,6 @@ public class Meeting extends BaseModel {
   private String purpose = null;
 
   @JsonProperty("mainEmployee")
-
   @OneToOne
   private Employee mainEmployee;
 
@@ -109,7 +109,7 @@ public class Meeting extends BaseModel {
    * Get notes
    * @return notes
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "Notes can be created, updated and deleted with POST and PUT")
   @Valid
 
   public List<MeetingNote> getNotes() {
@@ -138,7 +138,7 @@ public class Meeting extends BaseModel {
    * Get employee
    * @return employee
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "Can use only existing employees")
   @Valid
 
   public List<Employee> getEmployees() {
@@ -167,7 +167,7 @@ public class Meeting extends BaseModel {
    * Get contacts
    * @return contacts
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "Can use only existing contacts")
   @Valid
 
   public List<Contact> getContacts() {
@@ -271,7 +271,7 @@ public class Meeting extends BaseModel {
    * Get mainEmployee
    * @return mainEmployee
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "Can use only existing employee")
 
 
   public Employee getMainEmployee() {

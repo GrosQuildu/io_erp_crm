@@ -29,8 +29,8 @@ public class MeetingsApiController implements MeetingsApi {
      * Depends on:
         * mainEmployee (not null)
         * employees (not null, list)
-        * contacts (not null, list)
-        * notes (may be null, list)
+        * meetingContacts (not null, list)
+        * meetingNotes (may be null, list)
      */
     @Autowired
     MeetingRepository meetingRepository;
@@ -52,7 +52,7 @@ public class MeetingsApiController implements MeetingsApi {
             if(employeeTmp != null) {
                 employees.add(employeeTmp);
             } else {
-                throw new Error("Employee not found");
+                throw new Error("Employee " + employee.getId() + " not found");
             }
         }
         meeting.setEmployees(employees);
@@ -65,23 +65,10 @@ public class MeetingsApiController implements MeetingsApi {
             if(contactTmp != null) {
                 contacts.add(contactTmp);
             } else {
-                throw new Error("Contact not found");
+                throw new Error("Contact" + contact.getId() + "not found");
             }
         }
         meeting.setContacts(contacts);
-
-        if(meeting.getNotes() != null) {
-            ArrayList<MeetingNote> notes = new ArrayList<MeetingNote>();
-            for (MeetingNote note : meeting.getNotes()) {
-                MeetingNote noteTmp = meetingNoteRepository.findById(note.getId());
-                if (noteTmp != null) {
-                    notes.add(noteTmp);
-                } else {
-                    throw new Error("Meeting note not found");
-                }
-            }
-            meeting.setNotes(notes);
-        }
 
         meeting = meetingRepository.save(meeting);
         return new ResponseEntity<Integer>(meeting.getId(), HttpStatus.OK);
@@ -107,7 +94,7 @@ public class MeetingsApiController implements MeetingsApi {
 
     public ResponseEntity<Void> updateMeeting(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,
         @ApiParam(value = "Meeting to update"  )  @Valid @RequestBody Meeting meeting) {
-        if(meeting.getId() != null && meetingId != meeting.getId())
+        if(meeting.getId() == null || meetingId != meeting.getId())
             throw new Error("Wrong id");
 
         meeting = BaseModel.combineWithOld(meetingRepository, meeting);
@@ -139,20 +126,7 @@ public class MeetingsApiController implements MeetingsApi {
         }
         meeting.setContacts(contacts);
 
-        if(meeting.getNotes() != null) {
-            ArrayList<MeetingNote> notes = new ArrayList<MeetingNote>();
-            for (MeetingNote note : meeting.getNotes()) {
-                MeetingNote noteTmp = meetingNoteRepository.findById(note.getId());
-                if (noteTmp != null) {
-                    notes.add(noteTmp);
-                } else {
-                    throw new Error("Meeting note not found");
-                }
-            }
-            meeting.setNotes(notes);
-        }
-
-        meetingRepository.save(meeting);
+        meeting = meetingRepository.save(meeting);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 

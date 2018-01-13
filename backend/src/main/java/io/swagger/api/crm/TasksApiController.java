@@ -68,32 +68,6 @@ public class TasksApiController implements TasksApi {
             task.setContacts(contacts);
         }
 
-        if(task.getComments() != null) {
-            ArrayList<TaskComment> comments = new ArrayList<TaskComment>();
-            for (TaskComment comment : task.getComments()) {
-                TaskComment commentTmp = taskCommentRepository.findById(comment.getId());
-                if (commentTmp != null) {
-                    comments.add(commentTmp);
-                } else {
-                    throw new Error("Comment not found");
-                }
-            }
-            task.setComments(comments);
-        }
-
-        if(task.getNotes() != null) {
-            ArrayList<TaskNote> notes = new ArrayList<TaskNote>();
-            for (TaskNote note : task.getNotes()) {
-                TaskNote noteTmp = taskNoteRepository.findById(note.getId());
-                if (noteTmp != null) {
-                    notes.add(noteTmp);
-                } else {
-                    throw new Error("Note not found");
-                }
-            }
-            task.setNotes(notes);
-        }
-
         task = taskRepository.save(task);
         return new ResponseEntity<Integer>(task.getId(), HttpStatus.OK);
     }
@@ -118,7 +92,7 @@ public class TasksApiController implements TasksApi {
 
     public ResponseEntity<Void> updateTask(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId,
         @ApiParam(value = "Task to update"  )  @Valid @RequestBody Task task) {
-        if(task.getId() != null && taskId != task.getId())
+        if(task.getId() == null || taskId != task.getId())
             throw new Error("Wrong id");
 
         task = BaseModel.combineWithOld(taskRepository, task);
@@ -139,32 +113,6 @@ public class TasksApiController implements TasksApi {
                 }
             }
             task.setContacts(contacts);
-        }
-
-        if(task.getComments() != null) {
-            ArrayList<TaskComment> comments = new ArrayList<TaskComment>();
-            for (TaskComment comment : task.getComments()) {
-                TaskComment commentTmp = taskCommentRepository.findById(comment.getId());
-                if (commentTmp != null) {
-                    comments.add(commentTmp);
-                } else {
-                    throw new Error("Comment not found");
-                }
-            }
-            task.setComments(comments);
-        }
-
-        if(task.getNotes() != null) {
-            ArrayList<TaskNote> notes = new ArrayList<TaskNote>();
-            for (TaskNote note : task.getNotes()) {
-                TaskNote noteTmp = taskNoteRepository.findById(note.getId());
-                if (noteTmp != null) {
-                    notes.add(noteTmp);
-                } else {
-                    throw new Error("Note not found");
-                }
-            }
-            task.setNotes(notes);
         }
 
         taskRepository.save(task);

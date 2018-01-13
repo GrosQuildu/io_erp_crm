@@ -19,30 +19,22 @@ public class MeetingNote extends BaseModel {
   @GeneratedValue
   private Integer id ;
 
-  @JsonProperty("meeting")
-
-  @ManyToOne
-  @JoinColumn(name = "meeting_id")
-  private Meeting meeting;
-
   @JsonProperty("content")
-
   private String content;
 
   @JsonProperty("backgroundColor")
-
   private String backgroundColor;
 
   protected MeetingNote() {}
 
-  public MeetingNote(Integer id, Meeting meeting, String content, String backgroundColor) {
+  public MeetingNote(Integer id, String content, String backgroundColor) {
     this.id = id;
-    this.meeting = meeting;
     this.content = content;
     this.backgroundColor = backgroundColor;
   }
 
-    public MeetingNote id(Integer id) {
+
+  public MeetingNote id(Integer id) {
     this.id = id;
     return this;
   }
@@ -53,36 +45,14 @@ public class MeetingNote extends BaseModel {
   **/
   @ApiModelProperty(required = true, value = "")
 
-
-
   public Integer getId() {
     return id;
   }
-
   public void setId(Integer id) {
     this.id = id;
   }
 
-  public MeetingNote meeting(Meeting meeting) {
-    this.meeting = meeting;
-    return this;
-  }
 
-   /**
-   * Get meeting
-   * @return meeting
-  **/
-  @ApiModelProperty(required = true, value = "")
-
-
-
-  public Meeting getMeetingId() {
-    return meeting;
-  }
-
-  public void setMeetingId(Meeting meeting) {
-    this.meeting = meeting;
-  }
 
   public MeetingNote content(String content) {
     this.content = content;
@@ -99,10 +69,10 @@ public class MeetingNote extends BaseModel {
   public String getContent() {
     return content;
   }
-
   public void setContent(String content) {
     this.content = content;
   }
+
 
   public MeetingNote backgroundColor(String backgroundColor) {
     this.backgroundColor = backgroundColor;
@@ -115,11 +85,10 @@ public class MeetingNote extends BaseModel {
   **/
   @ApiModelProperty(value = "")
 
- @Size(min=4,max=10)
+  @Size(min=4,max=10)
   public String getBackgroundColor() {
     return backgroundColor;
   }
-
   public void setBackgroundColor(String backgroundColor) {
     this.backgroundColor = backgroundColor;
   }
@@ -135,14 +104,13 @@ public class MeetingNote extends BaseModel {
     }
     MeetingNote meetingNote = (MeetingNote) o;
     return Objects.equals(this.id, meetingNote.id) &&
-        Objects.equals(this.meeting, meetingNote.meeting) &&
         Objects.equals(this.content, meetingNote.content) &&
         Objects.equals(this.backgroundColor, meetingNote.backgroundColor);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, meeting, content, backgroundColor);
+    return Objects.hash(id, content, backgroundColor);
   }
 
   @Override
@@ -151,7 +119,6 @@ public class MeetingNote extends BaseModel {
     sb.append("class MeetingNote {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    meeting: ").append(toIndentedString(meeting)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    backgroundColor: ").append(toIndentedString(backgroundColor)).append("\n");
     sb.append("}");

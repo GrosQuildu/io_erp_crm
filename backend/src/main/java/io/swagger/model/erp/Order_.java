@@ -1,5 +1,7 @@
 package io.swagger.model.erp;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,9 +10,11 @@ import java.math.BigDecimal;
 import io.swagger.model.BaseModel;
 import io.swagger.model.common.Client;
 import io.swagger.model.common.Employee;
+import org.hibernate.annotations.*;
 import org.joda.time.LocalDate;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -26,12 +30,10 @@ public class Order_ extends BaseModel {
   private Integer id;
 
   @JsonProperty("orderNumber")
-
   @Column(nullable = false, unique = true)
   private String orderNumber;
 
   @JsonProperty("orderDate")
-
   @Column(nullable = false, unique = false)
   private LocalDate orderDate;
 
@@ -46,8 +48,12 @@ public class Order_ extends BaseModel {
   @JoinColumn(name = "employee_id")
   private Employee employee = null;
 
-  @JsonProperty("client")
+  @JsonProperty("orderedArticles")
+  @OneToMany(orphanRemoval=true)
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private List<OrderedArticle> orderedArticles = null;
 
+  @JsonProperty("client")
   @ManyToOne
   @JoinColumn(name = "client_id")
   private Client client;
@@ -62,12 +68,10 @@ public class Order_ extends BaseModel {
   private BigDecimal advance = null;
 
   @JsonProperty("vat")
-
   @Column(nullable = false, unique = false)
   private Float vat;
 
   @JsonProperty("state")
-
   @Column(nullable = false, unique = false)
   private String state;
 
@@ -224,6 +228,35 @@ public class Order_ extends BaseModel {
 
   public void setEmployee(Employee employee) {
     this.employee = employee;
+  }
+
+
+  public Order_ orderedArticles(List<OrderedArticle> orderedArticles) {
+    this.orderedArticles = orderedArticles;
+    return this;
+  }
+
+  public Order_ addorderedArticlesItem(OrderedArticle orderedArticlesItem) {
+    if (this.orderedArticles == null) {
+      this.orderedArticles = new ArrayList<OrderedArticle>();
+    }
+    this.orderedArticles.add(orderedArticlesItem);
+    return this;
+  }
+
+  /**
+   * Get orderedArticles
+   * @return orderedArticles
+   **/
+  @ApiModelProperty(value = "orderedArticles can be created, updated and deleted with POST and PUT")
+  @Valid
+
+  public List<OrderedArticle> getorderedArticles() {
+    return orderedArticles;
+  }
+
+  public void setorderedArticles(List<OrderedArticle> orderedArticles) {
+    this.orderedArticles = orderedArticles;
   }
 
   public Order_ clientId(Client client) {
@@ -468,6 +501,7 @@ public class Order_ extends BaseModel {
             Objects.equals(this.realizationDate, order.realizationDate) &&
             Objects.equals(this.realizationDeadline, order.realizationDeadline) &&
             Objects.equals(this.employee, order.employee) &&
+            Objects.equals(this.orderedArticles, order.orderedArticles) &&
             Objects.equals(this.client, order.client) &&
             Objects.equals(this.conditions, order.conditions) &&
             Objects.equals(this.comments, order.comments) &&
@@ -483,7 +517,8 @@ public class Order_ extends BaseModel {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, orderNumber, orderDate, realizationDate, realizationDeadline, employee, client, conditions, comments, advance, vat, state, deliveryCost, deliveryAddress, isSigned, isPaid, isDone);
+    return Objects.hash(id, orderNumber, orderDate, realizationDate, realizationDeadline, employee, orderedArticles, client,
+            conditions, comments, advance, vat, state, deliveryCost, deliveryAddress, isSigned, isPaid, isDone);
   }
 
   @Override
@@ -497,6 +532,7 @@ public class Order_ extends BaseModel {
     sb.append("    realizationDate: ").append(toIndentedString(realizationDate)).append("\n");
     sb.append("    realizationDeadline: ").append(toIndentedString(realizationDeadline)).append("\n");
     sb.append("    employee: ").append(toIndentedString(employee)).append("\n");
+    sb.append("    orderedArticles: ").append(toIndentedString(orderedArticles)).append("\n");
     sb.append("    client: ").append(toIndentedString(client)).append("\n");
     sb.append("    conditions: ").append(toIndentedString(conditions)).append("\n");
     sb.append("    comments: ").append(toIndentedString(comments)).append("\n");

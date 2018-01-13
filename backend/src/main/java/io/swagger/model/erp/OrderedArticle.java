@@ -21,18 +21,11 @@ public class OrderedArticle extends BaseModel {
   @Id
   @GeneratedValue
   private Integer id;
-
   @JsonProperty("article")
 
   @ManyToOne
   @JoinColumn(name = "article_id")
   private Article article;
-
-  @JsonProperty("order")
-
-  @ManyToOne
-  @JoinColumn(name = "order_id")
-  private Order_ order;
 
   @JsonProperty("description")
   private String description = "";
@@ -53,10 +46,9 @@ public class OrderedArticle extends BaseModel {
 
   protected OrderedArticle() {}
 
-  public OrderedArticle(Integer id, Article article, Order_ order, String description, Integer amount) {
+  public OrderedArticle(Integer id, Article article, String description, Integer amount) {
     this.id = id;
     this.article = article;
-    this.order = order;
     this.description = description;
     this.amount = amount;
   }
@@ -106,26 +98,7 @@ public class OrderedArticle extends BaseModel {
     this.article = article;
   }
 
-  public OrderedArticle orderId(Order_ orderId) {
-    this.order = orderId;
-    return this;
-  }
 
-   /**
-   * Get order
-   * @return order
-  **/
-  @ApiModelProperty(required = true, value = "")
-
-
-
-  public Order_ getOrder() {
-    return order;
-  }
-
-  public void setOrder(Order_ order) {
-    this.order = order;
-  }
 
   public OrderedArticle description(String description) {
     this.description = description;
@@ -245,7 +218,6 @@ public class OrderedArticle extends BaseModel {
     OrderedArticle orderedArticle = (OrderedArticle) o;
     return Objects.equals(this.id, orderedArticle.id) &&
         Objects.equals(this.article, orderedArticle.article) &&
-        Objects.equals(this.order, orderedArticle.order) &&
         Objects.equals(this.description, orderedArticle.description) &&
         Objects.equals(this.amount, orderedArticle.amount) &&
         Objects.equals(this.unitPrice, orderedArticle.unitPrice) &&
@@ -255,7 +227,7 @@ public class OrderedArticle extends BaseModel {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, article, order, description, amount, unitPrice, netPrice, weight);
+    return Objects.hash(id, article, description, amount, unitPrice, netPrice, weight);
   }
 
   @Override
@@ -265,7 +237,6 @@ public class OrderedArticle extends BaseModel {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    article: ").append(toIndentedString(article)).append("\n");
-    sb.append("    order: ").append(toIndentedString(order)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
     sb.append("    unitPrice: ").append(toIndentedString(unitPrice)).append("\n");

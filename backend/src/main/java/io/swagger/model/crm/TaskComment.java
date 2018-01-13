@@ -22,25 +22,16 @@ public class TaskComment extends BaseModel {
   @GeneratedValue
   private Integer id;
 
-  @JsonProperty("task")
-
-  @ManyToOne
-  @JoinColumn(name = "task_id")
-  private Task task;
-
   @JsonProperty("content")
-
   @Column(nullable = false, unique = false)
   private String content;
 
   @JsonProperty("employee")
-
   @ManyToOne
   @JoinColumn(name = "employee_id")
   private Employee employee;
 
   @JsonProperty("time")
-
   @Column(nullable = false, unique = false)
   private LocalDate time;
 
@@ -48,7 +39,6 @@ public class TaskComment extends BaseModel {
 
   public TaskComment(Integer id, Task task, String content, Employee employee, LocalDate time) {
     this.id = id;
-    this.task = task;
     this.content = content;
     this.employee = employee;
     this.time = time;
@@ -75,26 +65,6 @@ public class TaskComment extends BaseModel {
     this.id = id;
   }
 
-  public TaskComment task(Task task) {
-    this.task = task;
-    return this;
-  }
-
-   /**
-   * Get task
-   * @return task
-  **/
-  @ApiModelProperty(required = true, value = "")
-
-
-
-  public Task getTask() {
-    return task;
-  }
-
-  public void setTask(Task task) {
-    this.task = task;
-  }
 
   public TaskComment content(String content) {
     this.content = content;
@@ -171,7 +141,6 @@ public class TaskComment extends BaseModel {
     }
     TaskComment taskComment = (TaskComment) o;
     return Objects.equals(this.id, taskComment.id) &&
-        Objects.equals(this.task, taskComment.task) &&
         Objects.equals(this.content, taskComment.content) &&
         Objects.equals(this.employee, taskComment.employee) &&
         Objects.equals(this.time, taskComment.time);
@@ -179,7 +148,7 @@ public class TaskComment extends BaseModel {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, task, content, employee, time);
+    return Objects.hash(id, content, employee, time);
   }
 
   @Override
@@ -188,7 +157,6 @@ public class TaskComment extends BaseModel {
     sb.append("class TaskComment {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    task: ").append(toIndentedString(task)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    employee: ").append(toIndentedString(employee)).append("\n");
     sb.append("    time: ").append(toIndentedString(time)).append("\n");

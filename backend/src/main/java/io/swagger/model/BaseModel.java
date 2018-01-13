@@ -114,6 +114,9 @@ public abstract class BaseModel {
         if(dependencyFromModel == null)
             throw new java.lang.Error(dependencySimpleName + " is null");
 
+        if(dependencyFromModel.getId() == null)
+            throw new java.lang.Error(dependencySimpleName + " id is null");
+
         D dependencyFound = (D) repository.findOne(dependencyFromModel.getId());
         if(dependencyFound == null)
             throw new java.lang.Error(dependencySimpleName + " not found");

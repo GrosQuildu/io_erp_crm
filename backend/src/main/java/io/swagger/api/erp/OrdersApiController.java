@@ -1,17 +1,12 @@
 package io.swagger.api.erp;
 
-import java.math.BigDecimal;
-
-import io.swagger.ModelHelper;
+import io.swagger.annotations.ApiParam;
 import io.swagger.model.BaseModel;
 import io.swagger.model.common.Client;
 import io.swagger.model.common.ClientRepository;
 import io.swagger.model.common.Employee;
 import io.swagger.model.common.EmployeeRepository;
 import io.swagger.model.erp.*;
-
-import io.swagger.annotations.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
-
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.List;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-11-15T00:41:28.115Z")
 
 @Controller
@@ -33,6 +28,7 @@ public class OrdersApiController implements OrdersApi {
      * Depends on:
         * employee (may be null)
         * client (not null)
+        * orderedArticles (may be null, list)
      */
     @Autowired
     OrderRepository orderRepository;
@@ -56,7 +52,7 @@ public class OrdersApiController implements OrdersApi {
     public ResponseEntity<Void> deleteOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId) {
         Order_ order = BaseModel.getModelHelper(orderRepository, orderId);
         BaseModel.dependent(proformaRepository, order);
-        orderedArticleRepository.delete(orderedArticleRepository.findAllByOrderId(order.getId()));
+        orderedArticleRepository.delete(order.getorderedArticles());
         orderRepository.delete(orderId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
@@ -71,8 +67,7 @@ public class OrdersApiController implements OrdersApi {
 
         BigDecimal weightSum = new BigDecimal(0);
         Float weight = null;
-        for (OrderedArticle orderedArticle :
-                orderedArticleRepository.findAllByOrderId(order.getId())) {
+        for (OrderedArticle orderedArticle : order.getorderedArticles()) {
             weight = orderedArticle.getWeight();
             if(weight == null) {
                 weight = orderedArticle.getArticle().getWeight() * orderedArticle.getAmount();
@@ -89,8 +84,7 @@ public class OrdersApiController implements OrdersApi {
 
         BigDecimal netPriceSum = new BigDecimal(0);
         BigDecimal netPrice = null;
-        for (OrderedArticle orderedArticle :
-                orderedArticleRepository.findAllByOrderId(order.getId())) {
+        for (OrderedArticle orderedArticle : order.getorderedArticles()) {
             netPrice = orderedArticle.getNetPrice();
             if(netPrice == null) {
                 netPrice = orderedArticle.getArticle().getUnitPrice().multiply(new BigDecimal(orderedArticle.getAmount()));

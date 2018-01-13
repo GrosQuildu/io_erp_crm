@@ -55,7 +55,7 @@ public class TaskStatusesApiController implements TaskStatusesApi {
 
     public ResponseEntity<Void> updateTaskStatus(@ApiParam(value = "",required=true ) @PathVariable("taskStatusId") Integer taskStatusId,
         @ApiParam(value = "TaskStatus to create"  )  @Valid @RequestBody TaskStatus taskStatus) {
-        if(taskStatus.getId() != null && taskStatusId != taskStatus.getId())
+        if(taskStatus.getId() == null || taskStatusId != taskStatus.getId())
             throw new Error("Wrong id");
         taskStatus = BaseModel.combineWithOld(taskStatusRepository, taskStatus);
         taskStatus = taskStatusRepository.save(taskStatus);

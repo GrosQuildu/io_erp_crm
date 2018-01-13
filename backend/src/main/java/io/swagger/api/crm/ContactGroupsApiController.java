@@ -30,7 +30,7 @@ public class ContactGroupsApiController implements ContactGroupsApi {
     @Autowired
     ContactGroupRepository contactGroupRepository;
     @Autowired
-    ContactRepository clientRepository;
+    ContactRepository contactRepository;
 
     public ResponseEntity<Integer> createContactGroup(@ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactGroup) {
         contactGroup = contactGroupRepository.save(contactGroup);
@@ -38,14 +38,14 @@ public class ContactGroupsApiController implements ContactGroupsApi {
     }
 
     public ResponseEntity<Void> deleteContactGroup(@ApiParam(value = "",required=true ) @PathVariable("contactGroupId") Integer contactGroupId) {
-        ContactGroup contactGroup = BaseModel.getModelHelper(clientRepository, contactGroupId);
-        BaseModel.dependent(clientRepository, contactGroup);
+        ContactGroup contactGroup = BaseModel.getModelHelper(contactRepository, contactGroupId);
+        BaseModel.dependent(contactRepository, contactGroup);
         contactGroupRepository.delete(contactGroupId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<ContactGroup> getContactGroup(@ApiParam(value = "",required=true ) @PathVariable("contactGroupId") Integer contactGroupId) {
-        ContactGroup contactGroup = BaseModel.getModelHelper(clientRepository, contactGroupId);
+        ContactGroup contactGroup = BaseModel.getModelHelper(contactRepository, contactGroupId);
         return new ResponseEntity<ContactGroup>(contactGroup, HttpStatus.OK);
     }
 

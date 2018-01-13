@@ -37,14 +37,14 @@ public class TaskStatusesApiController implements TaskStatusesApi {
     }
 
     public ResponseEntity<Void> deleteTaskStatus(@ApiParam(value = "",required=true ) @PathVariable("taskStatusId") Integer taskStatusId) {
-        TaskStatus taskStatus = BaseModel.getModelHelper(taskRepository, taskStatusId);
+        TaskStatus taskStatus = BaseModel.getModelHelper(taskStatusRepository, taskStatusId);
         BaseModel.dependent(taskRepository, taskStatus);
         taskStatusRepository.delete(taskStatusId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<TaskStatus> getTaskStatus(@ApiParam(value = "",required=true ) @PathVariable("taskStatusId") Integer taskStatusId) {
-        TaskStatus taskStatus = BaseModel.getModelHelper(taskRepository, taskStatusId);
+        TaskStatus taskStatus = BaseModel.getModelHelper(taskStatusRepository, taskStatusId);
         return new ResponseEntity<TaskStatus>(taskStatus, HttpStatus.OK);
     }
 

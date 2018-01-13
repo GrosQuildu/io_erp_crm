@@ -34,7 +34,7 @@ public interface TaskCommentsApi {
             consumes = { "application/json" },
             method = RequestMethod.POST)
     ResponseEntity<Integer> createTaskComments(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId,
-                                               @ApiParam(value = "TaskComment to create"  )  @RequestBody TaskComment order);
+                                               @ApiParam(value = "TaskComment to create"  )  @Valid @RequestBody TaskComment order);
 
     @ApiOperation(value = "Delete TaskComment", notes = "", response = Void.class, authorizations = {
             @Authorization(value = "Authorization")
@@ -94,6 +94,6 @@ public interface TaskCommentsApi {
             method = RequestMethod.PUT)
     ResponseEntity<Void> updateTaskComment(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId,
                                            @ApiParam(value = "",required=true ) @PathVariable("TaskCommentId") Integer taskCommentId,
-                                           @ApiParam(value = "TaskComment to update"  )  @RequestBody TaskComment taskComment);
+                                           @ApiParam(value = "TaskComment to update"  )  @Valid @RequestBody TaskComment taskComment);
 
 }

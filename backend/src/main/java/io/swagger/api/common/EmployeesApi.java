@@ -37,7 +37,7 @@ public interface EmployeesApi {
         consumes = { "application/json" },
         method = RequestMethod.PUT)
     ResponseEntity<Void> changePassword(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,
-                                        @ApiParam(value = ""  )  @RequestBody ChangePassword changePassword);
+                                        @ApiParam(value = ""  )  @Valid @RequestBody ChangePassword changePassword);
 
 
     @ApiOperation(value = "Create new employee (admin only)", notes = "", response = Integer.class, authorizations = {
@@ -53,7 +53,7 @@ public interface EmployeesApi {
         consumes = { "application/json" },
         method = RequestMethod.POST)
     @PreAuthorize("principal.authorities.contains(ADMIN)")
-    ResponseEntity<Integer> createEmployee(@ApiParam(value = "Employee to create"  )  @RequestBody Employee employee);
+    ResponseEntity<Integer> createEmployee(@ApiParam(value = "Employee to create"  )  @Valid @RequestBody Employee employee);
 
 
     @ApiOperation(value = "Delete employee (admin only)", notes = "", response = Void.class, authorizations = {
@@ -114,6 +114,6 @@ public interface EmployeesApi {
         consumes = { "application/json" },
         method = RequestMethod.PUT)
     ResponseEntity<Void> updateEmployee(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,
-                                        @ApiParam(value = "Employee to create"  )  @RequestBody Employee employee);
+                                        @ApiParam(value = "Employee to create"  )  @Valid @RequestBody Employee employee);
 
 }

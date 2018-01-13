@@ -32,7 +32,7 @@ public class ProformasApiController implements ProformasApi {
     OrderRepository orderRepository;
 
 
-    public ResponseEntity<Integer> createProforma(@ApiParam(value = "Proforma to create"  )  @RequestBody Proforma proforma) {
+    public ResponseEntity<Integer> createProforma(@ApiParam(value = "Proforma to create"  )  @Valid @RequestBody Proforma proforma) {
         proforma = BaseModel.dependsOn(Order_.class, orderRepository, proforma);
         proforma = proformaRepository.save(proforma);
         return new ResponseEntity<Integer>(HttpStatus.OK);
@@ -55,7 +55,7 @@ public class ProformasApiController implements ProformasApi {
     }
 
     public ResponseEntity<Void> updateProforma(@ApiParam(value = "",required=true ) @PathVariable("proformaId") Integer proformaId,
-        @ApiParam(value = "Proforma to create"  )  @RequestBody Proforma proforma) {
+        @ApiParam(value = "Proforma to create"  )  @Valid @RequestBody Proforma proforma) {
         if(proforma.getId() != null && proformaId != proforma.getId())
             throw new Error("Wrong id");
         proforma = BaseModel.combineWithOld(proformaRepository, proforma);

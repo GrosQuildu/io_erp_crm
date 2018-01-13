@@ -43,7 +43,7 @@ public class TaskNotesApiController implements TaskNotesApi {
     }
 
     public ResponseEntity<Integer> createTaskNotes(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId,
-                                                   @ApiParam(value = "TaskNote to create"  )  @RequestBody TaskNote taskNote) {
+                                                   @ApiParam(value = "TaskNote to create"  )  @Valid @RequestBody TaskNote taskNote) {
         checkTask(taskId, taskNote);
         taskNote = BaseModel.dependsOn(Task.class, taskRepository, taskNote);
         taskNote = taskNoteRepository.save(taskNote);
@@ -73,7 +73,7 @@ public class TaskNotesApiController implements TaskNotesApi {
 
     public ResponseEntity<Void> updateTaskNote(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId,
                                                @ApiParam(value = "",required=true ) @PathVariable("TaskNoteId") Integer taskNoteId,
-                                               @ApiParam(value = "TaskNote to update"  )  @RequestBody TaskNote taskNote) {
+                                               @ApiParam(value = "TaskNote to update"  )  @Valid @RequestBody TaskNote taskNote) {
         if(taskNote.getId() != null && taskNoteId != taskNote.getId())
             throw new Error("Wrong id");
 

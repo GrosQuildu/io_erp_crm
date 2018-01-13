@@ -37,7 +37,7 @@ public class ClientsApiController implements ClientsApi {
     @Autowired
     OrderRepository orderRepository;
 
-    public ResponseEntity<Integer> createClient(@ApiParam(value = "Client to create"  )  @RequestBody Client client) {
+    public ResponseEntity<Integer> createClient(@ApiParam(value = "Client to create"  )  @Valid @RequestBody Client client) {
         client = BaseModel.dependsOn(ClientType.class, clientTypeRepository, client);
         client = clientRepository.save(client);
         return new ResponseEntity<Integer>(client.getId(), HttpStatus.OK);
@@ -61,7 +61,7 @@ public class ClientsApiController implements ClientsApi {
     }
 
     public ResponseEntity<Void> updateClient(@ApiParam(value = "",required=true ) @PathVariable("clientId") Integer clientId,
-        @ApiParam(value = "Client to update"  )  @RequestBody Client client) {
+        @ApiParam(value = "Client to update"  )  @Valid @RequestBody Client client) {
         if(client.getId() != null && clientId != client.getId())
             throw new Error("Wrong id");
         client = BaseModel.combineWithOld(clientRepository, client);

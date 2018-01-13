@@ -31,7 +31,7 @@ public class DeliveryCostsApiController implements DeliveryCostsApi {
     @Autowired
     DeliveryCostRepository deliveryCostRepository;
 
-    public ResponseEntity<Integer> createDeliveryCost(@ApiParam(value = "DeliveryCost to create"  )  @RequestBody DeliveryCost deliveryCost) {
+    public ResponseEntity<Integer> createDeliveryCost(@ApiParam(value = "DeliveryCost to create"  )  @Valid @RequestBody DeliveryCost deliveryCost) {
         deliveryCost = deliveryCostRepository.save(deliveryCost);
         return new ResponseEntity<Integer>(deliveryCost.getId(), HttpStatus.OK);
     }
@@ -53,7 +53,7 @@ public class DeliveryCostsApiController implements DeliveryCostsApi {
     }
 
     public ResponseEntity<Void> updateDeliveryCost(@ApiParam(value = "",required=true ) @PathVariable("deliveryCostId") Integer deliveryCostId,
-        @ApiParam(value = "DeliveryCost to create"  )  @RequestBody DeliveryCost deliveryCost) {
+        @ApiParam(value = "DeliveryCost to create"  )  @Valid @RequestBody DeliveryCost deliveryCost) {
         if(deliveryCost.getId() != null && deliveryCostId != deliveryCost.getId())
             throw new Error("Wrong id");
         deliveryCost = BaseModel.combineWithOld(deliveryCostRepository, deliveryCost);

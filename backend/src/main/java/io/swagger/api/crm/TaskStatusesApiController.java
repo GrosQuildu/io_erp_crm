@@ -31,20 +31,20 @@ public class TaskStatusesApiController implements TaskStatusesApi {
     @Autowired
     TaskRepository taskRepository;
 
-    public ResponseEntity<Integer> createTaskStatus(@ApiParam(value = "TaskStatus to create"  )  @RequestBody TaskStatus taskStatus) {
+    public ResponseEntity<Integer> createTaskStatus(@ApiParam(value = "TaskStatus to create"  )  @Valid @RequestBody TaskStatus taskStatus) {
         taskStatus = taskStatusRepository.save(taskStatus);
         return new ResponseEntity<Integer>(taskStatus.getId(), HttpStatus.OK);
     }
 
     public ResponseEntity<Void> deleteTaskStatus(@ApiParam(value = "",required=true ) @PathVariable("taskStatusId") Integer taskStatusId) {
-        TaskStatus taskStatus = BaseModel.getModelHelper(taskStatusRepository, taskStatusId);
+        TaskStatus taskStatus = BaseModel.getModelHelper(taskRepository, taskStatusId);
         BaseModel.dependent(taskRepository, taskStatus);
         taskStatusRepository.delete(taskStatusId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<TaskStatus> getTaskStatus(@ApiParam(value = "",required=true ) @PathVariable("taskStatusId") Integer taskStatusId) {
-        TaskStatus taskStatus = BaseModel.getModelHelper(taskStatusRepository, taskStatusId);
+        TaskStatus taskStatus = BaseModel.getModelHelper(taskRepository, taskStatusId);
         return new ResponseEntity<TaskStatus>(taskStatus, HttpStatus.OK);
     }
 
@@ -54,7 +54,7 @@ public class TaskStatusesApiController implements TaskStatusesApi {
     }
 
     public ResponseEntity<Void> updateTaskStatus(@ApiParam(value = "",required=true ) @PathVariable("taskStatusId") Integer taskStatusId,
-        @ApiParam(value = "TaskStatus to create"  )  @RequestBody TaskStatus taskStatus) {
+        @ApiParam(value = "TaskStatus to create"  )  @Valid @RequestBody TaskStatus taskStatus) {
         if(taskStatus.getId() != null && taskStatusId != taskStatus.getId())
             throw new Error("Wrong id");
         taskStatus = BaseModel.combineWithOld(taskStatusRepository, taskStatus);

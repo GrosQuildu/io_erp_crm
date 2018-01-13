@@ -36,7 +36,7 @@ public interface OrdersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createOrder(@ApiParam(value = "Order_ to create"  )  @RequestBody Order_ order);
+    ResponseEntity<Integer> createOrder(@ApiParam(value = "Order_ to create"  )  @Valid @RequestBody Order_ order);
 
 
     @ApiOperation(value = "Delete order", notes = "", response = Void.class, authorizations = {
@@ -127,7 +127,7 @@ public interface OrdersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,@ApiParam(value = "Order_ to create"  )  @RequestBody Order_ order);
+    ResponseEntity<Void> updateOrder(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,@ApiParam(value = "Order_ to create"  )  @Valid @RequestBody Order_ order);
 
 
 }

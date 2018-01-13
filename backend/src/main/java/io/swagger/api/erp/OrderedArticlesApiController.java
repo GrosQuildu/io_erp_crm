@@ -46,7 +46,7 @@ public class OrderedArticlesApiController implements OrderedArticlesApi {
     }
 
     public ResponseEntity<Integer> createOrderedArticle(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,
-                                                        @ApiParam(value = "OrderedArticle to create"  )  @RequestBody OrderedArticle orderedArticle) {
+                                                        @ApiParam(value = "OrderedArticle to create"  )  @Valid @RequestBody OrderedArticle orderedArticle) {
         checkOrder(orderId, orderedArticle);
         orderedArticle = BaseModel.dependsOn(Order.class, orderRepository, orderedArticle);
         orderedArticle = BaseModel.dependsOn(Article.class, articleRepository, orderedArticle);
@@ -103,7 +103,7 @@ public class OrderedArticlesApiController implements OrderedArticlesApi {
 
     public ResponseEntity<Void> updateOrderedArticle(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,
                                                      @ApiParam(value = "",required=true ) @PathVariable("OrderedArticleId") Integer orderedArticleId,
-                                                     @ApiParam(value = "OrderedArticle to create"  )  @RequestBody OrderedArticle orderedArticle) {
+                                                     @ApiParam(value = "OrderedArticle to create"  )  @Valid @RequestBody OrderedArticle orderedArticle) {
         if(orderedArticle.getId() != null && orderedArticleId != orderedArticle.getId())
             throw new Error("Wrong id");
 

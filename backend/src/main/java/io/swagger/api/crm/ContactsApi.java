@@ -34,7 +34,7 @@ public interface ContactsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createContact(@ApiParam(value = "Contact to create"  )  @RequestBody Contact contact);
+    ResponseEntity<Integer> createContact(@ApiParam(value = "Contact to create"  )  @Valid @RequestBody Contact contact);
 
 
     @ApiOperation(value = "Delete contact", notes = "", response = Void.class, authorizations = {
@@ -94,6 +94,6 @@ public interface ContactsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateContact(@ApiParam(value = "",required=true ) @PathVariable("contactId") Integer contactId,@ApiParam(value = "Contact to create"  )  @RequestBody Contact contact);
+    ResponseEntity<Void> updateContact(@ApiParam(value = "",required=true ) @PathVariable("contactId") Integer contactId,@ApiParam(value = "Contact to create"  )  @Valid @RequestBody Contact contact);
 
 }

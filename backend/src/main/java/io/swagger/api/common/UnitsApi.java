@@ -34,7 +34,7 @@ public interface UnitsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createUnit(@ApiParam(value = "Unit to create"  )  @RequestBody Unit unit);
+    ResponseEntity<Integer> createUnit(@ApiParam(value = "Unit to create"  )  @Valid @RequestBody Unit unit);
 
 
     @ApiOperation(value = "Delete unit", notes = "", response = Void.class, authorizations = {
@@ -94,6 +94,6 @@ public interface UnitsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateUnit(@ApiParam(value = "",required=true ) @PathVariable("unitId") Integer unitId,@ApiParam(value = "Unit to update"  )  @RequestBody Unit unit);
+    ResponseEntity<Void> updateUnit(@ApiParam(value = "",required=true ) @PathVariable("unitId") Integer unitId,@ApiParam(value = "Unit to update"  )  @Valid @RequestBody Unit unit);
 
 }

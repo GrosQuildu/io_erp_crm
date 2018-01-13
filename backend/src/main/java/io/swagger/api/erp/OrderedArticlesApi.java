@@ -37,7 +37,7 @@ public interface OrderedArticlesApi {
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.POST)
-    ResponseEntity<Integer> createOrderedArticle(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,@ApiParam(value = "OrderedArticle to create"  )  @RequestBody OrderedArticle order);
+    ResponseEntity<Integer> createOrderedArticle(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,@ApiParam(value = "OrderedArticle to create"  )  @Valid @RequestBody OrderedArticle order);
 
 
     @ApiOperation(value = "Delete OrderedArticle", notes = "", response = Void.class, authorizations = {
@@ -127,6 +127,6 @@ public interface OrderedArticlesApi {
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.PUT)
-    ResponseEntity<Void> updateOrderedArticle(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,@ApiParam(value = "",required=true ) @PathVariable("OrderedArticleId") Integer orderedArticleId,@ApiParam(value = "OrderedArticle to create"  )  @RequestBody OrderedArticle orderedArticle);
+    ResponseEntity<Void> updateOrderedArticle(@ApiParam(value = "",required=true ) @PathVariable("orderId") Integer orderId,@ApiParam(value = "",required=true ) @PathVariable("OrderedArticleId") Integer orderedArticleId,@ApiParam(value = "OrderedArticle to create"  )  @Valid @RequestBody OrderedArticle orderedArticle);
 
 }

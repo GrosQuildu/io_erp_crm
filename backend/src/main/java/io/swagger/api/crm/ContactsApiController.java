@@ -43,7 +43,7 @@ public class ContactsApiController implements ContactsApi {
     @Autowired
     ClientRepository clientRepository;
 
-    public ResponseEntity<Integer> createContact(@ApiParam(value = "Contact to create"  )  @RequestBody Contact contact) {
+    public ResponseEntity<Integer> createContact(@ApiParam(value = "Contact to create"  )  @Valid @RequestBody Contact contact) {
         contact = BaseModel.dependsOn(ContactGroup.class, contactGroupRepository, contact);
         contact = BaseModel.dependsOn(Employee.class, contactGroupRepository, contact);
         if(contact.getClient() != null)
@@ -72,7 +72,7 @@ public class ContactsApiController implements ContactsApi {
     }
 
     public ResponseEntity<Void> updateContact(@ApiParam(value = "",required=true ) @PathVariable("contactId") Integer contactId,
-        @ApiParam(value = "Contact to create"  )  @RequestBody Contact contact) {
+        @ApiParam(value = "Contact to create"  )  @Valid @RequestBody Contact contact) {
         if(contact.getId() != null && contactId != contact.getId())
             throw new Error("Wrong id");
 

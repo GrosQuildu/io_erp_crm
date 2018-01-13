@@ -32,7 +32,7 @@ public class ContactGroupsApiController implements ContactGroupsApi {
     @Autowired
     ContactRepository clientRepository;
 
-    public ResponseEntity<Integer> createContactGroup(@ApiParam(value = "ContactGroup to create"  )  @RequestBody ContactGroup contactGroup) {
+    public ResponseEntity<Integer> createContactGroup(@ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactGroup) {
         contactGroup = contactGroupRepository.save(contactGroup);
         return new ResponseEntity<Integer>(contactGroup.getId(), HttpStatus.OK);
     }
@@ -55,7 +55,7 @@ public class ContactGroupsApiController implements ContactGroupsApi {
     }
 
     public ResponseEntity<Void> updateContactGroup(@ApiParam(value = "",required=true ) @PathVariable("contactGroupId") Integer contactGroupId,
-        @ApiParam(value = "ContactGroup to create"  )  @RequestBody ContactGroup contactGroup) {
+        @ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactGroup) {
         if(contactGroup.getId() != null && contactGroupId != contactGroup.getId())
             throw new Error("Wrong id");
         contactGroup = BaseModel.combineWithOld(contactGroupRepository, contactGroup);

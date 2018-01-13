@@ -40,7 +40,7 @@ public class EmployeesApiController implements EmployeesApi {
     EmployeeService userService;
 
     public ResponseEntity<Void> changePassword(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,
-        @ApiParam(value = ""  )  @RequestBody ChangePassword changePassword) {
+        @ApiParam(value = ""  )  @Valid @RequestBody ChangePassword changePassword) {
         Employee currentEmployee = userService.getCurrentUser();
         Employee employee = employeeRepository.findById(employeeId);
 
@@ -57,7 +57,7 @@ public class EmployeesApiController implements EmployeesApi {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    public ResponseEntity<Integer> createEmployee(@ApiParam(value = "Employee to create")  @RequestBody Employee employee) {
+    public ResponseEntity<Integer> createEmployee(@ApiParam(value = "Employee to create")  @Valid @RequestBody Employee employee) {
         Employee currentEmployee = userService.getCurrentUser();
         if(currentEmployee.getRole() != Employee.Role.ADMIN)
             throw new Error("Only admin can create employees");
@@ -90,7 +90,7 @@ public class EmployeesApiController implements EmployeesApi {
     }
 
     public ResponseEntity<Void> updateEmployee(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,
-        @ApiParam(value = "Employee to update"  )  @RequestBody Employee employee) {
+        @ApiParam(value = "Employee to update"  )  @Valid @RequestBody Employee employee) {
         if(employee.getId() != null && employeeId != employee.getId())
             throw new Error("Wrong id");
 

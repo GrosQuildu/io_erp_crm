@@ -39,7 +39,7 @@ public class ArticlesApiController implements ArticlesApi {
     @Autowired
     OrderedArticleRepository orderedArticleRepository;
 
-    public ResponseEntity<Integer> createArticle(@ApiParam(value = "Article to create"  )  @Valid @RequestBody Article article) {
+    public ResponseEntity<Integer> createArticle(@ApiParam(value = "Article to create"  )  @RequestBody Article article) {
         article = BaseModel.dependsOn(Unit.class, unitRepository, article);
         article = articleRepository.save(article);
         return new ResponseEntity<Integer>(article.getId(), HttpStatus.OK);
@@ -63,7 +63,7 @@ public class ArticlesApiController implements ArticlesApi {
     }
 
     public ResponseEntity<Void> updateArticle(@ApiParam(value = "",required=true ) @PathVariable("articleId") Integer articleId,
-        @ApiParam(value = "Article to create"  )  @Valid @RequestBody Article article) {
+        @ApiParam(value = "Article to create"  )  @RequestBody Article article) {
         if(article.getId() != null && articleId != article.getId())
             throw new Error("Wrong id");
         article = BaseModel.combineWithOld(articleRepository, article);

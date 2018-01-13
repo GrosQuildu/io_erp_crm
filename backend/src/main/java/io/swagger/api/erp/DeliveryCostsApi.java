@@ -34,7 +34,7 @@ public interface DeliveryCostsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createDeliveryCost(@ApiParam(value = "DeliveryCost to create"  )  @Valid @RequestBody DeliveryCost deliveryCost);
+    ResponseEntity<Integer> createDeliveryCost(@ApiParam(value = "DeliveryCost to create"  )  @RequestBody DeliveryCost deliveryCost);
 
 
     @ApiOperation(value = "Delete deliveryCost", notes = "", response = Void.class, authorizations = {
@@ -94,6 +94,6 @@ public interface DeliveryCostsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateDeliveryCost(@ApiParam(value = "",required=true ) @PathVariable("deliveryCostId") Integer deliveryCostId,@ApiParam(value = "DeliveryCost to create"  )  @Valid @RequestBody DeliveryCost deliveryCost);
+    ResponseEntity<Void> updateDeliveryCost(@ApiParam(value = "",required=true ) @PathVariable("deliveryCostId") Integer deliveryCostId,@ApiParam(value = "DeliveryCost to create"  )  @RequestBody DeliveryCost deliveryCost);
 
 }

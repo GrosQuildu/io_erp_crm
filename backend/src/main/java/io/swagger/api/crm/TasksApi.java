@@ -37,7 +37,7 @@ public interface TasksApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createTask(@ApiParam(value = "Task to create"  )  @Valid @RequestBody Task task);
+    ResponseEntity<Integer> createTask(@ApiParam(value = "Task to create"  )  @RequestBody Task task);
 
 
     @ApiOperation(value = "Delete task", notes = "", response = Void.class, authorizations = {
@@ -97,6 +97,6 @@ public interface TasksApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateTask(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId,@ApiParam(value = "Task to update"  )  @Valid @RequestBody Task task);
+    ResponseEntity<Void> updateTask(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId,@ApiParam(value = "Task to update"  )  @RequestBody Task task);
 
 }

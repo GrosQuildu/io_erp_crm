@@ -41,7 +41,7 @@ public class MeetingsApiController implements MeetingsApi {
     @Autowired
     ContactRepository contactRepository;
 
-    public ResponseEntity<Integer> createMeeting(@ApiParam(value = "Meeting to create"  )  @Valid @RequestBody Meeting meeting) {
+    public ResponseEntity<Integer> createMeeting(@ApiParam(value = "Meeting to create"  )  @RequestBody Meeting meeting) {
         meeting = BaseModel.dependsOn(Employee.class, employeeRepository, meeting, "MainEmployee");
 
         if(meeting.getEmployees() == null)
@@ -106,7 +106,7 @@ public class MeetingsApiController implements MeetingsApi {
     }
 
     public ResponseEntity<Void> updateMeeting(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,
-        @ApiParam(value = "Meeting to update"  )  @Valid @RequestBody Meeting meeting) {
+        @ApiParam(value = "Meeting to update"  )  @RequestBody Meeting meeting) {
         if(meeting.getId() != null && meetingId != meeting.getId())
             throw new Error("Wrong id");
 

@@ -34,7 +34,7 @@ public interface ClientTypesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createClientType(@ApiParam(value = "ClientType to create"  )  @Valid @RequestBody ClientType clientType);
+    ResponseEntity<Integer> createClientType(@ApiParam(value = "ClientType to create"  )  @RequestBody ClientType clientType);
 
 
     @ApiOperation(value = "Delete clientType", notes = "", response = Void.class, authorizations = {
@@ -94,6 +94,6 @@ public interface ClientTypesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateClientType(@ApiParam(value = "",required=true ) @PathVariable("clientTypeId") Integer clientTypeId,@ApiParam(value = "ClientType to create"  )  @Valid @RequestBody ClientType clientType);
+    ResponseEntity<Void> updateClientType(@ApiParam(value = "",required=true ) @PathVariable("clientTypeId") Integer clientTypeId,@ApiParam(value = "ClientType to create"  )  @RequestBody ClientType clientType);
 
 }

@@ -33,7 +33,7 @@ public class ClientTypesApiController implements ClientTypesApi {
     @Autowired
     ClientRepository clientRepository;
 
-    public ResponseEntity<Integer> createClientType(@ApiParam(value = "ClientType to create"  )  @Valid @RequestBody ClientType clientType) {
+    public ResponseEntity<Integer> createClientType(@ApiParam(value = "ClientType to create"  )  @RequestBody ClientType clientType) {
         clientType = clientTypeRepository.save(clientType);
         return new ResponseEntity<Integer>(clientType.getId(), HttpStatus.OK);
     }
@@ -56,7 +56,7 @@ public class ClientTypesApiController implements ClientTypesApi {
     }
 
     public ResponseEntity<Void> updateClientType(@ApiParam(value = "",required=true ) @PathVariable("clientTypeId") Integer clientTypeId,
-        @ApiParam(value = "ClientType to update"  )  @Valid @RequestBody ClientType clientType) {
+        @ApiParam(value = "ClientType to update"  )  @RequestBody ClientType clientType) {
         if(clientType.getId() != null && clientTypeId != clientType.getId())
             throw new Error("Wrong id");
         clientType = BaseModel.combineWithOld(clientTypeRepository, clientType);

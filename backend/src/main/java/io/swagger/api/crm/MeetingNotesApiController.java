@@ -42,7 +42,7 @@ public class MeetingNotesApiController implements MeetingNotesApi {
     }
 
     public ResponseEntity<Integer> createMeetingNotes(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,
-                                                      @ApiParam(value = "MeetingNote to create"  )  @Valid @RequestBody MeetingNote meetingNote) {
+                                                      @ApiParam(value = "MeetingNote to create"  )  @RequestBody MeetingNote meetingNote) {
         checkMeeting(meetingId, meetingNote);
         meetingNote = BaseModel.dependsOn(Meeting.class, meetingRepository, meetingNote);
         meetingNote = meetingNoteRepository.save(meetingNote);
@@ -72,7 +72,7 @@ public class MeetingNotesApiController implements MeetingNotesApi {
 
     public ResponseEntity<Void> updateMeetingNote(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,
                                                   @ApiParam(value = "",required=true ) @PathVariable("MeetingNoteId") Integer meetingNoteId,
-                                                  @ApiParam(value = "MeetingNote to update"  )  @Valid @RequestBody MeetingNote meetingNote) {
+                                                  @ApiParam(value = "MeetingNote to update"  )  @RequestBody MeetingNote meetingNote) {
         if(meetingNote.getId() != null && meetingNoteId != meetingNote.getId())
             throw new Error("Wrong id");
 

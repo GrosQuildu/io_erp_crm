@@ -34,7 +34,7 @@ public interface ClientsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createClient(@ApiParam(value = "Client to create"  )  @Valid @RequestBody Client client);
+    ResponseEntity<Integer> createClient(@ApiParam(value = "Client to create"  )  @RequestBody Client client);
 
 
     @ApiOperation(value = "Delete client", notes = "", response = Void.class, authorizations = {
@@ -94,6 +94,6 @@ public interface ClientsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateClient(@ApiParam(value = "",required=true ) @PathVariable("clientId") Integer clientId,@ApiParam(value = "Client to create"  )  @Valid @RequestBody Client client);
+    ResponseEntity<Void> updateClient(@ApiParam(value = "",required=true ) @PathVariable("clientId") Integer clientId,@ApiParam(value = "Client to create"  )  @RequestBody Client client);
 
 }

@@ -34,7 +34,7 @@ public interface TaskStatusesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createTaskStatus(@ApiParam(value = "TaskStatus to create"  )  @Valid @RequestBody TaskStatus taskStatus);
+    ResponseEntity<Integer> createTaskStatus(@ApiParam(value = "TaskStatus to create"  )  @RequestBody TaskStatus taskStatus);
 
 
     @ApiOperation(value = "Delete taskStatus", notes = "", response = Void.class, authorizations = {
@@ -94,6 +94,6 @@ public interface TaskStatusesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateTaskStatus(@ApiParam(value = "",required=true ) @PathVariable("taskStatusId") Integer taskStatusId,@ApiParam(value = "TaskStatus to create"  )  @Valid @RequestBody TaskStatus taskStatus);
+    ResponseEntity<Void> updateTaskStatus(@ApiParam(value = "",required=true ) @PathVariable("taskStatusId") Integer taskStatusId,@ApiParam(value = "TaskStatus to create"  )  @RequestBody TaskStatus taskStatus);
 
 }

@@ -34,7 +34,7 @@ public interface ArticlesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createArticle(@ApiParam(value = "Article to create"  )  @Valid @RequestBody Article article);
+    ResponseEntity<Integer> createArticle(@ApiParam(value = "Article to create"  )  @RequestBody Article article);
 
 
     @ApiOperation(value = "Delete article", notes = "", response = Void.class, authorizations = {
@@ -94,6 +94,6 @@ public interface ArticlesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateArticle(@ApiParam(value = "",required=true ) @PathVariable("articleId") Integer articleId,@ApiParam(value = "Article to create"  )  @Valid @RequestBody Article article);
+    ResponseEntity<Void> updateArticle(@ApiParam(value = "",required=true ) @PathVariable("articleId") Integer articleId,@ApiParam(value = "Article to create"  )  @RequestBody Article article);
 
 }

@@ -40,7 +40,7 @@ public class TaskCommentsApiController implements TaskCommentsApi {
     }
     
     public ResponseEntity<Integer> createTaskComments(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId,
-                                                      @ApiParam(value = "TaskComment to create"  )  @Valid @RequestBody TaskComment taskComment) {
+                                                      @ApiParam(value = "TaskComment to create"  )  @RequestBody TaskComment taskComment) {
         checkTask(taskId, taskComment);
         taskComment = BaseModel.dependsOn(Task.class, taskRepository, taskComment);
         taskComment = taskCommentRepository.save(taskComment);
@@ -70,7 +70,7 @@ public class TaskCommentsApiController implements TaskCommentsApi {
 
     public ResponseEntity<Void> updateTaskComment(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId,
                                                   @ApiParam(value = "",required=true ) @PathVariable("TaskCommentId") Integer taskCommentId,
-                                                  @ApiParam(value = "TaskComment to update"  )  @Valid @RequestBody TaskComment taskComment) {
+                                                  @ApiParam(value = "TaskComment to update"  )  @RequestBody TaskComment taskComment) {
         if(taskComment.getId() != null && taskCommentId != taskComment.getId())
             throw new Error("Wrong id");
 

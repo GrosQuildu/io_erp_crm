@@ -34,7 +34,7 @@ public interface ProformasApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createProforma(@ApiParam(value = "Proforma to create"  )  @Valid @RequestBody Proforma proforma);
+    ResponseEntity<Integer> createProforma(@ApiParam(value = "Proforma to create"  )  @RequestBody Proforma proforma);
 
 
     @ApiOperation(value = "Delete proforma", notes = "", response = Void.class, authorizations = {
@@ -94,6 +94,6 @@ public interface ProformasApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateProforma(@ApiParam(value = "",required=true ) @PathVariable("proformaId") Integer proformaId,@ApiParam(value = "Proforma to create"  )  @Valid @RequestBody Proforma proforma);
+    ResponseEntity<Void> updateProforma(@ApiParam(value = "",required=true ) @PathVariable("proformaId") Integer proformaId,@ApiParam(value = "Proforma to create"  )  @RequestBody Proforma proforma);
 
 }

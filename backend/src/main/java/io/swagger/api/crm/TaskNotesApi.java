@@ -35,7 +35,7 @@ public interface TaskNotesApi {
             consumes = { "application/json" },
             method = RequestMethod.POST)
     ResponseEntity<Integer> createTaskNotes(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId,
-                                            @ApiParam(value = "TaskNote to create"  )  @Valid @RequestBody TaskNote order);
+                                            @ApiParam(value = "TaskNote to create"  )  @RequestBody TaskNote order);
 
     @ApiOperation(value = "Delete TaskNote", notes = "", response = Void.class, authorizations = {
             @Authorization(value = "Authorization")
@@ -96,6 +96,6 @@ public interface TaskNotesApi {
             method = RequestMethod.PUT)
     ResponseEntity<Void> updateTaskNote(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId,
                                         @ApiParam(value = "",required=true ) @PathVariable("TaskNoteId") Integer taskNoteId,
-                                        @ApiParam(value = "TaskNote to update"  )  @Valid @RequestBody TaskNote taskNote);
+                                        @ApiParam(value = "TaskNote to update"  )  @RequestBody TaskNote taskNote);
 
 }

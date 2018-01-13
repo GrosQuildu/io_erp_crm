@@ -34,7 +34,7 @@ public interface MeetingNotesApi {
             consumes = { "application/json" },
             method = RequestMethod.POST)
     ResponseEntity<Integer> createMeetingNotes(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,
-                                               @ApiParam(value = "MeetingNote to create"  )  @Valid @RequestBody MeetingNote meetingNote);
+                                               @ApiParam(value = "MeetingNote to create"  )  @RequestBody MeetingNote meetingNote);
 
     @ApiOperation(value = "Delete MeetingNote", notes = "", response = Void.class, authorizations = {
             @Authorization(value = "Authorization")
@@ -96,7 +96,7 @@ public interface MeetingNotesApi {
             method = RequestMethod.PUT)
     ResponseEntity<Void> updateMeetingNote(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,
                                            @ApiParam(value = "",required=true ) @PathVariable("MeetingNoteId") Integer meetingNoteId,
-                                           @ApiParam(value = "MeetingNote to update"  )  @Valid @RequestBody MeetingNote meetingNote);
+                                           @ApiParam(value = "MeetingNote to update"  )  @RequestBody MeetingNote meetingNote);
 
 
 }

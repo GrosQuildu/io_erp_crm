@@ -34,7 +34,7 @@ public interface ContactGroupsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Integer> createContactGroup(@ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactGroup);
+    ResponseEntity<Integer> createContactGroup(@ApiParam(value = "ContactGroup to create"  )  @RequestBody ContactGroup contactGroup);
 
 
     @ApiOperation(value = "Delete contactGroup", notes = "", response = Void.class, authorizations = {
@@ -94,6 +94,6 @@ public interface ContactGroupsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateContactGroup(@ApiParam(value = "",required=true ) @PathVariable("contactGroupId") Integer contactGroupId,@ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactGroup);
+    ResponseEntity<Void> updateContactGroup(@ApiParam(value = "",required=true ) @PathVariable("contactGroupId") Integer contactGroupId,@ApiParam(value = "ContactGroup to create"  )  @RequestBody ContactGroup contactGroup);
 
 }

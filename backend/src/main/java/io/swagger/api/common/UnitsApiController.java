@@ -34,7 +34,7 @@ public class UnitsApiController implements UnitsApi {
     ArticleRepository articlesRepository;
 
 
-    public ResponseEntity<Integer> createUnit(@ApiParam(value = "Unit to create"  )  @Valid @RequestBody Unit unit) {
+    public ResponseEntity<Integer> createUnit(@ApiParam(value = "Unit to create"  )  @RequestBody Unit unit) {
         unit = unitRepository.save(unit);
         return new ResponseEntity<Integer>(unit.getId(), HttpStatus.OK);
     }
@@ -57,7 +57,7 @@ public class UnitsApiController implements UnitsApi {
     }
 
     public ResponseEntity<Void> updateUnit(@ApiParam(value = "",required=true ) @PathVariable("unitId") Integer unitId,
-        @ApiParam(value = "Unit to update"  )  @Valid @RequestBody Unit unit) {
+        @ApiParam(value = "Unit to update"  )  @RequestBody Unit unit) {
         if(unit.getId() != null && unitId != unit.getId())
             throw new Error("Wrong id");
         unit = BaseModel.combineWithOld(unitRepository, unit);

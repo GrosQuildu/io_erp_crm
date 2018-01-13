@@ -24,8 +24,6 @@ Second, setup postgres database. Installation guides [here](https://wiki.postgre
 
 ## Build
 
-Run:
-
 ```
 mvn clean install
 
@@ -60,3 +58,20 @@ mvn -Dtest=EmployeeApiControllerTest test
 ## Documentation
 
 API is documented with swagger. After starting server you can find documentation at http://ip:port/api/swagger-ui.html
+
+
+## Authentication
+
+Access to API is restricted to users authenticated with token. To generate token send post request to http://ip:port/api/oauth/token with basic auth configured in resources/application.properties in security.oauth2 section and with following parameters: grant_type=password, username, password. For example:
+
+```
+curl -X POST "http://client_id:client_secret@localhost:8080/api/oauth/token" -H "accept: application/json" -d grant_type=password -d username="" -d password=""
+```
+
+To use the token, send requests with "Authorization: Bearer {token}" header.
+
+There are three roles for employees: admin, erp and crm. All of them have access to /api endpoint. Admin have access to all api endpoints and can change every employee's data. Employees with roles erp or crm are restricted to /api/erp/ or /api/crm/ endpoints and can change only own data.
+
+Default users credentials can be found in application.properties.
+
+Remember to change them and default basic auth credentials.

@@ -12,7 +12,13 @@ import java.util.List;
  * Created by gros on 20.11.17.
  */
 public abstract class BaseModel {
-
+    /* Hack to validate dependencies and objects updating.
+    *  First, spring can't easily handle partial object update. It sets not sent fields as null,
+    *  but we assume that they should remain unchanged.
+    *
+    *  Second, nested (related) objects validation (like: references to not existing objects,
+    *  deletion when some object have reference to current object etc) is done at sql level. It's sufficient, but
+     * additional checks at controller level seems good. */
     /**
      * Combine (merge) model (send via http) with old model from database
      * @param repository model repository

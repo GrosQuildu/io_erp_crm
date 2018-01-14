@@ -1,0 +1,2852 @@
+swagger: "2.0"
+info:
+  title: IO ERP CRM
+  description: IO ERP CRM
+  version: 1.0.0
+
+host: localhost:8080
+basePath: /api
+schemes:
+  - https
+  - http
+
+
+securityDefinitions:
+  APIKeyHeader:
+    type: apiKey
+    in: header
+    name: API-KEY
+
+
+security:
+  - APIKeyHeader: []
+
+responses:
+  NotFound:
+    description: The specified resource was not found
+    schema:
+      $ref: "#/definitions/Error"
+  ServerError:
+    description: Server error
+    schema:
+      $ref: "#/definitions/Error"
+  Unauthorized:
+    description: Unauthorized - API key is missing or invalid
+    schema:
+      $ref: "#/definitions/Error"
+
+
+
+
+# /* ---- DEFINITIONS
+#    ----
+#
+
+definitions:
+  Error:
+    type: object
+    properties:
+      message:
+        type: string
+    required:
+      - message
+
+# /* ----- COMMON START ----- */
+  Employee:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      lastName:
+        type: string
+        minLength: 5
+        maxLength: 100
+      firstName:
+        type: string
+        minLength: 5
+        maxLength: 100
+      telephone:
+        type: string
+        minLength: 5
+        maxLength: 15
+      mail:
+        type: string
+        format: email
+      password:
+        type: string
+        format: password
+        description: required on post, ignored on update, "***" on get
+      isAdmin:
+        type: boolean
+        default: false
+      scope:
+        type: string
+        enum: [erp, crm, common]
+      monthSchedule:
+        type: number
+        format: money
+        default: 0
+      visibility:
+        type: boolean
+        default: true
+    required:
+      - id
+      - lastName
+      - firstName
+      - mail
+      - scope
+      - password
+
+  ClientType:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      description:
+        type: string
+        minLength: 5
+        maxLength: 100
+    required:
+      - id
+      - description
+
+  Client:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+        minLength: 5
+        maxLength: 100
+      street:
+        type: string
+        minLength: 5
+        maxLength: 100
+      city:
+        type: string
+        minLength: 5
+        maxLength: 100
+      postCode:
+        type: string
+        format: ^\d{2}-?\d{3}$
+      nameDelivery:
+        type: string
+        minLength: 5
+        maxLength: 100
+      streetDelivery:
+        type: string
+        minLength: 5
+        maxLength: 100
+      cityDelivery:
+        type: string
+        minLength: 5
+        maxLength: 100
+      postCodeDelivery:
+        type: string
+        format: ^\d{2}-?\d{3}$
+      nip:
+        type: string
+        minLength: 10
+        maxLength: 20
+      telephone:
+        type: string
+        minLength: 5
+        maxLength: 10
+      mail:
+        type: string
+        format: email
+      contactPerson:
+        type: string
+        minLength: 5
+        maxLength: 100
+      clientTypeId:
+        type: integer
+        format: int32
+    required:
+      - id
+      - name
+      - street
+      - city
+      - postCode
+      - mail
+      - clientTypeId
+
+# /* ----- COMMON END ----- */
+
+
+# /* ----- ERP START ----- */
+  Unit:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+        maxLength: 100
+      nameShort:
+        type: string
+        maxLength: 32
+    required:
+      - id
+      - name
+      - nameShort
+
+  DeliveryCost:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      articleId:
+        type: integer
+        format: int32
+      weightFrom:
+        type: number
+        format: float
+      weightTo:
+        type: number
+        format: float
+      price:
+        type: number
+        format: money
+    required:
+      - id
+      - weightFrom
+      - weightTo
+      - price
+
+  Article:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      availability:
+        type: integer
+        format: int32
+      ordered:
+        type: integer
+        format: int32
+      unitId:
+        type: integer
+        format: int32
+      unitPrice:
+        type: number
+        format: money
+    required:
+      - id
+      - availability
+      - unitId
+      - unitPrice
+
+  Proforma:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      proformaNumber:
+        type: string
+        minLength: 5
+        maxLength: 32
+      orderId:
+        type: integer
+        format: int32
+      issueDate:
+        type: string
+        format: date
+      saleDate:
+        type: string
+        format: date
+      paymentDate:
+        type: string
+        format: date
+      paymentMethod:
+        type: string
+        maxLength: 100
+    required:
+      - id
+      - proformaNumber
+      - orderId
+      - issueDate
+      - saleDate
+      - paymentDate
+      - paymentMethod
+
+  OrderedArticle:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      articleId:
+        type: integer
+        format: int32
+      orderId:
+        type: integer
+        format: int32
+      description:
+        type: string
+      amount:
+        type: integer
+        format: int32
+      unitPrice:
+        type: number
+        format: money
+      netPrine:
+        type: number
+        format: money
+      weight:
+        type: number
+        format: float
+    required:
+      - id
+      - articleId
+      - orderId
+      - description
+      - amount
+      - unitPrice
+      - netPrine
+      - weight
+
+  Order:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      orderNumber:
+        type: string
+        maxLength: 32
+      orderDate:
+        type: string
+        format: date
+      realizationDate:
+        type: string
+        format: date
+      employeeId:
+        type: integer
+        format: int32
+      clientId:
+        type: integer
+        format: int32
+      conditions:
+        type: string
+        default: ""
+      comments:
+        type: string
+        default: ""
+      advance:
+        type: number
+        format: money
+        default: 0
+      netPrice:
+        type: number
+        format: money
+      vat:
+        type: number
+        format: float
+      weight:
+        type: number
+        format: float
+      state:
+        type: string
+        maxLength: 100
+      deliveryCost:
+        type: number
+        format: money
+      deliveryAddress:
+        type: string
+      signed:
+        type: boolean
+        default: false
+      paid:
+        type: string
+        maxLength: 100
+      deliveryAutocalculation:
+        type: boolean
+        default: true
+      isDone:
+        type: boolean
+        default: false
+    required:
+      - id
+      - orderNumber
+      - orderDate
+      - realizationDate
+      - employeeId
+      - clientId
+      - netPrice
+      - vat
+      - weight
+      - state
+      - deliveryCost
+      - deliveryAddress
+      - paid
+
+# /* ----- ERP END ----- */
+
+
+# /* ----- CRM START ----- */
+  Contact:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      clientId:
+        type: integer
+        format: int32
+      employeeId:
+        type: integer
+        format: int32
+      clientTypeId:
+        type: integer
+        format: int32
+      vip:
+        type: boolean
+        default: false
+      firstName:
+        type: string
+        minLength: 5
+        maxLength: 100
+      lastName:
+        type: string
+        minLength: 5
+        maxLength: 100
+      street:
+        type: string
+        minLength: 5
+        maxLength: 100
+      city:
+        type: string
+        minLength: 5
+        maxLength: 100
+      postCode:
+        type: string
+        minLength: 5
+        maxLength: 100
+      telephone:
+        type: string
+        minLength: 5
+        maxLength: 100
+      mail:
+        type: string
+        format: email
+    required:
+      - id
+      - clientId
+      - employeeId
+      - clientTypeId
+      - firstName
+      - lastName
+      - street
+      - city
+      - postCode
+      - mail
+
+  ContactType:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      description:
+        type: string
+        minLength: 5
+        maxLength: 100
+    required:
+      - id
+      - description
+
+  TaskStatus:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      description:
+        type: string
+        minLength: 5
+        maxLength: 100
+    required:
+      - id
+      - description
+
+  Task:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      title:
+        type: string
+        minLength: 5
+        maxLength: 100
+      taskStatusId:
+        type: integer
+        format: int32
+      employeeId:
+        type: integer
+        format: int32
+      employeeCommissionedId:
+        type: integer
+        format: int32
+      contactId:
+        type: integer
+        format: int32
+      backgroundColor:
+        type: string
+        minLength: 4
+        maxLength: 10
+      description:
+        type: string
+      isArchived:
+        type: boolean
+        default: false
+      endDate:
+        type: string
+        format: date
+    required:
+      - id
+      - title
+      - taskStatusId
+      - employeeId
+
+  TaskComment:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      taskId:
+        type: integer
+        format: int32
+      content:
+        type: string
+      employeeId:
+        type: integer
+        format: int32
+      time:
+        type: string
+        format: date
+    required:
+      - id
+      - taskId
+      - time
+
+  TaskNote:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      taskId:
+        type: integer
+        format: int32
+      content:
+        type: string
+      backgroundColor:
+        type: string
+        minLength: 4
+        maxLength: 10
+    required:
+      - id
+      - taskId
+
+  TaskContact:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      taskId:
+        type: integer
+        format: int32
+      contactId:
+        type: integer
+        format: int32
+    required:
+      - id
+      - taskId
+      - contactId
+
+  Meeting:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      meetingDate:
+        type: string
+        format: date
+      nextMeetingDate:
+        type: string
+        format: date
+      description:
+        type: string
+      purpose:
+        type: string
+      employeeId:
+        type: integer
+        format: int32
+      telephoneMeeting:
+        type: boolean
+        default: false
+    required:
+      - id
+      - meetingDate
+
+  MeetingNote:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      meetingId:
+        type: integer
+        format: int32
+      content:
+        type: string
+      backgroundColor:
+        type: string
+        minLength: 4
+        maxLength: 10
+    required:
+      - id
+      - meetingId
+
+  MeetingContact:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      meetingId:
+        type: integer
+        format: int32
+      contactId:
+        type: integer
+        format: int32
+    required:
+      - id
+      - meetingId
+      - contactId
+
+  MeetingEmployee:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      meetingId:
+        type: integer
+        format: int32
+      employeeId:
+        type: integer
+        format: int32
+    required:
+      - id
+      - meetingId
+      - employeeId
+
+# /* ----- CRM END ----- */
+
+
+
+
+# /* ---- PATHS
+#    ----
+#
+paths:
+  # /* ----- COMMON PATHS START ----- */
+  /login:
+    post:
+      tags:
+        - employees
+      operationId: login
+      summary: Get authentication token
+      description: auth
+      security: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          schema:
+            type: object
+            properties:
+              user:
+                type: string
+              password:
+                type: string
+                format: password
+            required:
+              - user
+              - password
+      responses:
+        200:
+          description: "Login successful"
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+        401:
+          description: "Not authenticated"
+
+  /employees:
+    get:
+      tags:
+        - employees
+      operationId: getEmployees
+      summary: Returns list of Employees
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Employee"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - employees
+      operationId: createEmployee
+      summary: Create a new employee
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: employee
+          description: Employee to create
+          schema:
+            $ref: "#/definitions/Employee"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /employees/{employeeId}:
+    parameters:
+      - in: path
+        name: employeeId
+        type: integer
+        required: true
+    get:
+      tags:
+        - employees
+      operationId: getEmployee
+      summary: Returns Employee
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/Employee"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - employees
+      operationId: updateEmployee
+      summary: Update existing employee
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: employee
+          description: Employee to create
+          schema:
+            $ref: "#/definitions/Employee"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - employees
+      operationId: deleteEmployee
+      summary: Delete employee
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /employees/{employeeId}/changePassword:
+    put:
+      tags:
+        - employees
+      operationId: changePassword
+      summary: Change employee's password
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: employeeId
+          type: integer
+          required: true
+        - in: body
+          name: employee
+          schema:
+            type: object
+            properties:
+              oldPassword:
+                type: string
+                format: password
+              newPassword:
+                type: string
+                format: password
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+
+  /clientTypes:
+    get:
+      tags:
+        - common - clientTypes
+      operationId: getClientTypes
+      summary: Returns list of ClientTypes
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ClientType"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - common - clientTypes
+      operationId: createClientType
+      summary: Create a new clientType
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: clientType
+          description: ClientType to create
+          schema:
+            $ref: "#/definitions/ClientType"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /clientTypes/{clientTypeId}:
+    parameters:
+      - in: path
+        name: clientTypeId
+        type: integer
+        required: true
+    get:
+      tags:
+        - common - clientTypes
+      operationId: getClientType
+      summary: Returns ClientType
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ClientType"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - common - clientTypes
+      operationId: updateClientType
+      summary: Update existing clientType
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: clientType
+          description: ClientType to create
+          schema:
+            $ref: "#/definitions/ClientType"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - common - clientTypes
+      operationId: deleteClientType
+      summary: Delete clientType
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+
+  /clients:
+    get:
+      tags:
+        - common - clients
+      operationId: getClients
+      summary: Returns list of Clients
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Client"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - common - clients
+      operationId: createClient
+      summary: Create a new client
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: client
+          description: Client to create
+          schema:
+            $ref: "#/definitions/Client"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /clients/{clientId}:
+    parameters:
+      - in: path
+        name: clientId
+        type: integer
+        required: true
+    get:
+      tags:
+        - common - clients
+      operationId: getClient
+      summary: Returns Client
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/Client"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - common - clients
+      operationId: updateClient
+      summary: Update existing client
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: client
+          description: Client to create
+          schema:
+            $ref: "#/definitions/Client"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - common - clients
+      operationId: deleteClient
+      summary: Delete client
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  # /* ----- COMMON PATHS END ----- */
+
+
+  # /* ----- ERP PATHS START ----- */
+  /units:
+    get:
+      tags:
+        - ERP - units
+      operationId: getUnits
+      summary: Returns list of units
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Unit"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+
+  /deliveryCosts:
+    get:
+      tags:
+        - ERP - deliveryCosts
+      operationId: getDeliveryCosts
+      summary: Returns list of DeliveryCosts
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/DeliveryCost"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - ERP - deliveryCosts
+      operationId: createDeliveryCost
+      summary: Create a new deliveryCost
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: deliveryCost
+          description: DeliveryCost to create
+          schema:
+            $ref: "#/definitions/DeliveryCost"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /deliveryCosts/{deliveryCostId}:
+    parameters:
+      - in: path
+        name: deliveryCostId
+        type: integer
+        required: true
+    get:
+      tags:
+        - ERP - deliveryCosts
+      operationId: getDeliveryCost
+      summary: Returns DeliveryCost
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/DeliveryCost"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - ERP - deliveryCosts
+      operationId: updateDeliveryCost
+      summary: Update existing deliveryCost
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: deliveryCost
+          description: DeliveryCost to create
+          schema:
+            $ref: "#/definitions/DeliveryCost"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - ERP - deliveryCosts
+      operationId: deleteDeliveryCost
+      summary: Delete deliveryCost
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /articles:
+    get:
+      tags:
+        - ERP - articles
+      operationId: getArticles
+      summary: Returns list of Articles
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Article"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - ERP - articles
+      operationId: createArticle
+      summary: Create a new article
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: article
+          description: Article to create
+          schema:
+            $ref: "#/definitions/Article"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /articles/{articleId}:
+    parameters:
+      - in: path
+        name: articleId
+        type: integer
+        required: true
+    get:
+      tags:
+        - ERP - articles
+      operationId: getArticle
+      summary: Returns Article
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/Article"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - ERP - articles
+      operationId: updateArticle
+      summary: Update existing article
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: article
+          description: Article to create
+          schema:
+            $ref: "#/definitions/Article"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - ERP - articles
+      operationId: deleteArticle
+      summary: Delete article
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /proformas:
+    get:
+      tags:
+        - ERP - proformas
+      operationId: getProformas
+      summary: Returns list of Proformas
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Proforma"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - ERP - proformas
+      operationId: createProforma
+      summary: Create a new proforma
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: proforma
+          description: Proforma to create
+          schema:
+            $ref: "#/definitions/Proforma"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /proformas/{proformaId}:
+    parameters:
+      - in: path
+        name: proformaId
+        type: integer
+        required: true
+    get:
+      tags:
+        - ERP - proformas
+      operationId: getProforma
+      summary: Returns Proforma
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/Proforma"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - ERP - proformas
+      operationId: updateProforma
+      summary: Update existing proforma
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: proforma
+          description: Proforma to create
+          schema:
+            $ref: "#/definitions/Proforma"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - ERP - proformas
+      operationId: deleteProforma
+      summary: Delete proforma
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /orders:
+    get:
+      tags:
+        - ERP - orders
+      operationId: getOrders
+      summary: Returns list of Orders
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Order"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - ERP - orders
+      operationId: createOrder
+      summary: Create a new order
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: order
+          description: Order to create
+          schema:
+            type: object
+            properties:
+              order:
+                $ref: "#/definitions/Order"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /orders/{orderId}:
+    parameters:
+      - in: path
+        name: orderId
+        type: integer
+        required: true
+    get:
+      tags:
+        - ERP - orders
+      operationId: getOrder
+      summary: Returns Order
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/Order"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - ERP - orders
+      operationId: updateOrder
+      summary: Update existing order
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: order
+          description: Order to create
+          schema:
+            $ref: "#/definitions/Order"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - ERP - orders
+      operationId: deleteOrder
+      summary: Delete order
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+
+  /orders/{orderId}/articles:
+    parameters:
+      - in: path
+        name: orderId
+        type: integer
+        required: true
+    get:
+      tags:
+        - ERP - orderedArticles
+      operationId: getOrderedArticles
+      summary: Returns articles belonging to given order
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/OrderedArticle"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - ERP - orderedArticles
+      operationId: createOrderedArticle
+      summary: Create a new OrderedArticle for given order
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: order
+          description: OrderedArticle to create
+          schema:
+            $ref: "#/definitions/OrderedArticle"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+
+  /orders/{orderId}/articles/{OrderedArticleId}:
+    parameters:
+      - in: path
+        name: orderId
+        type: integer
+        required: true
+      - in: path
+        name: OrderedArticleId
+        type: integer
+        required: true
+    get:
+      tags:
+        - ERP - orderedArticles
+      operationId: getOrderedArticle
+      summary: Returns article belonging to given order
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/OrderedArticle"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - ERP - orderedArticles
+      operationId: updateOrderedArticle
+      summary: Update existing OrderedArticle
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: OrderedArticle
+          description: OrderedArticle to create
+          schema:
+            $ref: "#/definitions/OrderedArticle"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - ERP - orderedArticles
+      operationId: deleteOrderedArticle
+      summary: Delete OrderedArticle
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+  # /* ----- ERP PATHS END ----- */
+
+
+
+  # /* ----- CRM PATHS START ----- */
+  /contactTypes:
+    get:
+      tags:
+        - CRM - contactTypes
+      operationId: getContactTypes
+      summary: Returns list of ContactTypes
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ContactType"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - CRM - contactTypes
+      operationId: createContactType
+      summary: Create a new contactType
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: contactType
+          description: ContactType to create
+          schema:
+            $ref: "#/definitions/ContactType"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /contactTypes/{contactTypeId}:
+    parameters:
+      - in: path
+        name: contactTypeId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - contactTypes
+      operationId: getContactType
+      summary: Returns ContactType
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ContactType"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - CRM - contactTypes
+      operationId: updateContactType
+      summary: Update existing contactType
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: contactType
+          description: ContactType to create
+          schema:
+            $ref: "#/definitions/ContactType"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - CRM - contactTypes
+      operationId: deleteContactType
+      summary: Delete contactType
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /contacts:
+    get:
+      tags:
+        - CRM - contacts
+      operationId: getContacts
+      summary: Returns list of Contacts
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Contact"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - CRM - contacts
+      operationId: createContact
+      summary: Create a new contact
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: contact
+          description: Contact to create
+          schema:
+            $ref: "#/definitions/Contact"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /contacts/{contactId}:
+    parameters:
+      - in: path
+        name: contactId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - contacts
+      operationId: getContact
+      summary: Returns Contact
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/Contact"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - CRM - contacts
+      operationId: updateContact
+      summary: Update existing contact
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: contact
+          description: Contact to create
+          schema:
+            $ref: "#/definitions/Contact"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - CRM - contacts
+      operationId: deleteContact
+      summary: Delete contact
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /taskStatuses:
+    get:
+      tags:
+        - CRM - taskStatuses
+      operationId: getTaskStatuses
+      summary: Returns list of TaskStatuses
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/TaskStatus"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - CRM - taskStatuses
+      operationId: createTaskStatuse
+      summary: Create a new taskStatuse
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: taskStatuse
+          description: TaskStatuse to create
+          schema:
+            $ref: "#/definitions/TaskStatus"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /taskStatuses/{taskStatuseId}:
+    parameters:
+      - in: path
+        name: taskStatuseId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - taskStatuses
+      operationId: getTaskStatuse
+      summary: Returns TaskStatuse
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/TaskStatus"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - CRM - taskStatuses
+      operationId: updateTaskStatuse
+      summary: Update existing taskStatuse
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: taskStatuse
+          description: TaskStatuse to create
+          schema:
+            $ref: "#/definitions/TaskStatus"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - CRM - taskStatuses
+      operationId: deleteTaskStatuse
+      summary: Delete taskStatuse
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+
+  /tasks:
+    get:
+      tags:
+        - CRM - tasks
+      operationId: getTasks
+      summary: Returns list of Tasks
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Task"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - CRM - tasks
+      operationId: createTask
+      summary: Create a new task
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: task
+          description: Task to create
+          schema:
+            type: object
+            properties:
+              task:
+                $ref: "#/definitions/Task"
+              comments:
+                type: array
+                items:
+                  $ref: "#/definitions/TaskComment"
+              notes:
+                type: array
+                items:
+                  $ref: "#/definitions/TaskNote"
+              contacts:
+                type: array
+                items:
+                  $ref: "#/definitions/TaskContact"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /tasks/{taskId}:
+    parameters:
+      - in: path
+        name: taskId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - tasks
+      operationId: getTask
+      summary: Returns Task
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/Task"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - CRM - tasks
+      operationId: updateTask
+      summary: Update existing task
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: task
+          description: Task to update
+          schema:
+            $ref: "#/definitions/Task"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - CRM - tasks
+      operationId: deleteTask
+      summary: Delete task
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /tasks/{taskId}/comments:
+    parameters:
+      - in: path
+        name: taskId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - task comments
+      operationId: getTaskComments
+      summary: Returns comments belonging to given task
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/TaskComment"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - CRM - task comments
+      operationId: createTaskComments
+      summary: Create a new TaskComment for given task
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: order
+          description: TaskComment to create
+          schema:
+            $ref: "#/definitions/TaskComment"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+
+  /tasks/{taskId}/comments/{TaskCommentId}:
+    parameters:
+      - in: path
+        name: taskId
+        type: integer
+        required: true
+      - in: path
+        name: TaskCommentId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - task comments
+      operationId: getTaskComment
+      summary: Returns comment belonging to given task
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/TaskComment"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - CRM - task comments
+      operationId: updateTaskComment
+      summary: Update existing TaskComment
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: TaskComment
+          description: TaskComment to update
+          schema:
+            $ref: "#/definitions/TaskComment"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - CRM - task comments
+      operationId: deleteTaskComment
+      summary: Delete TaskComment
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /tasks/{taskId}/notes:
+    parameters:
+      - in: path
+        name: taskId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - task notes
+      operationId: getTaskNotes
+      summary: Returns notes belonging to given task
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/TaskNote"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - CRM - task notes
+      operationId: createTaskNotes
+      summary: Create a new TaskNote for given task
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: order
+          description: TaskNote to create
+          schema:
+            $ref: "#/definitions/TaskNote"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+
+  /tasks/{taskId}/notes/{TaskNoteId}:
+    parameters:
+      - in: path
+        name: taskId
+        type: integer
+        required: true
+      - in: path
+        name: TaskNoteId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - task notes
+      operationId: getTaskNote
+      summary: Returns note belonging to given task
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/TaskNote"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - CRM - task notes
+      operationId: updateTaskNote
+      summary: Update existing TaskNote
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: TaskNote
+          description: TaskNote to update
+          schema:
+            $ref: "#/definitions/TaskNote"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - CRM - task notes
+      operationId: deleteTaskNote
+      summary: Delete TaskNote
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+
+
+  /meetings:
+    get:
+      tags:
+        - CRM - meetings
+      operationId: getMeetings
+      summary: Returns list of Meetings
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Meeting"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - CRM - meetings
+      operationId: createMeeting
+      summary: Create a new meeting
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: meeting
+          description: Meeting to create
+          schema:
+            $ref: "#/definitions/Meeting"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /meetings/{meetingId}:
+    parameters:
+      - in: path
+        name: meetingId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - meetings
+      operationId: getMeeting
+      summary: Returns Meeting
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/Meeting"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - CRM - meetings
+      operationId: updateMeeting
+      summary: Update existing meeting
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: meeting
+          description: Meeting to update
+          schema:
+            $ref: "#/definitions/Meeting"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - CRM - meetings
+      operationId: deleteMeeting
+      summary: Delete meeting
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /meetings/{meetingId}/notes:
+    parameters:
+      - in: path
+        name: meetingId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - meeting notes
+      operationId: getMeetingNotes
+      summary: Returns notes belonging to given meeting
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/MeetingNote"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - CRM - meeting notes
+      operationId: createMeetingNotes
+      summary: Create a new MeetingNote for given meeting
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: order
+          description: MeetingNote to create
+          schema:
+            $ref: "#/definitions/MeetingNote"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+
+  /meetings/{meetingId}/notes/{MeetingNoteId}:
+    parameters:
+      - in: path
+        name: meetingId
+        type: integer
+        required: true
+      - in: path
+        name: MeetingNoteId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - meeting notes
+      operationId: getMeetingNote
+      summary: Returns note belonging to given meeting
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/MeetingNote"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - CRM - meeting notes
+      operationId: updateMeetingNote
+      summary: Update existing MeetingNote
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: MeetingNote
+          description: MeetingNote to update
+          schema:
+            $ref: "#/definitions/MeetingNote"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - CRM - meeting notes
+      operationId: deleteMeetingNote
+      summary: Delete MeetingNote
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /meetings/{meetingId}/contacts:
+    parameters:
+      - in: path
+        name: meetingId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - meeting contacts
+      operationId: getMeetingContacts
+      summary: Returns contacts belonging to given meeting
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/MeetingContact"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - CRM - meeting contacts
+      operationId: createMeetingContacts
+      summary: Create a new MeetingContact for given meeting
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: order
+          description: MeetingContact to create
+          schema:
+            $ref: "#/definitions/MeetingContact"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+
+  /meetings/{meetingId}/contacts/{MeetingContactId}:
+    parameters:
+      - in: path
+        name: meetingId
+        type: integer
+        required: true
+      - in: path
+        name: MeetingContactId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - meeting contacts
+      operationId: getMeetingContact
+      summary: Returns contact belonging to given meeting
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/MeetingContact"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - CRM - meeting contacts
+      operationId: updateMeetingContact
+      summary: Update existing MeetingContact
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: MeetingContact
+          description: MeetingContact to update
+          schema:
+            $ref: "#/definitions/MeetingContact"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - CRM - meeting contacts
+      operationId: deleteMeetingContact
+      summary: Delete MeetingContact
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  /meetings/{meetingId}/employees:
+    parameters:
+      - in: path
+        name: meetingId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - meeting employees
+      operationId: getMeetingEmployees
+      summary: Returns employees belonging to given meeting
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/MeetingEmployee"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    post:
+      tags:
+        - CRM - meeting employees
+      operationId: createMeetingEmployees
+      summary: Create a new MeetingEmployee for given meeting
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: order
+          description: MeetingEmployee to create
+          schema:
+            $ref: "#/definitions/MeetingEmployee"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+
+  /meetings/{meetingId}/employees/{MeetingEmployeeId}:
+    parameters:
+      - in: path
+        name: meetingId
+        type: integer
+        required: true
+      - in: path
+        name: MeetingEmployeeId
+        type: integer
+        required: true
+    get:
+      tags:
+        - CRM - meeting employees
+      operationId: getMeetingEmployee
+      summary: Returns employee belonging to given meeting
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/MeetingEmployee"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+    put:
+      tags:
+        - CRM - meeting employees
+      operationId: updateMeetingEmployee
+      summary: Update existing MeetingEmployee
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: MeetingEmployee
+          description: MeetingEmployee to update
+          schema:
+            $ref: "#/definitions/MeetingEmployee"
+      responses:
+        200:
+          description: "Updated"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+    delete:
+      tags:
+        - CRM - meeting employees
+      operationId: deleteMeetingEmployee
+      summary: Delete MeetingEmployee
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Deleted"
+        401:
+          $ref: "#/responses/Unauthorized"
+        500:
+          $ref: "#/responses/ServerError"
+
+  # /* ----- CRM PATHS END ----- */

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" lang="en">
+    <title>SchemaCrawler Example</title>
+    <link rel="stylesheet" type="text/css" href="../sc.css">
+    <link rel="stylesheet" type="text/css" href="../../sc.css">
+  </head>
+  <body>
+    <main>
+<h1>SchemaCrawler - Diagram Example</h1>
+<h2>Description</h2>
+<p>The diagram example demonstrates the integration of SchemaCrawler with Graphviz.</p>
+<h2>How to Run</h2>
+<ol>
+<li>Make sure that java is on your PATH</li>
+</ol>
+<h3>Run With SQLite Database</h3>
+<ol>
+<li>Start a command shell in the diagram example directory</li>
+<li>Run <code>sqlite_diagram.cmd ..\..\_testdb\sc.db sc.pdf</code> (or <code>sqlite_diagram.sh ../../_testdb/sc.db sc.pdf</code> on Unix)</li>
+</ol>
+<h3>Run With HyperSQL Database</h3>
+<ol>
+<li>Start the test database server by following instructions in the <code>_testdb/README.html</code> file</li>
+<li>Start a command shell in the diagram example directory</li>
+<li>Run <code>diagram.cmd</code> (or <code>diagram.sh</code> on Unix)</li>
+</ol>
+<h2>How to Experiment</h2>
+<ol>
+<li>Try using grep options to include certain tables. For example, try using a command-line option of <code>-grepcolumns=.*\\.AUTHOR.*</code></li>
+<li>Try controlling display of foreign-key names, column ordinal numbers, and schema names by setting the following properties in the SchemaCrawler configuration file, <code>config/schemacrawler.config.properties</code>.</li>
+</ol>
+<pre><code>schemacrawler.format.show_ordinal_numbers=true        
+schemacrawler.format.hide_foreignkey_names=true
+schemacrawler.format.show_unqualified_names=true
+</code></pre>
+<ol>
+<li>Try using Graphviz command-line options by setting the following property in the SchemaCrawler configuration file, <code>config/schemacrawler.config.properties</code>.</li>
+</ol>
+<pre><code>schemacrawler.graph.graphviz_opts=-Gdpi=300
+</code></pre>
+<h2>SchemaCrawler Web Application</h2>
+<p>Take a look at the <a href="http://www.schemacrawler.com/webapp.html">SchemaCrawler Web Application</a>.</p>
+
+    </main>
+    <footer>
+      <hr/>
+      Copyright &copy; 2000-2018, Sualeh Fatehi. <br />
+      <a href="http://www.schemacrawler.com/">SchemaCrawler</a>
+    </footer>
+  </body>
+</html>

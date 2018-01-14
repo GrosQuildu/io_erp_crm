@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" lang="en">
+    <title>SchemaCrawler Example</title>
+    <link rel="stylesheet" type="text/css" href="../sc.css">
+    <link rel="stylesheet" type="text/css" href="../../sc.css">
+  </head>
+  <body>
+    <main>
+<h1>SchemaCrawler - Offline Snapshot Example</h1>
+<p>SchemaCrawler allows you to save off your database metadata into an offline snapshot, for future use. Later, you can connect to this offline snapshot as you would to a regular database.</p>
+<h2>How to Run</h2>
+<ol>
+<li>Follow the instructions in the <a href="../commandline/commandline-readme.html">commandline</a> example.</li>
+<li>To create an offline snapshot, run <code>schemacrawler.cmd -server=hsqldb -database=schemacrawler -user=sa -password= -infolevel=maximum -command=serialize -o=offline.db</code> (use <code>schemacrawler.sh</code> instead of <code>schemacrawler.cmd</code> on Unix)</li>
+<li>To use the offline snapshot, run <code>schemacrawler.cmd -server=offline -database=offline.db -infolevel=standard -command=schema</code> (use <code>schemacrawler.sh</code> instead of <code>schemacrawler.cmd</code> on Unix)</li>
+</ol>
+<h2>How to Experiment</h2>
+<ol>
+<li>Try other SchemaCrawler commands with the offline snapshot.</li>
+</ol>
+
+    </main>
+    <footer>
+      <hr/>
+      Copyright &copy; 2000-2018, Sualeh Fatehi. <br />
+      <a href="http://www.schemacrawler.com/">SchemaCrawler</a>
+    </footer>
+  </body>
+</html>

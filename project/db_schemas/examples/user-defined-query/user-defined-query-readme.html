@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" lang="en">
+    <title>SchemaCrawler Example</title>
+    <link rel="stylesheet" type="text/css" href="../sc.css">
+    <link rel="stylesheet" type="text/css" href="../../sc.css">
+  </head>
+  <body>
+    <main>
+<h1>SchemaCrawler - User Defined Queries Example</h1>
+<h2>Description</h2>
+<p>SchemaCrawler has the capability to execute any arbitrary SQL, per table. The following variables are available to aid in the construction of queries - <code>${tabletype}</code>, <code>${table}</code>, and <code>${columns}</code>. This example demonstrates how to execute arbitrary SQL, per table.</p>
+<h2>How to Run</h2>
+<ol>
+<li>Make sure that java is on your PATH</li>
+<li>Start the test database server by following instructions in the <code>_testdb/README.html</code> file</li>
+<li>Start a command shell in the user-defined-query example directory</li>
+<li>Run <code>user-defined-query.cmd</code> (or <code>user-defined-query.sh</code> on Unix)</li>
+</ol>
+<h2>How to Experiment</h2>
+<ol>
+<li>Try generating different output formats, such as HTML or JSON.</li>
+<li>Try modifying <code>config/schemacrawler.config.properties</code> with different queries.</li>
+<li>Redirect the output of SchemaCrawler into a file, by running <code>user-defined-query.cmd &gt; file.txt</code>.</li>
+<li>Try running an arbitrary query, following the instructions in the <a href="../commandline/commandline-readme.html">commandline</a> example.</li>
+</ol>
+
+    </main>
+    <footer>
+      <hr/>
+      Copyright &copy; 2000-2018, Sualeh Fatehi. <br />
+      <a href="http://www.schemacrawler.com/">SchemaCrawler</a>
+    </footer>
+  </body>
+</html>

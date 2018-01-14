@@ -2,6 +2,10 @@ package io.swagger.model.erp;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.LocalDateSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.BaseModel;
 import org.joda.time.LocalDate;
@@ -22,30 +26,31 @@ public class Proforma extends BaseModel {
   private Integer id;
 
   @JsonProperty("proformaNumber")
-
+  @Size(min=5,max=32)
   @Column(nullable = false, unique = true)
   private String proformaNumber;
 
   @JsonProperty("order")
-
   @OneToOne
   @JoinColumn(name = "order_id", unique = true)
   private Order_ order;
 
   @JsonProperty("issueDate")
-
+  @JsonDeserialize(using=LocalDateDeserializer.class)
+  @JsonSerialize(using = LocalDateSerializer.class)
   private LocalDate issueDate ;
 
   @JsonProperty("saleDate")
-
+  @JsonDeserialize(using=LocalDateDeserializer.class)
+  @JsonSerialize(using = LocalDateSerializer.class)
   private LocalDate saleDate;
 
   @JsonProperty("paymentDate")
-
+  @JsonDeserialize(using=LocalDateDeserializer.class)
+  @JsonSerialize(using = LocalDateSerializer.class)
   private LocalDate paymentDate;
 
   @JsonProperty("paymentMethod")
-
   private String paymentMethod;
 
   public Proforma id(Integer id) {
@@ -96,7 +101,7 @@ public class Proforma extends BaseModel {
   @ApiModelProperty(required = true, value = "")
 
 
- @Size(min=5,max=32)
+
   public String getProformaNumber() {
     return proformaNumber;
   }
@@ -204,7 +209,6 @@ public class Proforma extends BaseModel {
   @ApiModelProperty(required = true, value = "")
 
 
- @Size(max=100)
   public String getPaymentMethod() {
     return paymentMethod;
   }

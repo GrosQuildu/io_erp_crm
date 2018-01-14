@@ -183,7 +183,7 @@ public class ClientsApiControllerIT {
 
 		given()
 			.header("Authorization", "Bearer " + adminToken)
-			.contentType("application/json").proxy("127.0.0.1", 6666)
+			.contentType("application/json")
 		.when()
 			.body(client1)
 			.put(RESOURCE + "/" + client1.getId())

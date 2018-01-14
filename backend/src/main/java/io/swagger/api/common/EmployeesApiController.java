@@ -45,7 +45,7 @@ public class EmployeesApiController implements EmployeesApi {
         Employee employee = employeeRepository.findById(employeeId);
 
         // can change passwords only if currently logged in user is admin or employee is chaning own password
-        if(currentEmployee.getRole() != Employee.Role.ADMIN && currentEmployee.getId() != employee.getId())
+        if(currentEmployee.getRole() != Employee.Role.ADMIN && !currentEmployee.getId().equals(employee.getId()))
             throw new Error("Can't edit this user");
 
         // have to send old password unless admin
@@ -91,14 +91,14 @@ public class EmployeesApiController implements EmployeesApi {
 
     public ResponseEntity<Void> updateEmployee(@ApiParam(value = "",required=true ) @PathVariable("employeeId") Integer employeeId,
         @ApiParam(value = "Employee to update"  )  @Valid @RequestBody Employee employee) {
-        if(employee.getId() != null && employeeId != employee.getId())
+        if(employee.getId() != null && !employeeId.equals(employee.getId()))
             throw new Error("Wrong id");
 
-        employee = BaseModel.combineWithOld(employeeRepository, employee);
+        employee = BaseModel.combineWithOld(employeeRepository, employee, employeeId);
         Employee currentEmployee = userService.getCurrentUser();
 
         // can update only if currently logged in user is admin or employee is updating himself
-        if(currentEmployee.getRole() != Employee.Role.ADMIN && currentEmployee.getId() != employee.getId())
+        if(currentEmployee.getRole() != Employee.Role.ADMIN && !currentEmployee.getId().equals(employee.getId()))
             throw new Error("Can't edit this user");
 
         // check if (perhaps) new mail is not used

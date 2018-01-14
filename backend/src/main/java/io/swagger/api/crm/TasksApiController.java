@@ -92,10 +92,10 @@ public class TasksApiController implements TasksApi {
 
     public ResponseEntity<Void> updateTask(@ApiParam(value = "",required=true ) @PathVariable("taskId") Integer taskId,
         @ApiParam(value = "Task to update"  )  @Valid @RequestBody Task task) {
-        if(task.getId() == null || taskId != task.getId())
+        if(task.getId() != null && !taskId.equals(task.getId()))
             throw new Error("Wrong id");
 
-        task = BaseModel.combineWithOld(taskRepository, task);
+        task = BaseModel.combineWithOld(taskRepository, task, taskId);
 
         task = BaseModel.dependsOn(Employee.class, employeeRepository, task, "EmployeeCommissioned");
         if(task.getEmployee() != null)

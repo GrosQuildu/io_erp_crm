@@ -94,10 +94,10 @@ public class MeetingsApiController implements MeetingsApi {
 
     public ResponseEntity<Void> updateMeeting(@ApiParam(value = "",required=true ) @PathVariable("meetingId") Integer meetingId,
         @ApiParam(value = "Meeting to update"  )  @Valid @RequestBody Meeting meeting) {
-        if(meeting.getId() == null || meetingId != meeting.getId())
+        if(meeting.getId() != null && !meetingId.equals(meeting.getId()))
             throw new Error("Wrong id");
 
-        meeting = BaseModel.combineWithOld(meetingRepository, meeting);
+        meeting = BaseModel.combineWithOld(meetingRepository, meeting, meetingId);
         meeting = BaseModel.dependsOn(Employee.class, employeeRepository, meeting, "MainEmployee");
 
         if(meeting.getEmployees() == null)

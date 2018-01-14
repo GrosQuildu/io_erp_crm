@@ -56,9 +56,9 @@ public class ProformasApiController implements ProformasApi {
 
     public ResponseEntity<Void> updateProforma(@ApiParam(value = "",required=true ) @PathVariable("proformaId") Integer proformaId,
         @ApiParam(value = "Proforma to create"  )  @Valid @RequestBody Proforma proforma) {
-        if(proforma.getId() != null && proformaId != proforma.getId())
+        if(proforma.getId() != null && !proformaId.equals(proforma.getId()))
             throw new Error("Wrong id");
-        proforma = BaseModel.combineWithOld(proformaRepository, proforma);
+        proforma = BaseModel.combineWithOld(proformaRepository, proforma, proformaId);
         proforma = BaseModel.dependsOn(Order_.class, orderRepository, proforma, "Order");
         proformaRepository.save(proforma);
         return new ResponseEntity<Void>(HttpStatus.OK);

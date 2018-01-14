@@ -55,8 +55,6 @@ public class ClientTypeApiControllerIT {
 			erpToken = ITHelper.getToken(Employee.Role.ERP);
 		}
 
-        repository.deleteAll();
-
         clientType1 = new ClientType(null, "clientType1");
         clientType2 = new ClientType(null, "clientType2");
         clientType3 = new ClientType(null, "clientType3");
@@ -177,7 +175,7 @@ public class ClientTypeApiControllerIT {
 
 		given()
 			.header("Authorization", "Bearer " + adminToken)
-			.contentType("application/json")
+			.contentType("application/json").proxy("127.0.0.1", 6666)
 		.when()
 			.body(clientType1)
 			.put(RESOURCE + "/" + clientType1.getId())

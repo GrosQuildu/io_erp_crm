@@ -54,9 +54,9 @@ public class DeliveryCostsApiController implements DeliveryCostsApi {
 
     public ResponseEntity<Void> updateDeliveryCost(@ApiParam(value = "",required=true ) @PathVariable("deliveryCostId") Integer deliveryCostId,
         @ApiParam(value = "DeliveryCost to create"  )  @Valid @RequestBody DeliveryCost deliveryCost) {
-        if(deliveryCost.getId() != null && deliveryCostId != deliveryCost.getId())
+        if(deliveryCost.getId() != null && !deliveryCostId.equals(deliveryCost.getId()))
             throw new Error("Wrong id");
-        deliveryCost = BaseModel.combineWithOld(deliveryCostRepository, deliveryCost);
+        deliveryCost = BaseModel.combineWithOld(deliveryCostRepository, deliveryCost, deliveryCostId);
         deliveryCost = deliveryCostRepository.save(deliveryCost);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

@@ -27,8 +27,8 @@ public abstract class BaseModel {
      * @param <R> Class of model repository (extends CrudRepository)
      * @return T, updated Model
      */
-    public static <T extends BaseModel, R extends CrudRepository> T combineWithOld(R repository, T model) {
-        T modelOld = BaseModel.getModelHelper(repository, model.getId());
+    public static <T extends BaseModel, R extends CrudRepository> T combineWithOld(R repository, T model, Integer id) {
+        T modelOld = BaseModel.getModelHelper(repository, id);
         try {
             ModelHelper.combine(modelOld, model);
         } catch (Exception e) {

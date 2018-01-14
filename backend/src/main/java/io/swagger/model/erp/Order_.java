@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.LocalDateSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 
@@ -16,7 +20,6 @@ import org.joda.time.LocalDate;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 /**
  * Order_
@@ -35,9 +38,13 @@ public class Order_ extends BaseModel {
 
   @JsonProperty("orderDate")
   @Column(nullable = false, unique = false)
+  @JsonDeserialize(using=LocalDateDeserializer.class)
+  @JsonSerialize(using = LocalDateSerializer.class)
   private LocalDate orderDate;
 
   @JsonProperty("realizationDate")
+  @JsonDeserialize(using=LocalDateDeserializer.class)
+  @JsonSerialize(using = LocalDateSerializer.class)
   private LocalDate realizationDate = null;
 
   @JsonProperty("realizationDeadline")
@@ -136,7 +143,7 @@ public class Order_ extends BaseModel {
   @ApiModelProperty(required = true, value = "")
 
 
-  @Size(max=32)
+
   public String getOrderNumber() {
     return orderNumber;
   }
@@ -199,8 +206,6 @@ public class Order_ extends BaseModel {
    **/
   @ApiModelProperty(required = true, value = "")
 
-
-  @Size(max=100)
   public String getRealizationDeadline() {
     return realizationDeadline;
   }
@@ -374,7 +379,6 @@ public class Order_ extends BaseModel {
   @ApiModelProperty(required = true, value = "")
 
 
-  @Size(max=100)
   public String getState() {
     return state;
   }
@@ -456,7 +460,6 @@ public class Order_ extends BaseModel {
    **/
   @ApiModelProperty(value = "")
 
-  @Size(max=100)
   public String getIsPaid() {
     return isPaid;
   }

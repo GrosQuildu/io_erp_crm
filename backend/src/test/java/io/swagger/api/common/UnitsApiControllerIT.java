@@ -55,8 +55,6 @@ public class UnitsApiControllerIT {
 			erpToken = ITHelper.getToken(Employee.Role.ERP);
 		}
 
-        repository.deleteAll();
-
         unit1 = new Unit(null, "unit1", "unit1Short");
         unit2 = new Unit(null, "unit2", "unit1Short2");
         unit3 = new Unit(null, "unit3", "unit1Short3");

@@ -56,9 +56,9 @@ public class ContactGroupsApiController implements ContactGroupsApi {
 
     public ResponseEntity<Void> updateContactGroup(@ApiParam(value = "",required=true ) @PathVariable("contactGroupId") Integer contactGroupId,
         @ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactGroup) {
-        if(contactGroup.getId() == null || contactGroupId != contactGroup.getId())
+        if(contactGroup.getId() != null && !contactGroupId.equals(contactGroup.getId()))
             throw new Error("Wrong id");
-        contactGroup = BaseModel.combineWithOld(contactGroupRepository, contactGroup);
+        contactGroup = BaseModel.combineWithOld(contactGroupRepository, contactGroup, contactGroupId);
         contactGroup = contactGroupRepository.save(contactGroup);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

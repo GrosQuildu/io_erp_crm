@@ -62,7 +62,7 @@ public class EmployeesApiController implements EmployeesApi {
         if(currentEmployee.getRole() != Employee.Role.ADMIN)
             throw new Error("Only admin can create employees");
 
-        userService.save(employee);
+        employee = userService.save(employee);
         return new ResponseEntity<Integer>(employee.getId(), HttpStatus.OK);
     }
 
@@ -71,7 +71,7 @@ public class EmployeesApiController implements EmployeesApi {
         if(currentEmployee.getRole() != Employee.Role.ADMIN)
             throw new Error("Only admin can delete employees");
 
-        Employee employee = BaseModel.getModelHelper(employeeRepository, employeeId);
+//        Employee employee = BaseModel.getModelHelper(employeeRepository, employeeId);
 //        BaseModel.dependent(orderRepository, employee);
         employeeRepository.delete(employeeId);
         return new ResponseEntity<Void>(HttpStatus.OK);

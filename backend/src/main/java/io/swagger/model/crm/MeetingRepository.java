@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface MeetingRepository extends CrudRepository<Meeting, Integer> {
     public Meeting findById(Integer id);
-    public List<Meeting> findAllByContactId(Integer id);
+    public List<Meeting> findAllByContacts(Integer id);
 }

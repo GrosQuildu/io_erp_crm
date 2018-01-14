@@ -28,20 +28,21 @@ public class Employee extends BaseModel {
   private Integer id;
 
   @JsonProperty("name")
-
+  @Size(min=5,max=100)
   @Column(nullable = false, unique = false)
   private String name;
 
   @JsonProperty("telephone")
+  @Size(max=15)
   private String telephone = null;
 
   @JsonProperty("mail")
-
+  @Size(min=8,max=256)
   @Column(nullable = false, unique = true)
   private String mail;
 
   @JsonProperty("password")
-
+  @Size(min=8)
   @Column(nullable = false, unique = false)
   private String password;
 
@@ -133,8 +134,6 @@ public class Employee extends BaseModel {
    **/
   @ApiModelProperty(required = true, value = "")
 
-
-  @Size(min=5,max=100)
   public String getName() {
     return name;
   }
@@ -154,7 +153,6 @@ public class Employee extends BaseModel {
    **/
   @ApiModelProperty(value = "")
 
-  @Size(min=5,max=15)
   public String getTelephone() {
     return telephone;
   }

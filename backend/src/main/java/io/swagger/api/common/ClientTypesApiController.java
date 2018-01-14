@@ -39,14 +39,14 @@ public class ClientTypesApiController implements ClientTypesApi {
     }
 
     public ResponseEntity<Void> deleteClientType(@ApiParam(value = "",required=true ) @PathVariable("clientTypeId") Integer clientTypeId) {
-        ClientType clientType = BaseModel.getModelHelper(clientRepository, clientTypeId);
+        ClientType clientType = BaseModel.getModelHelper(clientTypeRepository, clientTypeId);
         BaseModel.dependent(clientRepository, clientType);
         clientTypeRepository.delete(clientTypeId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<ClientType> getClientType(@ApiParam(value = "",required=true ) @PathVariable("clientTypeId") Integer clientTypeId) {
-        ClientType clientType = BaseModel.getModelHelper(clientRepository, clientTypeId);
+        ClientType clientType = BaseModel.getModelHelper(clientTypeRepository, clientTypeId);
         return new ResponseEntity<ClientType>(clientType, HttpStatus.OK);
     }
 

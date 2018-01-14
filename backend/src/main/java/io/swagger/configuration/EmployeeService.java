@@ -22,9 +22,9 @@ public class EmployeeService {
         return new BCryptPasswordEncoder();
     }
 
-    public void save(Employee employee){
+    public Employee save(Employee employee){
         employee.setPassword(getPasswordEncoder().encode(employee.getPassword()));
-        employeeRepository.save(employee);
+        return employeeRepository.save(employee);
     }
 
     public boolean matches(String oldPassword, String actualPassword) {

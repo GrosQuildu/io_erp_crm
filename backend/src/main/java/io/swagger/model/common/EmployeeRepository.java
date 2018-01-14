@@ -1,10 +1,9 @@
 package io.swagger.model.common;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * Created by gros on 20.11.17.
- */
+@Repository
 public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
     public Employee findById(Integer id);
     public Employee findByMail(String mail);

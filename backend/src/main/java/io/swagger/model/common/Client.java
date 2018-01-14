@@ -21,44 +21,51 @@ public class Client extends BaseModel {
   private Integer id;
 
   @JsonProperty("name")
-
+  @Size(min=5,max=100)
   @Column(nullable = false, unique = false)
   private String name;
 
   @JsonProperty("street")
+  @Size(max=100)
   private String street = null;
 
   @JsonProperty("city")
+  @Size(max=100)
   private String city = null;
 
   @JsonProperty("postCode")
   private String postCode = null;
 
   @JsonProperty("nameDelivery")
+  @Size(max=100)
   private String nameDelivery = null;
 
   @JsonProperty("streetDelivery")
+  @Size(max=100)
   private String streetDelivery = null;
 
   @JsonProperty("cityDelivery")
+  @Size(max=100)
   private String cityDelivery = null;
 
   @JsonProperty("postCodeDelivery")
+  @Size(max=100)
   private String postCodeDelivery = null;
 
   @JsonProperty("nip")
+  @Size(max=20)
   private String nip = null;
 
   @JsonProperty("telephone")
+  @Size(max=15)
   private String telephone = null;
 
   @JsonProperty("mail")
-
+  @Size(min=8,max=256)
   @Column(nullable = false, unique = true)
   private String mail;
 
   @JsonProperty("clientType")
-
   @ManyToOne
   @JoinColumn(name = "client_type_id")
   private ClientType clientType;
@@ -105,7 +112,6 @@ public class Client extends BaseModel {
   @ApiModelProperty(required = true, value = "")
 
 
- @Size(min=5,max=100)
   public String getName() {
     return name;
   }
@@ -125,7 +131,7 @@ public class Client extends BaseModel {
   **/
   @ApiModelProperty(value = "")
 
- @Size(min=5,max=100)
+
   public String getStreet() {
     return street;
   }
@@ -145,7 +151,6 @@ public class Client extends BaseModel {
   **/
   @ApiModelProperty(value = "")
 
- @Size(min=5,max=100)
   public String getCity() {
     return city;
   }
@@ -185,7 +190,7 @@ public class Client extends BaseModel {
   **/
   @ApiModelProperty(value = "")
 
- @Size(min=5,max=100)
+
   public String getNameDelivery() {
     return nameDelivery;
   }
@@ -205,7 +210,7 @@ public class Client extends BaseModel {
   **/
   @ApiModelProperty(value = "")
 
- @Size(min=5,max=100)
+
   public String getStreetDelivery() {
     return streetDelivery;
   }
@@ -225,7 +230,6 @@ public class Client extends BaseModel {
   **/
   @ApiModelProperty(value = "")
 
- @Size(min=5,max=100)
   public String getCityDelivery() {
     return cityDelivery;
   }
@@ -265,7 +269,7 @@ public class Client extends BaseModel {
   **/
   @ApiModelProperty(value = "")
 
- @Size(min=10,max=20)
+
   public String getNip() {
     return nip;
   }
@@ -285,7 +289,7 @@ public class Client extends BaseModel {
   **/
   @ApiModelProperty(value = "")
 
- @Size(min=5,max=10)
+
   public String getTelephone() {
     return telephone;
   }

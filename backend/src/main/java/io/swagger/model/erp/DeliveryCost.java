@@ -26,17 +26,17 @@ public class DeliveryCost extends BaseModel {
   private Integer id = null;
 
   @JsonProperty("weightFrom")
-
+  @Min(0)
   @Column(nullable = false, unique = false)
   private Float weightFrom;
 
   @JsonProperty("weightTo")
-
+  @Min(0)
   @Column(nullable = false, unique = false)
   private Float weightTo;
 
   @JsonProperty("price")
-
+  @Min(0)
   @Column(nullable = false, unique = false)
   private BigDecimal price;
 

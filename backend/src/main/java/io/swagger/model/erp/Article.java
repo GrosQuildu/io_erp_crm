@@ -10,7 +10,7 @@ import io.swagger.model.common.Unit;
 import java.math.BigDecimal;
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Size;
 
 /**
  * Article
@@ -24,23 +24,20 @@ public class Article extends BaseModel {
   private Integer id;
 
   @JsonProperty("name")
-
+  @Size(min=5,max=100)
   @Column(nullable = false, unique = true)
   private String name;
 
   @JsonProperty("availability")
-
   @Column(nullable = false, unique = false)
   private Integer availability;
 
   @JsonProperty("unit")
-
   @ManyToOne
   @JoinColumn(name = "unit_id")
   private Unit unit;
 
   @JsonProperty("unitPrice")
-
   @Column(nullable = false, unique = false)
   private BigDecimal unitPrice;
 
@@ -88,14 +85,14 @@ public class Article extends BaseModel {
 
 
   /**
-   * Get availability
-   * @return availability
+   * Get name
+   * @return name
    **/
   @ApiModelProperty(required = true, value = "")
 
 
-  public Integer getName() {
-    return availability;
+  public String getName() {
+    return name;
   }
 
   public void setName(String name) {
@@ -114,7 +111,6 @@ public class Article extends BaseModel {
    * @return availability
   **/
   @ApiModelProperty(required = true, value = "")
-
 
 
   public Integer getAvailability() {
@@ -137,7 +133,6 @@ public class Article extends BaseModel {
    * @return unit
   **/
   @ApiModelProperty(required = true, value = "Not null")
-
 
 
   public Unit getUnit() {

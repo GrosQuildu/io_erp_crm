@@ -7,6 +7,7 @@ import io.swagger.Swagger2SpringBoot;
 import io.swagger.api.ITHelper;
 import io.swagger.model.common.*;
 import org.apache.http.HttpStatus;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,13 +52,15 @@ public class ClientsApiControllerIT {
 
 	@Before
 	public void setUp() {
-        if (!adminToken.isEmpty())
-            return;
-        RestAssured.port = serverPort;
+		RestAssured.port = serverPort;
+		if (adminToken.isEmpty()) {
+			adminToken = ITHelper.getToken(Employee.Role.ADMIN);
+			crmToken = ITHelper.getToken(Employee.Role.CRM);
+			erpToken = ITHelper.getToken(Employee.Role.ERP);
+		}
 
-        adminToken = ITHelper.getToken(Employee.Role.ADMIN);
-        crmToken = ITHelper.getToken(Employee.Role.CRM);
-        erpToken = ITHelper.getToken(Employee.Role.ERP);
+        repository.deleteAll();
+        clientTypeRepository.deleteAll();
 
         clientType1 = new ClientType(null, "clienType1");
         clientType2 = new ClientType(null, "clienType1");
@@ -69,6 +72,12 @@ public class ClientsApiControllerIT {
 
         invalidToken = "XXX-9a20-4b49-97a9-YYY";
     }
+
+    @After
+	public void clear() {
+		repository.deleteAll();
+		clientTypeRepository.deleteAll();
+	}
 
 	@Test
 	public void createClientWithoutAuthShouldReturn401Error() {
@@ -82,7 +91,7 @@ public class ClientsApiControllerIT {
 	}
 
 	@Test
-	public void createClientWithWrongUserTokenShouldReturn500Error() {
+	public void createClientWithWrongUserTokenShouldReturnAuthError() {
 		given()
 			.header("Authorization", "Bearer " + invalidToken)
 			.contentType("application/json")
@@ -115,7 +124,6 @@ public class ClientsApiControllerIT {
 			.get(RESOURCE + "/" + newId)
 			.as(Client.class);
 		assert toCompare.equals(createdClient);
-		repository.deleteAll();
 	}
 
 	@Test
@@ -129,12 +137,10 @@ public class ClientsApiControllerIT {
 			.post(RESOURCE)
 		.then()
 			.statusCode(HttpStatus.SC_BAD_REQUEST);
-		client1.setMail("test@test.com");
 	}
 
 	@Test
 	public void deleteClientShouldDeleteClient() {
-        client1.setId(null);
         client1 = repository.save(client1);
 		given()
 			.header("Authorization", "Bearer " + adminToken)
@@ -169,12 +175,10 @@ public class ClientsApiControllerIT {
 			.put(RESOURCE + "/" + client1.getId() + 3)
 		.then()
 			.statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-		repository.deleteAll();
 	}
 
 	@Test
 	public void updateClientShouldUpdate() {
-	    client1.setId(null);
 		client1 = repository.save(client1);
 		client1.setCityDelivery("asdasd");
 		client1.setNameDelivery("wae awe awe ");
@@ -195,13 +199,10 @@ public class ClientsApiControllerIT {
 			.get(RESOURCE + "/" + client1.getId())
 			.as(Client.class);
 		assert toCompare.equals(client1);
-		repository.deleteAll();
 	}
 
 	@Test
 	public void getClientsShouldReturnAllClients() {
-	    client1.setId(null);
-	    client2.setId(null);
 		client1 = repository.save(client1);
 		client2 = repository.save(client2);
 
@@ -213,6 +214,5 @@ public class ClientsApiControllerIT {
 		.then()
 			.statusCode(HttpStatus.SC_OK)
 			.body("id", hasItems(client1.getId(), client2.getId()));
-		repository.deleteAll();
 	}
 }

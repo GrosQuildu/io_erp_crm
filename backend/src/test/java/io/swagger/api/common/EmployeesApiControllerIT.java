@@ -7,6 +7,7 @@ import io.swagger.api.ITHelper;
 import io.swagger.model.common.Employee;
 import io.swagger.model.common.EmployeeRepository;
 import org.apache.http.HttpStatus;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,17 +44,24 @@ public class EmployeesApiControllerIT {
 
 	@Before
 	public void setUp() {
-		if(!adminToken.isEmpty())
-			return;
 		RestAssured.port = serverPort;
-
-		adminToken = ITHelper.getToken(Employee.Role.ADMIN);
-		crmToken = ITHelper.getToken(Employee.Role.CRM);
-		erpToken = ITHelper.getToken(Employee.Role.ERP);
+		if(adminToken.isEmpty()) {
+			adminToken = ITHelper.getToken(Employee.Role.ADMIN);
+			crmToken = ITHelper.getToken(Employee.Role.CRM);
+			erpToken = ITHelper.getToken(Employee.Role.ERP);
+		}
 
 		employee1 = new Employee(null, "employee1", "test@test.com", "password123", Employee.Role.ADMIN);
 		employee2 = new Employee(null, "employee2", "test2@test.com", "password123", Employee.Role.ERP);
 		employee3 = new Employee(null, "employee3", "test3@test.com", "password123", Employee.Role.CRM);
+	}
+
+	@After
+	public void clear() {
+		for (Employee employee : repository.findAll()) {
+			if(employee.getId() > 3)
+				repository.delete(employee.getId());
+		}
 	}
 
 	@Test
@@ -68,7 +76,7 @@ public class EmployeesApiControllerIT {
 	}
 
 	@Test
-	public void createEmployeeWithWrongUserTokenShouldReturn500Error() {
+	public void createEmployeeWithWrongUserTokenShouldReturnAuthError() {
 		given()
 			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
@@ -101,7 +109,6 @@ public class EmployeesApiControllerIT {
 			.get(RESOURCE + "/" + newId)
 			.as(Employee.class);
 		assert toCompare.equals(createdEmployee);
-		repository.delete(newId);
 	}
 
 	@Test
@@ -126,12 +133,10 @@ public class EmployeesApiControllerIT {
 			.post(RESOURCE)
 		.then()
 			.statusCode(HttpStatus.SC_BAD_REQUEST);
-		employee1.setMail("test@test.com");
 	}
 
 	@Test
 	public void deleteEmployeeShouldDeleteEmployee() {
-		employee1.setId(null);
 		employee1 = repository.save(employee1);
 		given()
 			.header("Authorization", "Bearer " + adminToken)
@@ -156,9 +161,7 @@ public class EmployeesApiControllerIT {
 
 	@Test
 	public void updateEmployeeWithWrongPathBodyIdShouldReturnError() {
-		employee1.setId(null);
 		employee1 = repository.save(employee1);
-
 		given()
 			.header("Authorization", "Bearer " + adminToken)
 			.contentType("application/json")
@@ -167,16 +170,10 @@ public class EmployeesApiControllerIT {
 			.put(RESOURCE + "/" + employee1.getId() + 3)
 		.then()
 			.statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-
-		repository.delete(employee1.getId());
 	}
 
 	@Test
 	public void updateEmployeeShouldUpdate() {
-		employee1.setId(null);
-		System.out.println("----------------");
-		System.out.println(employee1);
-		System.out.println(repository.findAll());
 		employee1 = repository.save(employee1);
 		employee1.setMail("another@mail.com");
 
@@ -197,14 +194,10 @@ public class EmployeesApiControllerIT {
 			.get(RESOURCE + "/" + employee1.getId())
 			.as(Employee.class);
 		assert toCompare.equals(employee1);
-		employee1.setPassword("password123");
-		repository.delete(employee1.getId());
 	}
 
 	@Test
 	public void getEmployeesShouldReturnAllEmployees() {
-		employee1.setId(null);
-		employee2.setId(null);
 		employee1 = repository.save(employee1);
 		employee2 = repository.save(employee2);
 
@@ -216,25 +209,20 @@ public class EmployeesApiControllerIT {
 		.then()
 			.statusCode(HttpStatus.SC_OK)
 			.body("id", hasItems(1,2,3,employee1.getId()));
-		repository.delete(employee1.getId());
-		repository.delete(employee2.getId());
 	}
 
 
 	@Test
 	public void getEmployeesShouldReturnDefaultEmployees() {
-		Response response = given()
-					.header("Authorization", "Bearer " + adminToken)
-					.contentType("application/json")
-				.when()
-					.get(RESOURCE)
-				.then()
-					.statusCode(HttpStatus.SC_OK)
-					.body("name", hasItems("admin", "main_erp", "main_crm"))
-					.body("visibility", hasItems(true, true, true))
-		.extract().response();
-		System.out.println("-------------");
-		System.out.println(response.getBody().print());
+		given()
+			.header("Authorization", "Bearer " + adminToken)
+			.contentType("application/json")
+		.when()
+			.get(RESOURCE)
+		.then()
+			.statusCode(HttpStatus.SC_OK)
+			.body("name", hasItems("admin", "main_erp", "main_crm"))
+			.body("visibility", hasItems(true, true, true));
 	}
 
 

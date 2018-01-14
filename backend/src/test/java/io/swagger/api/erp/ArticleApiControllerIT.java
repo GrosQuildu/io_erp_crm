@@ -6,7 +6,11 @@ import com.jayway.restassured.response.Response;
 import io.swagger.Swagger2SpringBoot;
 import io.swagger.api.ITHelper;
 import io.swagger.model.common.*;
+import io.swagger.model.erp.Article;
+import io.swagger.model.erp.ArticleRepository;
 import org.apache.http.HttpStatus;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +20,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.math.BigDecimal;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItems;
@@ -31,124 +37,130 @@ public class ArticleApiControllerIT {
 	private static String crmToken = "";
 	private static String erpToken = "";
 
-	private static ClientType clientType1;
-	private static ClientType clientType2;
+	private static Unit unit1;
+	private static Unit unit2;
 
-	private static Client client1;
-	private static Client client2;
-	private static Client client3;
+	private static Article article1;
+	private static Article article2;
+	private static Article article3;
 
 	private static String invalidToken;
 
 	@Autowired
-	private ClientRepository repository;
+	private ArticleRepository repository;
 	@Autowired
-	private ClientTypeRepository clientTypeRepository;
+	private UnitRepository unitRepository;
 
 	@LocalServerPort
 	private int serverPort;
 
 	@Before
 	public void setUp() {
-        if (!adminToken.isEmpty())
-            return;
-        RestAssured.port = serverPort;
+		RestAssured.port = serverPort;
+		if (adminToken.isEmpty()) {
+			adminToken = ITHelper.getToken(Employee.Role.ADMIN);
+			crmToken = ITHelper.getToken(Employee.Role.CRM);
+			erpToken = ITHelper.getToken(Employee.Role.ERP);
+		}
 
-        adminToken = ITHelper.getToken(Employee.Role.ADMIN);
-        crmToken = ITHelper.getToken(Employee.Role.CRM);
-        erpToken = ITHelper.getToken(Employee.Role.ERP);
+        repository.deleteAll();
+        unitRepository.deleteAll();
 
-        clientType1 = new ClientType(null, "clienType1");
-        clientType2 = new ClientType(null, "clienType1");
-        clientType1 = clientTypeRepository.save(clientType1);
-        clientType2 = clientTypeRepository.save(clientType2);
+        unit1 = new Unit(null, "unit1", "unit1Short");
+        unit2 = new Unit(null, "unit2", "unit1Short2");
+        unit1 = unitRepository.save(unit1);
+        unit2 = unitRepository.save(unit2);
 
-        client1 = new Client(null, "client1", "test@test.com", clientType1);
-        client2 = new Client(null, "client2", "test2@test.com", clientType2);
+        article1 = new Article(null, "article1", 10, unit1, new BigDecimal(2.22));
+        article2 = new Article(null, "article2", 40, unit2, new BigDecimal(225.12));
 
         invalidToken = "XXX-9a20-4b49-97a9-YYY";
     }
 
+    @After
+	public void clear() {
+		repository.deleteAll();
+		unitRepository.deleteAll();
+	}
+
 	@Test
-	public void createClientWithoutAuthShouldReturn401Error() {
+	public void createArticleWithoutAuthShouldReturn401Error() {
 		given()
 			.contentType("application/json")
 		.when()
-			.body(client1)
+			.body(article1)
 			.post(RESOURCE)
 		.then()
 			.statusCode(HttpStatus.SC_UNAUTHORIZED);
 	}
 
 	@Test
-	public void createClientWithWrongUserTokenShouldReturn500Error() {
+	public void createArticleWithWrongUserTokenShouldReturnAuthError() {
 		given()
-			.header("Authorization", "Bearer " + invalidToken)
+			.header("Authorization", "Bearer " + crmToken)
 			.contentType("application/json")
 		.when()
-			.body(client1)
+			.body(article1)
 			.post(RESOURCE)
 		.then()
-			.statusCode(HttpStatus.SC_UNAUTHORIZED);
+			.statusCode(HttpStatus.SC_FORBIDDEN);
 	}
 
 	@Test
-	public void createClientWithProperUserTokenShouldReturnIdAndSaveObject() {
+	public void createArticleWithProperUserTokenShouldReturnIdAndSaveObject() {
 		Response response = given()
-								.header("Authorization", "Bearer " + adminToken)
+								.header("Authorization", "Bearer " + erpToken)
 								.contentType("application/json")
 							.when()
-								.body(client1)
+								.body(article1)
 								.post(RESOURCE)
 							.then()
 								.statusCode(HttpStatus.SC_OK)
 								.extract().response();
 
 		Integer newId = Integer.parseInt(new String(response.asByteArray()));
-		Client createdClient = repository.findById(newId);
+		Article createdArticle = repository.findById(newId);
 
-		Client toCompare = given()
+		Article toCompare = given()
 			.header("Authorization", "Bearer " + adminToken)
 			.contentType("application/json")
 		.when()
 			.get(RESOURCE + "/" + newId)
-			.as(Client.class);
-		assert toCompare.equals(createdClient);
-		repository.deleteAll();
+			.as(Article.class);
+		assert toCompare.equals(createdArticle);
 	}
 
 	@Test
-	public void createClientWithoutRequiredFieldsShouldReturnError() {
-		client1.setMail("");
+	public void createArticleWithoutRequiredFieldsShouldReturnError() {
+		article1.setName("");
 		given()
-			.header("Authorization", "Bearer " + adminToken)
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
-			.body(client1)
+			.body(article1)
 			.post(RESOURCE)
 		.then()
 			.statusCode(HttpStatus.SC_BAD_REQUEST);
-		client1.setMail("test@test.com");
+		article1.setName("article1");
 	}
 
 	@Test
-	public void deleteClientShouldDeleteClient() {
-        client1.setId(null);
-        client1 = repository.save(client1);
+	public void deleteArticleShouldDeleteArticle() {
+        article1 = repository.save(article1);
 		given()
-			.header("Authorization", "Bearer " + adminToken)
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
-			.delete(RESOURCE + "/" + client1.getId())
+			.delete(RESOURCE + "/" + article1.getId())
 		.then()
 			.statusCode(HttpStatus.SC_OK);
-		assert repository.findById(client1.getId()) == null;
+		assert repository.findById(article1.getId()) == null;
 	}
 
 	@Test
-	public void deleteNonexistingClientShouldReturnError() {
+	public void deleteNonexistingArticleShouldReturnError() {
 		given()
-			.header("Authorization", "Bearer " + adminToken)
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
 			.delete(RESOURCE + "/" + 321)
@@ -157,61 +169,58 @@ public class ArticleApiControllerIT {
 	}
 
 	@Test
-	public void updateClientWithWrongPathBodyIdShouldReturnError() {
-	    client1.setId(null);
-	    client1 = repository.save(client1);
+	public void updateArticleWithWrongPathBodyIdShouldReturnError() {
+	    article1 = repository.save(article1);
 		given()
-			.header("Authorization", "Bearer " + adminToken)
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
-			.body(client1)
-			.put(RESOURCE + "/" + client1.getId() + 3)
+			.body(article1)
+			.put(RESOURCE + "/" + article1.getId() + 3)
 		.then()
 			.statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-		repository.deleteAll();
 	}
 
 	@Test
-	public void updateClientShouldUpdate() {
-	    client1.setId(null);
-		client1 = repository.save(client1);
-		client1.setCityDelivery("asdasd");
-		client1.setNameDelivery("wae awe awe ");
+	public void updateArticleShouldUpdate() {
+	    article1.setId(null);
+		article1 = repository.save(article1);
+		article1.setName("xxasdasd");
+		article1.setUnitPrice(new BigDecimal(123));
 
 		given()
-			.header("Authorization", "Bearer " + adminToken)
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
-			.body(client1)
-			.put(RESOURCE + "/" + client1.getId())
+			.body(article1)
+			.put(RESOURCE + "/" + article1.getId())
 		.then()
 			.statusCode(HttpStatus.SC_OK);
 
-		Client toCompare = given()
-			.header("Authorization", "Bearer " + adminToken)
+		Article toCompare = given()
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
-			.get(RESOURCE + "/" + client1.getId())
-			.as(Client.class);
-		assert toCompare.equals(client1);
-		repository.deleteAll();
+			.get(RESOURCE + "/" + article1.getId())
+			.as(Article.class);
+        toCompare.setUnitPrice(article1.getUnitPrice());
+        assert toCompare.equals(article1);
 	}
 
 	@Test
-	public void getClientsShouldReturnAllClients() {
-	    client1.setId(null);
-	    client2.setId(null);
-		client1 = repository.save(client1);
-		client2 = repository.save(client2);
+	public void getArticlesShouldReturnAllArticles() {
+	    article1.setId(null);
+	    article2.setId(null);
+		article1 = repository.save(article1);
+		article2 = repository.save(article2);
 
 		given()
-			.header("Authorization", "Bearer " + adminToken)
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
 			.get(RESOURCE)
 		.then()
 			.statusCode(HttpStatus.SC_OK)
-			.body("id", hasItems(client1.getId(), client2.getId()));
-		repository.deleteAll();
+			.body("id", hasItems(article1.getId(), article2.getId()));
 	}
 }

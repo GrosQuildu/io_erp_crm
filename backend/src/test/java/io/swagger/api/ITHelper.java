@@ -61,12 +61,12 @@ public class ITHelper {
         crmPass = "2G8UI6F0UVJC";
 
         String token = null;
-        System.out.println("------------------------");
-        System.out.println("------------------------");
-        System.out.println(adminName);
-        System.out.println(adminPass);
-        System.out.println("------------------------");
-        System.out.println("------------------------");
+//        System.out.println("------------------------");
+//        System.out.println("------------------------");
+//        System.out.println(adminName);
+//        System.out.println(adminPass);
+//        System.out.println("------------------------");
+//        System.out.println("------------------------");
         switch (role) {
             case ADMIN:
             Response response = given()

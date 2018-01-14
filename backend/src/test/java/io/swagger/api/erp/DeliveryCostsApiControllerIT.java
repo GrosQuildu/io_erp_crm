@@ -1,4 +1,4 @@
-package io.swagger.api.common;
+package io.swagger.api.erp;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
@@ -6,7 +6,8 @@ import io.swagger.Swagger2SpringBoot;
 import io.swagger.api.ITHelper;
 import io.swagger.model.common.Employee;
 import io.swagger.model.common.Unit;
-import io.swagger.model.common.UnitRepository;
+import io.swagger.model.erp.DeliveryCost;
+import io.swagger.model.erp.DeliveryCostRepository;
 import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
@@ -19,6 +20,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigDecimal;
+
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItems;
 
@@ -27,21 +30,23 @@ import static org.hamcrest.Matchers.hasItems;
 @Configuration
 @ContextConfiguration
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Swagger2SpringBoot.class)
-public class UnitsApiControllerIT {
-    private static final String RESOURCE = "/api/units";
+public class DeliveryCostsApiControllerIT {
+    private static final String RESOURCE = "/api/erp/deliveryCosts";
 
 	private static String adminToken = "";
 	private static String crmToken = "";
 	private static String erpToken = "";
 
-	private static Unit unit1;
-	private static Unit unit2;
-	private static Unit unit3;
+
+	private static DeliveryCost deliveryCost1;
+	private static DeliveryCost deliveryCost2;
+	private static DeliveryCost deliveryCost3;
 
 	private static String invalidToken;
 
 	@Autowired
-	private UnitRepository repository;
+	private DeliveryCostRepository repository;
+
 
 	@LocalServerPort
 	private int serverPort;
@@ -54,12 +59,12 @@ public class UnitsApiControllerIT {
 			crmToken = ITHelper.getToken(Employee.Role.CRM);
 			erpToken = ITHelper.getToken(Employee.Role.ERP);
 		}
-
+        
         repository.deleteAll();
 
-        unit1 = new Unit(null, "unit1", "unit1Short");
-        unit2 = new Unit(null, "unit2", "unit1Short2");
-        unit3 = new Unit(null, "unit3", "unit1Short3");
+        deliveryCost1 = new DeliveryCost(null, 10.0f, 20.0f, new BigDecimal(12.13));
+        deliveryCost2 = new DeliveryCost(null, 112.0f, 43.3f, new BigDecimal(154.1));
+        deliveryCost3 = new DeliveryCost(null, 103.0f, 123.0f, new BigDecimal(43.1));
 
         invalidToken = "XXX-9a20-4b49-97a9-YYY";
     }
@@ -70,93 +75,83 @@ public class UnitsApiControllerIT {
 	}
 
 	@Test
-	public void createUnitWithoutAuthShouldReturn401Error() {
+	public void createDeliveryCostWithoutAuthShouldReturn401Error() {
 		given()
 			.contentType("application/json")
 		.when()
-			.body(unit1)
+			.body(deliveryCost1)
 			.post(RESOURCE)
 		.then()
 			.statusCode(HttpStatus.SC_UNAUTHORIZED);
 	}
 
 	@Test
-	public void createUnitWithWrongUserTokenShouldReturnAuthError() {
+	public void createDeliveryCostWithWrongUserTokenShouldReturnAuthError() {
 		given()
-			.header("Authorization", "Bearer " + invalidToken)
+			.header("Authorization", "Bearer " + crmToken)
 			.contentType("application/json")
 		.when()
-			.body(unit1)
+			.body(deliveryCost1)
 			.post(RESOURCE)
 		.then()
-			.statusCode(HttpStatus.SC_UNAUTHORIZED);
+			.statusCode(HttpStatus.SC_FORBIDDEN);
 	}
 
 	@Test
-	public void createUnitWithProperUserTokenShouldReturnIdAndSaveObject() {
+	public void createDeliveryCostWithProperUserTokenShouldReturnIdAndSaveObject() {
 		Response response = given()
-								.header("Authorization", "Bearer " + adminToken)
+								.header("Authorization", "Bearer " + erpToken)
 								.contentType("application/json")
 							.when()
-								.body(unit1)
+								.body(deliveryCost1)
 								.post(RESOURCE)
 							.then()
 								.statusCode(HttpStatus.SC_OK)
 								.extract().response();
 
 		Integer newId = Integer.parseInt(new String(response.asByteArray()));
-		Unit createdUnit = repository.findById(newId);
+		DeliveryCost createdDeliveryCost = repository.findById(newId);
 
-		Unit toCompare = given()
+		DeliveryCost toCompare = given()
 			.header("Authorization", "Bearer " + adminToken)
 			.contentType("application/json")
 		.when()
 			.get(RESOURCE + "/" + newId)
-			.as(Unit.class);
-		assert toCompare.equals(createdUnit);
+			.as(DeliveryCost.class);
+		assert toCompare.equals(createdDeliveryCost);
 	}
 
 	@Test
-	public void createUnitWithoutRequiredFieldsShouldReturnError() {
-		unit1.setName("");
+	public void createDeliveryCostWithoutRequiredFieldsShouldReturnError() {
+		deliveryCost1.setPrice(null);
 		given()
-			.header("Authorization", "Bearer " + adminToken)
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
-			.body(unit1)
+			.body(deliveryCost1)
 			.post(RESOURCE)
 		.then()
-			.statusCode(HttpStatus.SC_BAD_REQUEST);
-
-		unit1.setName("unit1");
-		unit1.setNameShort("");
-		given()
-			.header("Authorization", "Bearer " + adminToken)
-			.contentType("application/json")
-		.when()
-			.body(unit1)
-			.post(RESOURCE)
-		.then()
-			.statusCode(HttpStatus.SC_BAD_REQUEST);
+			.statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	}
 
 	@Test
-	public void deleteUnitShouldDeleteUnit() {
-		unit1 = repository.save(unit1);
+	public void deleteDeliveryCostShouldDeleteDeliveryCost() {
+        deliveryCost1.setId(null);
+        deliveryCost1 = repository.save(deliveryCost1);
 		given()
-			.header("Authorization", "Bearer " + adminToken)
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
-			.delete(RESOURCE + "/" + unit1.getId())
+			.delete(RESOURCE + "/" + deliveryCost1.getId())
 		.then()
 			.statusCode(HttpStatus.SC_OK);
-		assert repository.findById(unit1.getId()) == null;
+		assert repository.findById(deliveryCost1.getId()) == null;
 	}
 
 	@Test
-	public void deleteNonexistingUnitShouldReturnError() {
+	public void deleteNonexistingDeliveryCostShouldReturnError() {
 		given()
-			.header("Authorization", "Bearer " + adminToken)
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
 			.delete(RESOURCE + "/" + 321)
@@ -165,55 +160,55 @@ public class UnitsApiControllerIT {
 	}
 
 	@Test
-	public void updateUnitWithWrongPathBodyIdShouldReturnError() {
-	    unit1 = repository.save(unit1);
-
+	public void updateDeliveryCostWithWrongPathBodyIdShouldReturnError() {
+	    deliveryCost1 = repository.save(deliveryCost1);
 		given()
-			.header("Authorization", "Bearer " + adminToken)
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
-			.body(unit1)
-			.put(RESOURCE + "/" + unit1.getId() + 3)
+			.body(deliveryCost1)
+			.put(RESOURCE + "/" + deliveryCost1.getId() + 3)
 		.then()
 			.statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	}
 
 	@Test
-	public void updateUnitShouldUpdate() {
-		unit1 = repository.save(unit1);
-		unit1.setNameShort("asdasd");
+	public void updateDeliveryCostShouldUpdate() {
+		deliveryCost1 = repository.save(deliveryCost1);
+		deliveryCost1.setWeightFrom(54.2f);
+		deliveryCost1.setPrice(new BigDecimal(123.3));
 
 		given()
-			.header("Authorization", "Bearer " + adminToken)
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
-			.body(unit1)
-			.put(RESOURCE + "/" + unit1.getId())
+			.body(deliveryCost1)
+			.put(RESOURCE + "/" + deliveryCost1.getId())
 		.then()
 			.statusCode(HttpStatus.SC_OK);
 
-		Unit toCompare = given()
-			.header("Authorization", "Bearer " + adminToken)
+		DeliveryCost toCompare = given()
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
-			.get(RESOURCE + "/" + unit1.getId())
-			.as(Unit.class);
-		assert toCompare.equals(unit1);
+			.get(RESOURCE + "/" + deliveryCost1.getId())
+			.as(DeliveryCost.class);
+		toCompare.setPrice(deliveryCost1.getPrice());
+		assert toCompare.equals(deliveryCost1);
 	}
 
 	@Test
-	public void getUnitsShouldReturnAllUnits() {
-		unit1 = repository.save(unit1);
-		unit2 = repository.save(unit2);
+	public void getDeliveryCostsShouldReturnAllDeliveryCosts() {
+		deliveryCost1 = repository.save(deliveryCost1);
+		deliveryCost2 = repository.save(deliveryCost2);
 
 		given()
-			.header("Authorization", "Bearer " + adminToken)
+			.header("Authorization", "Bearer " + erpToken)
 			.contentType("application/json")
 		.when()
 			.get(RESOURCE)
 		.then()
 			.statusCode(HttpStatus.SC_OK)
-			.body("id", hasItems(unit1.getId(), unit2.getId()));
+			.body("id", hasItems(deliveryCost1.getId(), deliveryCost2.getId()));
 	}
-
 }

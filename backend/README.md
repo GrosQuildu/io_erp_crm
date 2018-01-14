@@ -25,10 +25,10 @@ Second, setup postgres database. Installation guides [here](https://wiki.postgre
 ## Build
 
 ```
-mvn clean install
+mvn package
 
 # or without tests
-mvn install -DskipTests
+mvn package -Dmaven.test.skip=true
 ```
 
 ## Run

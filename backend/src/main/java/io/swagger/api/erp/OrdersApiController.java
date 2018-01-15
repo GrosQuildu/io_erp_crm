@@ -45,6 +45,7 @@ public class OrdersApiController implements OrdersApi {
         if(order.getEmployee() != null)
             order = BaseModel.dependsOn(Employee.class, employeeRepository, order);
         order = BaseModel.dependsOn(Client.class, clientRepository, order);
+        order.setId(null);
         order = orderRepository.save(order);
         return new ResponseEntity<Integer>(order.getId(), HttpStatus.OK);
     }

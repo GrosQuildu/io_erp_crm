@@ -70,6 +70,7 @@ public class MeetingsApiController implements MeetingsApi {
         }
         meeting.setContacts(contacts);
 
+        meeting.setId(null);
         meeting = meetingRepository.save(meeting);
         return new ResponseEntity<Integer>(meeting.getId(), HttpStatus.OK);
     }

@@ -207,6 +207,27 @@ public class ProformasApiControllerIT {
 			.as(Proforma.class);
 		assert toCompare.getId().equals(createdProforma.getId());
 	}
+	
+	@Test
+	public void createProformaWithExistingProformaIdShouldCreateNewProforma() {
+		proforma1 = repository.save(proforma1);
+		proforma2.setId(proforma1.getId());
+
+		Response response = given()
+								.header("Authorization", "Bearer " + adminToken)
+								.contentType("application/json")
+							.when()
+								.body(proforma2)
+								.post(RESOURCE)
+							.then()
+								.statusCode(HttpStatus.SC_OK)
+								.extract().response();
+
+		Integer newId = Integer.parseInt(new String(response.asByteArray()));
+		assert !newId.equals(proforma1.getId());
+		assert repository.findById(proforma1.getId()) != null;
+		assert repository.findById(newId) != null;
+	}
 
 	@Test
 	public void createProformaWithoutRequiredFieldsShouldReturnError() {

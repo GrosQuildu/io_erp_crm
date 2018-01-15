@@ -32,6 +32,7 @@ public class TaskStatusesApiController implements TaskStatusesApi {
     TaskRepository taskRepository;
 
     public ResponseEntity<Integer> createTaskStatus(@ApiParam(value = "TaskStatus to create"  )  @Valid @RequestBody TaskStatus taskStatus) {
+        taskStatus.setId(null);
         taskStatus = taskStatusRepository.save(taskStatus);
         return new ResponseEntity<Integer>(taskStatus.getId(), HttpStatus.OK);
     }

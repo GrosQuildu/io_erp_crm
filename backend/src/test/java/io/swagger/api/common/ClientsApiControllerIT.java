@@ -19,7 +19,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.not;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -98,6 +100,27 @@ public class ClientsApiControllerIT {
 			.post(RESOURCE)
 		.then()
 			.statusCode(HttpStatus.SC_UNAUTHORIZED);
+	}
+
+	@Test
+	public void createClientWithExistingClientIdShouldCreateNewClient() {
+		client1 = repository.save(client1);
+		client2.setId(client1.getId());
+
+		Response response = given()
+								.header("Authorization", "Bearer " + adminToken)
+								.contentType("application/json")
+							.when()
+								.body(client2)
+								.post(RESOURCE)
+							.then()
+								.statusCode(HttpStatus.SC_OK)
+								.extract().response();
+
+		Integer newId = Integer.parseInt(new String(response.asByteArray()));
+		assert !newId.equals(client1.getId());
+		assert repository.findById(client1.getId()) != null;
+		assert repository.findById(newId) != null;
 	}
 
 	@Test

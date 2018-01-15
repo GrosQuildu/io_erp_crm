@@ -21,7 +21,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.not;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @Configuration
@@ -112,6 +114,27 @@ public class ClientTypeApiControllerIT {
 			.get(RESOURCE + "/" + newId)
 			.as(ClientType.class);
 		assert toCompare.equals(createdClientType);
+	}
+	
+	@Test
+	public void createClientTypeWithExistingClientTypeIdShouldCreateNewClientType() {
+		clientType1 = repository.save(clientType1);
+		clientType2.setId(clientType1.getId());
+
+		Response response = given()
+								.header("Authorization", "Bearer " + adminToken)
+								.contentType("application/json")
+							.when()
+								.body(clientType2)
+								.post(RESOURCE)
+							.then()
+								.statusCode(HttpStatus.SC_OK)
+								.extract().response();
+
+		Integer newId = Integer.parseInt(new String(response.asByteArray()));
+		assert !newId.equals(clientType1.getId());
+		assert repository.findById(clientType1.getId()) != null;
+		assert repository.findById(newId) != null;
 	}
 
 	@Test

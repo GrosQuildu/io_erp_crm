@@ -16,9 +16,9 @@ import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UnitsApiControllerTest {
-    private static final Unit UNIT1 = new Unit(1, "name", "ShortName");
-    private static final Unit UNIT2 = new Unit(2, "name2", "ShortName2");
-    private static final Unit UNIT3 = new Unit(3, "name3", "ShortName3");
+    private static final Unit UNIT1 = new Unit(null, "name", "ShortName");
+    private static final Unit UNIT2 = new Unit(null, "name2", "ShortName2");
+    private static final Unit UNIT3 = new Unit(null, "name3", "ShortName3");
 
     @InjectMocks
     private UnitsApiController controller;

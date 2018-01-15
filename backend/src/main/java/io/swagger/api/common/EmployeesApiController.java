@@ -44,6 +44,9 @@ public class EmployeesApiController implements EmployeesApi {
         Employee currentEmployee = userService.getCurrentUser();
         Employee employee = employeeRepository.findById(employeeId);
 
+        if(currentEmployee == null || employee == null)
+            throw new Error("Can't find employee");
+
         // can change passwords only if currently logged in user is admin or employee is chaning own password
         if(currentEmployee.getRole() != Employee.Role.ADMIN && !currentEmployee.getId().equals(employee.getId()))
             throw new Error("Can't edit this user");
@@ -62,6 +65,7 @@ public class EmployeesApiController implements EmployeesApi {
         if(currentEmployee.getRole() != Employee.Role.ADMIN)
             throw new Error("Only admin can create employees");
 
+        employee.setId(null);
         employee = userService.save(employee);
         return new ResponseEntity<Integer>(employee.getId(), HttpStatus.OK);
     }

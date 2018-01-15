@@ -113,6 +113,27 @@ public class UnitsApiControllerIT {
 			.as(Unit.class);
 		assert toCompare.equals(createdUnit);
 	}
+	
+	@Test
+	public void createUnitWithExistingUnitIdShouldCreateNewUnit() {
+		unit1 = repository.save(unit1);
+		unit2.setId(unit1.getId());
+
+		Response response = given()
+								.header("Authorization", "Bearer " + adminToken)
+								.contentType("application/json")
+							.when()
+								.body(unit2)
+								.post(RESOURCE)
+							.then()
+								.statusCode(HttpStatus.SC_OK)
+								.extract().response();
+
+		Integer newId = Integer.parseInt(new String(response.asByteArray()));
+		assert !newId.equals(unit1.getId());
+		assert repository.findById(unit1.getId()) != null;
+		assert repository.findById(newId) != null;
+	}
 
 	@Test
 	public void createUnitWithoutRequiredFieldsShouldReturnError() {

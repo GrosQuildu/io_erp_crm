@@ -41,6 +41,7 @@ public class ArticlesApiController implements ArticlesApi {
 
     public ResponseEntity<Integer> createArticle(@ApiParam(value = "Article to create"  )  @Valid @RequestBody Article article) {
         article = BaseModel.dependsOn(Unit.class, unitRepository, article);
+        article.setId(null);
         article = articleRepository.save(article);
         return new ResponseEntity<Integer>(article.getId(), HttpStatus.OK);
     }

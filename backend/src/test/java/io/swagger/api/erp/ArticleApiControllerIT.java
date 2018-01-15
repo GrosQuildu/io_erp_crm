@@ -129,6 +129,27 @@ public class ArticleApiControllerIT {
 			.as(Article.class);
 		assert toCompare.equals(createdArticle);
 	}
+	
+	@Test
+	public void createArticleWithExistingArticleIdShouldCreateNewArticle() {
+		article1 = repository.save(article1);
+		article2.setId(article1.getId());
+
+		Response response = given()
+								.header("Authorization", "Bearer " + adminToken)
+								.contentType("application/json")
+							.when()
+								.body(article2)
+								.post(RESOURCE)
+							.then()
+								.statusCode(HttpStatus.SC_OK)
+								.extract().response();
+
+		Integer newId = Integer.parseInt(new String(response.asByteArray()));
+		assert !newId.equals(article1.getId());
+		assert repository.findById(article1.getId()) != null;
+		assert repository.findById(newId) != null;
+	}
 
 	@Test
 	public void createArticleWithoutRequiredFieldsShouldReturnError() {

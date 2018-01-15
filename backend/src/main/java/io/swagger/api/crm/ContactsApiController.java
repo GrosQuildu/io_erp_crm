@@ -49,6 +49,7 @@ public class ContactsApiController implements ContactsApi {
         if(contact.getClient() != null)
             contact = BaseModel.dependsOn(Client.class, clientRepository, contact);
 
+        contact.setId(null);
         contact = contactRepository.save(contact);
         return new ResponseEntity<Integer>(contact.getId(), HttpStatus.OK);
     }

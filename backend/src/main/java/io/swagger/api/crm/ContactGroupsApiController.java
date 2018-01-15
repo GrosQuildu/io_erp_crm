@@ -33,6 +33,7 @@ public class ContactGroupsApiController implements ContactGroupsApi {
     ContactRepository contactRepository;
 
     public ResponseEntity<Integer> createContactGroup(@ApiParam(value = "ContactGroup to create"  )  @Valid @RequestBody ContactGroup contactGroup) {
+        contactGroup.setId(null);
         contactGroup = contactGroupRepository.save(contactGroup);
         return new ResponseEntity<Integer>(contactGroup.getId(), HttpStatus.OK);
     }

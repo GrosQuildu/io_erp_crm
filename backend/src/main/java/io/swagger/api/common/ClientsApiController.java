@@ -39,6 +39,7 @@ public class ClientsApiController implements ClientsApi {
 
     public ResponseEntity<Integer> createClient(@ApiParam(value = "Client to create"  )  @Valid @RequestBody Client client) {
         client = BaseModel.dependsOn(ClientType.class, clientTypeRepository, client);
+        client.setId(null);
         client = clientRepository.save(client);
         return new ResponseEntity<Integer>(client.getId(), HttpStatus.OK);
     }

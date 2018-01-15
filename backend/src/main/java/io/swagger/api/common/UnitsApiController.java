@@ -35,6 +35,7 @@ public class UnitsApiController implements UnitsApi {
 
 
     public ResponseEntity<Integer> createUnit(@ApiParam(value = "Unit to create"  )  @Valid @RequestBody Unit unit) {
+        unit.setId(null);
         unit = unitRepository.save(unit);
         return new ResponseEntity<Integer>(unit.getId(), HttpStatus.OK);
     }

@@ -110,6 +110,27 @@ public class EmployeesApiControllerIT {
 			.as(Employee.class);
 		assert toCompare.equals(createdEmployee);
 	}
+	
+	@Test
+	public void createEmployeeWithExistingEmployeeIdShouldCreateNewEmployee() {
+		employee1 = repository.save(employee1);
+		employee2.setId(employee1.getId());
+
+		Response response = given()
+								.header("Authorization", "Bearer " + adminToken)
+								.contentType("application/json")
+							.when()
+								.body(employee2)
+								.post(RESOURCE)
+							.then()
+								.statusCode(HttpStatus.SC_OK)
+								.extract().response();
+
+		Integer newId = Integer.parseInt(new String(response.asByteArray()));
+		assert !newId.equals(employee1.getId());
+		assert repository.findById(employee1.getId()) != null;
+		assert repository.findById(newId) != null;
+	}
 
 	@Test
 	public void createEmployeeWithoutRequiredFieldsShouldReturnError() {

@@ -34,6 +34,7 @@ public class ProformasApiController implements ProformasApi {
 
     public ResponseEntity<Integer> createProforma(@ApiParam(value = "Proforma to create"  )  @Valid @RequestBody Proforma proforma) {
         proforma = BaseModel.dependsOn(Order_.class, orderRepository, proforma, "Order");
+        proforma.setId(null);
         proforma = proformaRepository.save(proforma);
         return new ResponseEntity<Integer>(proforma.getId(), HttpStatus.OK);
     }

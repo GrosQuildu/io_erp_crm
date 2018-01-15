@@ -181,6 +181,27 @@ public class OrderApiControllerIT {
 			.as(Order_.class);
 		assert toCompare.getId().equals(createdOrder.getId());
 	}
+	
+	@Test
+	public void createOrderWithExistingOrderIdShouldCreateNewOrder() {
+		order1 = repository.save(order1);
+		order2.setId(order1.getId());
+
+		Response response = given()
+								.header("Authorization", "Bearer " + adminToken)
+								.contentType("application/json")
+							.when()
+								.body(order2)
+								.post(RESOURCE)
+							.then()
+								.statusCode(HttpStatus.SC_OK)
+								.extract().response();
+
+		Integer newId = Integer.parseInt(new String(response.asByteArray()));
+		assert !newId.equals(order1.getId());
+		assert repository.findById(order1.getId()) != null;
+		assert repository.findById(newId) != null;
+	}
 
 	@Test
 	public void createOrderWithoutRequiredFieldsShouldReturnError() {

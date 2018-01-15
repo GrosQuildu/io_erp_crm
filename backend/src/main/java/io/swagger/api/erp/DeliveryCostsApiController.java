@@ -32,6 +32,7 @@ public class DeliveryCostsApiController implements DeliveryCostsApi {
     DeliveryCostRepository deliveryCostRepository;
 
     public ResponseEntity<Integer> createDeliveryCost(@ApiParam(value = "DeliveryCost to create"  )  @Valid @RequestBody DeliveryCost deliveryCost) {
+        deliveryCost.setId(null);
         deliveryCost = deliveryCostRepository.save(deliveryCost);
         return new ResponseEntity<Integer>(deliveryCost.getId(), HttpStatus.OK);
     }

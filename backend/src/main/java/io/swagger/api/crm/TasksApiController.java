@@ -68,6 +68,7 @@ public class TasksApiController implements TasksApi {
             task.setContacts(contacts);
         }
 
+        task.setId(null);
         task = taskRepository.save(task);
         return new ResponseEntity<Integer>(task.getId(), HttpStatus.OK);
     }

@@ -34,6 +34,7 @@ public class ClientTypesApiController implements ClientTypesApi {
     ClientRepository clientRepository;
 
     public ResponseEntity<Integer> createClientType(@ApiParam(value = "ClientType to create"  )  @Valid @RequestBody ClientType clientType) {
+        clientType.setId(null);
         clientType = clientTypeRepository.save(clientType);
         return new ResponseEntity<Integer>(clientType.getId(), HttpStatus.OK);
     }

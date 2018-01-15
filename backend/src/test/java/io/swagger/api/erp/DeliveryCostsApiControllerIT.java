@@ -120,6 +120,27 @@ public class DeliveryCostsApiControllerIT {
 			.as(DeliveryCost.class);
 		assert toCompare.equals(createdDeliveryCost);
 	}
+	
+	@Test
+	public void createDeliveryCostWithExistingDeliveryCostIdShouldCreateNewDeliveryCost() {
+		deliveryCost1 = repository.save(deliveryCost1);
+		deliveryCost2.setId(deliveryCost1.getId());
+
+		Response response = given()
+								.header("Authorization", "Bearer " + adminToken)
+								.contentType("application/json")
+							.when()
+								.body(deliveryCost2)
+								.post(RESOURCE)
+							.then()
+								.statusCode(HttpStatus.SC_OK)
+								.extract().response();
+
+		Integer newId = Integer.parseInt(new String(response.asByteArray()));
+		assert !newId.equals(deliveryCost1.getId());
+		assert repository.findById(deliveryCost1.getId()) != null;
+		assert repository.findById(newId) != null;
+	}
 
 	@Test
 	public void createDeliveryCostWithoutRequiredFieldsShouldReturnError() {

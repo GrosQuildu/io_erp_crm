@@ -106,7 +106,7 @@ public class ContactGroupsApiControllerIT {
         ContactGroup createdGroup = repository.findById(newId);
 
         ContactGroup toCompare = given()
-                .header("Authorization", "Bearer " + adminToken)
+                .header("Authorization", "Bearer " + crmToken)
                 .contentType("application/json")
                 .when()
                 .get(RESOURCE + "/" + newId)
@@ -116,12 +116,12 @@ public class ContactGroupsApiControllerIT {
 
 
     @Test
-    public void createContactGroupithExistingArticleIdShouldCreateNewContactGroup() {
+    public void createContactGroupithExistingContactGroupIdShouldCreateNewContactGroup() {
         group1 = repository.save(group1);
         group2.setId(group1.getId());
 
         Response response = given()
-                .header("Authorization", "Bearer " + adminToken)
+                .header("Authorization", "Bearer " + crmToken)
                 .contentType("application/json")
                 .when()
                 .body(group2)
@@ -220,7 +220,7 @@ public class ContactGroupsApiControllerIT {
         group2 = repository.save(group2);
 
         given()
-                .header("Authorization", "Bearer " + erpToken)
+                .header("Authorization", "Bearer " + crmToken)
                 .contentType("application/json")
                 .when()
                 .get(RESOURCE)

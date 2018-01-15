@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" lang="en">
+    <title>SchemaCrawler Example</title>
+    <link rel="stylesheet" type="text/css" href="../sc.css">
+    <link rel="stylesheet" type="text/css" href="../../sc.css">
+  </head>
+  <body>
+    <main>
+<h1>SchemaCrawler - Lint Example</h1>
+<h2>Description</h2>
+<p>SchemaCrawler looks for potential database design issues. Follow the steps below to run SchemaCrawler Lint.</p>
+<h2>How to Run</h2>
+<ol>
+<li>Follow the instructions in the <a href="../commandline/commandline-readme.html">commandline</a> example</li>
+<li>To find schema design issues, run <code>schemacrawler.cmd -server=hsqldb -database=schemacrawler -password= -infolevel=standard -command=lint</code> (use <code>schemacrawler.sh</code> instead of <code>schemacrawler.cmd</code> on Unix)</li>
+</ol>
+<h2>How to Experiment</h2>
+<ol>
+<li>See help on all of the available lints, run <code>schemacrawler.cmd -command=lint -help</code> (use <code>schemacrawler.sh</code> instead of <code>schemacrawler.cmd</code> on Unix)</li>
+<li>Create the SchemaCrawler Lint report in HTML5 and JSON formats.</li>
+<li>Create a customized SchemaCrawler Lint report using a linter configuration file.</li>
+<li>Copy the <code>schemacrawler-linter-configs.xml</code> file to the SchemaCrawler distribution directory, that is, the <code>_schemacrawler</code> directory.</li>
+<li>To find schema design issues, run with an additional command-line option, <code>-linterconfigs=schemacrawler-linter-configs.xml</code></li>
+<li>Try creating your own database lints in a new jar - see <a href="http://www.schemacrawler.com/lint.html">SchemaCrawler Lint</a>.</li>
+</ol>
+
+    </main>
+    <footer>
+      <hr/>
+      Copyright &copy; 2000-2018, Sualeh Fatehi. <br />
+      <a href="http://www.schemacrawler.com/">SchemaCrawler</a>
+    </footer>
+  </body>
+</html>

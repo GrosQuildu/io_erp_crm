@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" lang="en">
+    <title>SchemaCrawler Example</title>
+    <link rel="stylesheet" type="text/css" href="../sc.css">
+    <link rel="stylesheet" type="text/css" href="../../sc.css">
+  </head>
+  <body>
+    <main>
+<h1>SchemaCrawler</h1>
+<h2>Introduction</h2>
+<p>Please review the <a href="http://www.schemacrawler.com/">SchemaCrawler website</a> for FAQs, how-tos, and so on. This download contains the main SchemaCrawler distribution, as well as examples. You can extend the SchemaCrawler distribution by downloading additional libraries that SchemaCrawler integrates with, such as the Spring Framework, Groovy, Ruby, Python and so on. You can also download additional JDBC drivers, and have SchemaCrawler pick them up automatically. Once you are happy with the customization of your installation, you can copy the <code>_schemacrawler</code> folder to any location on your system, and use it from there.</p>
+<h2>Customizing Your SchemaCrawler Installation</h2>
+<p>You can customize your SchemaCrawler installation, to add functionality. This is an optional step.</p>
+<h3>Database Drivers</h3>
+<p>Download database drivers for your database, and put the jar files into the <code>lib</code> folder. SchemaCrawler will pick them up automatically.</p>
+<h3>Other Libraries</h3>
+<p>Follow these instructions to download and install libraries that SchemaCrawler integrates with, using the provided scripts.</p>
+<ol>
+<li>Make sure that java is on your PATH</li>
+<li>Start a command shell in the <code>_downloader</code> directory</li>
+<li>Run <code>download.cmd</code> (or <code>download.sh</code> on Unix). Provide one of the following arguments:
+<ul>
+<li><code>groovy</code> - for Groovy language scripting with SchemaCrawler</li>
+<li><code>python</code> - for Python language scripting with SchemaCrawler</li>
+<li><code>ruby</code> - for Ruby language scripting with SchemaCrawler</li>
+<li><code>velocity</code> - for Apache Velocity templating with SchemaCrawler</li>
+<li><code>spring</code> - for using Spring Framework with SchemaCrawler</li>
+</ul>
+</li>
+</ol>
+<h2>Examples</h2>
+<p>This folder contains a number of examples, as well as a database server that has an example schema and data. Each folder illustrates a SchemaCrawler capability. Read the readme file in each example folder for instructions.</p>
+
+    </main>
+    <footer>
+      <hr/>
+      Copyright &copy; 2000-2018, Sualeh Fatehi. <br />
+      <a href="http://www.schemacrawler.com/">SchemaCrawler</a>
+    </footer>
+  </body>
+</html>

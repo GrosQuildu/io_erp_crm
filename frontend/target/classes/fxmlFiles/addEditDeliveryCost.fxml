@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="main.java.erp.frontend.deliveryCosts.AddEditDeliveryCostController"
+      spacing="10" fx:id="mainBox" styleClass="mainBackground2"
+            >
+    <padding>
+        <Insets top="10" left="10" right="10" bottom="10"/> </padding>
+    <Label text="From (kg)"/>
+    <TextField maxWidth="Infinity" fx:id="fromField" />
+    <Label text="To (kg)"/>
+    <TextField maxWidth="Infinity" fx:id="toField" />
+    <Label text="Price"/>
+    <TextField maxWidth="Infinity" fx:id="priceField" />
+    <HBox maxWidth="Infinity" spacing="10">
+        <Button text="Save" fx:id="saveBtn"/>
+        <Button text="Cancel" fx:id="cancelBtn"/>
+    </HBox>
+</VBox>

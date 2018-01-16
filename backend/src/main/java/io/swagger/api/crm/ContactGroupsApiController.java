@@ -39,14 +39,14 @@ public class ContactGroupsApiController implements ContactGroupsApi {
     }
 
     public ResponseEntity<Void> deleteContactGroup(@ApiParam(value = "",required=true ) @PathVariable("contactGroupId") Integer contactGroupId) {
-        ContactGroup contactGroup = BaseModel.getModelHelper(contactRepository, contactGroupId);
+        ContactGroup contactGroup = BaseModel.getModelHelper(contactGroupRepository, contactGroupId);
         BaseModel.dependent(contactRepository, contactGroup);
         contactGroupRepository.delete(contactGroupId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<ContactGroup> getContactGroup(@ApiParam(value = "",required=true ) @PathVariable("contactGroupId") Integer contactGroupId) {
-        ContactGroup contactGroup = BaseModel.getModelHelper(contactRepository, contactGroupId);
+        ContactGroup contactGroup = BaseModel.getModelHelper(contactGroupRepository, contactGroupId);
         return new ResponseEntity<ContactGroup>(contactGroup, HttpStatus.OK);
     }
 

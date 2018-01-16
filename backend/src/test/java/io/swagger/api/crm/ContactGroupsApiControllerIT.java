@@ -208,7 +208,6 @@ public class ContactGroupsApiControllerIT {
                 .when()
                 .get(RESOURCE + "/" + group1.getId())
                 .as(ContactGroup.class);
-        toCompare.setDescription(group1.getDescription());
         assert toCompare.equals(group1);
     }
 

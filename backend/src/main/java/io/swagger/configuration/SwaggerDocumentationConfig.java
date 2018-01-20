@@ -38,7 +38,7 @@ public class SwaggerDocumentationConfig {
                     .apis(RequestHandlerSelectors.basePackage("io.swagger.api"))
                     .build()
                 .directModelSubstitute(org.joda.time.LocalDate.class, java.sql.Date.class)
-                .directModelSubstitute(org.joda.time.DateTime.class, java.util.Date.class)
+                .directModelSubstitute(org.joda.time.LocalDate.class, java.util.Date.class)
                 .apiInfo(apiInfo())
                 .securitySchemes(newArrayList(apiKey()));
     }

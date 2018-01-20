@@ -92,14 +92,12 @@ public class Employee extends BaseModel {
   }
 
   @JsonProperty("role")
-
   private Role role;
 
   @JsonProperty("monthSchedule")
   private BigDecimal monthSchedule = null;
 
   @JsonProperty("visibility")
-
   private Boolean visibility = true;
 
   public Employee id(Integer id) {

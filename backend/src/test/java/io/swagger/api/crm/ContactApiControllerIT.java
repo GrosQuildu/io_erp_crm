@@ -76,12 +76,9 @@ public class ContactApiControllerIT {
             erpToken = ITHelper.getToken(Employee.Role.ERP);
         }
 
-        clear();
 
-        employee1 = new Employee(null, "employee1", "employee111@test.com", "password123", Employee.Role.CRM);
-        employee1 = employeeRepository.save(employee1);
-        employee2 = new Employee(null, "employee2", "employee222@test.com", "password123", Employee.Role.ERP);
-        employee2 = employeeRepository.save(employee2);
+        employee1 = employeeRepository.findById(0);
+        employee2 = employeeRepository.findById(1);
 
         clientType1 = new ClientType(null, "clientType1");
         clientType2 = new ClientType(null, "clientType2");
@@ -100,12 +97,15 @@ public class ContactApiControllerIT {
 
         contact1 = new Contact(null, employee1, contactGroup1, "Contact1", "contact11@test.com");
         contact2 = new Contact(null, employee2, contactGroup2, "Contact2", "contact22@test.com");
+        contact2.setClient(client1);
 
         invalidToken = "XXX-9a20-4b49-97a9-YYY";
     }
 
     @After
     public void clear() {
+        repository.deleteAll();
+
         for (Employee employee : employeeRepository.findAll()) {
             if(employee.getId() > 3)
                 employeeRepository.delete(employee.getId());
@@ -113,7 +113,6 @@ public class ContactApiControllerIT {
         contactGroupRepository.deleteAll();
         clientRepository.deleteAll();
         clientTypeRepository.deleteAll();
-        repository.deleteAll();
     }
 
     @Test
@@ -240,6 +239,7 @@ public class ContactApiControllerIT {
     public void updateContactShouldUpdate() {
         contact1 = repository.save(contact1);
         contact1.setName("Ulala");
+        contact1.setClient(client2);
 
         given()
                 .header("Authorization", "Bearer " + crmToken)
@@ -256,7 +256,6 @@ public class ContactApiControllerIT {
                 .when()
                 .get(RESOURCE + "/" + contact1.getId())
                 .as(Contact.class);
-        toCompare.setName(contact1.getName());
         assert toCompare.equals(contact1);
     }
 

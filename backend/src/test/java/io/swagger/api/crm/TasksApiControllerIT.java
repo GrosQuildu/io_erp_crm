@@ -71,8 +71,6 @@ public class TasksApiControllerIT {
             erpToken = ITHelper.getToken(Employee.Role.ERP);
         }
 
-        clear();
-
         employee1 = new Employee(null, "employee1", "employee111@test.com", "password123", Employee.Role.CRM);
         employee1 = employeeRepository.save(employee1);
         employee2 = new Employee(null, "employee2", "employee222@test.com", "password123", Employee.Role.ERP);
@@ -94,12 +92,12 @@ public class TasksApiControllerIT {
 
     @After
     public void clear() {
+        repository.deleteAll();
         for (Employee employee : employeeRepository.findAll()) {
             if(employee.getId() > 3)
                 employeeRepository.delete(employee.getId());
         }
         taskStatusRepository.deleteAll();
-        repository.deleteAll();
     }
     @Test
     public void createTaskWithoutAuthShouldReturn401Error() {
@@ -241,7 +239,6 @@ public class TasksApiControllerIT {
                 .when()
                 .get(RESOURCE + "/" + task1.getId())
                 .as(Task.class);
-        toCompare.setEmployee(task1.getEmployee());
         assert toCompare.equals(task1);
     }
 

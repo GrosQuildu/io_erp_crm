@@ -2,6 +2,10 @@ package io.swagger.model.crm;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.LocalDateSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.BaseModel;
 import io.swagger.model.common.Employee;
@@ -33,6 +37,8 @@ public class TaskComment extends BaseModel {
 
   @JsonProperty("time")
   @Column(nullable = false, unique = false)
+  @JsonDeserialize(using=LocalDateDeserializer.class)
+  @JsonSerialize(using = LocalDateSerializer.class)
   private LocalDate time;
 
   protected TaskComment() {}

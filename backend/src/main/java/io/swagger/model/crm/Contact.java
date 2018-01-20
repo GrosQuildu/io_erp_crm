@@ -27,13 +27,11 @@ public class Contact extends BaseModel {
   private Client client = null;
 
   @JsonProperty("employee")
-
   @ManyToOne
   @JoinColumn(name = "employee_id")
   private Employee employee;
 
   @JsonProperty("contactGroup")
-
   @ManyToOne
   @JoinColumn(name = "contact_group_id")
   private ContactGroup contactGroup;
@@ -42,7 +40,7 @@ public class Contact extends BaseModel {
   private Boolean vip = false;
 
   @JsonProperty("name")
-
+  @Size(min=5,max=100)
   @Column(nullable = false, unique = false)
   private String name;
 
@@ -59,7 +57,7 @@ public class Contact extends BaseModel {
   private String telephone = null;
 
   @JsonProperty("mail")
-
+  @Size(min=8,max=256)
   @Column(nullable = false, unique = true)
   private String mail;
 
@@ -188,7 +186,6 @@ public class Contact extends BaseModel {
   @ApiModelProperty(required = true, value = "")
 
 
- @Size(min=5,max=100)
   public String getName() {
     return name;
   }
@@ -208,7 +205,6 @@ public class Contact extends BaseModel {
   **/
   @ApiModelProperty(value = "")
 
- @Size(min=5,max=100)
   public String getStreet() {
     return street;
   }
@@ -228,7 +224,7 @@ public class Contact extends BaseModel {
   **/
   @ApiModelProperty(value = "")
 
- @Size(min=5,max=100)
+
   public String getCity() {
     return city;
   }
@@ -248,7 +244,7 @@ public class Contact extends BaseModel {
   **/
   @ApiModelProperty(value = "")
 
- @Size(min=5,max=100)
+
   public String getPostCode() {
     return postCode;
   }
@@ -268,7 +264,6 @@ public class Contact extends BaseModel {
   **/
   @ApiModelProperty(value = "")
 
- @Size(min=5,max=100)
   public String getTelephone() {
     return telephone;
   }

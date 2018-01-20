@@ -160,9 +160,10 @@ public class OrderApiControllerIT {
 
 	@Test
 	public void createOrderWithProperUserTokenShouldReturnIdAndSaveObject() {
+		order1.setOrderDate(new LocalDate("2015-02-01"));
 		Response response = given()
 								.header("Authorization", "Bearer " + erpToken)
-								.contentType("application/json")
+								.contentType("application/json").proxy("127.0.0.1", 6666)
 							.when()
 								.body(order1)
 								.post(RESOURCE)

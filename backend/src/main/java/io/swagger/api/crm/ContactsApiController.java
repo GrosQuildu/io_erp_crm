@@ -4,6 +4,7 @@ import io.swagger.model.BaseModel;
 import io.swagger.model.common.Client;
 import io.swagger.model.common.ClientRepository;
 import io.swagger.model.common.Employee;
+import io.swagger.model.common.EmployeeRepository;
 import io.swagger.model.crm.*;
 
 import io.swagger.annotations.*;
@@ -37,6 +38,8 @@ public class ContactsApiController implements ContactsApi {
     @Autowired
     ContactGroupRepository contactGroupRepository;
     @Autowired
+    EmployeeRepository employeeRepository;
+    @Autowired
     MeetingRepository meetingRepository;
     @Autowired
     TaskRepository taskRepository;
@@ -56,8 +59,8 @@ public class ContactsApiController implements ContactsApi {
 
     public ResponseEntity<Void> deleteContact(@ApiParam(value = "",required=true ) @PathVariable("contactId") Integer contactId) {
         Contact contact = BaseModel.getModelHelper(contactRepository, contactId);
-        BaseModel.dependent(meetingRepository, contact);
-        BaseModel.dependent(taskRepository, contact);
+//        BaseModel.dependent(meetingRepository, contact);
+//        BaseModel.dependent(taskRepository, contact);
         contactRepository.delete(contactId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

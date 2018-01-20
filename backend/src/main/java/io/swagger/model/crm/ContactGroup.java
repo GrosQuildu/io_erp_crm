@@ -23,7 +23,7 @@ public class ContactGroup extends BaseModel {
   private Integer id;
 
   @JsonProperty("description")
-
+  @Size(min=5,max=100)
   @Column(nullable = false, unique = false)
   private String description;
 
@@ -46,7 +46,6 @@ public class ContactGroup extends BaseModel {
   @ApiModelProperty(required = true, value = "")
 
 
-
   public Integer getId() {
     return id;
   }
@@ -67,7 +66,6 @@ public class ContactGroup extends BaseModel {
   @ApiModelProperty(required = true, value = "")
 
 
- @Size(min=5,max=100)
   public String getDescription() {
     return description;
   }

@@ -55,8 +55,6 @@ public class TaskStatusesApiControllerIT {
             erpToken = ITHelper.getToken(Employee.Role.ERP);
         }
 
-        repository.deleteAll();
-
         status1 = new TaskStatus(null, "status 0");
         status2 = new TaskStatus(null, "status 1");
 
@@ -208,7 +206,6 @@ public class TaskStatusesApiControllerIT {
                 .when()
                 .get(RESOURCE + "/" + status1.getId())
                 .as(TaskStatus.class);
-        toCompare.setDescription(status1.getDescription());
         assert toCompare.equals(status1);
     }
 

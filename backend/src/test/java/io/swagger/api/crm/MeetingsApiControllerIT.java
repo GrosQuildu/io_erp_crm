@@ -77,11 +77,10 @@ public class MeetingsApiControllerIT {
             crmToken = ITHelper.getToken(Employee.Role.CRM);
             erpToken = ITHelper.getToken(Employee.Role.ERP);
         }
-        repository.deleteAll();
 
-        employee1 = new Employee(null, "employee1", "employee111@test.com", "password123", Employee.Role.CRM);
+        employee1 = new Employee(4, "employee1", "employee111@test.com", "password123", Employee.Role.CRM);
         employee1 = employeeRepository.save(employee1);
-        employee2 = new Employee(null, "employee2", "employee222@test.com", "password123", Employee.Role.ERP);
+        employee2 = new Employee(5, "employee2", "employee222@test.com", "password123", Employee.Role.ERP);
         employee2 = employeeRepository.save(employee2);
 
         List<Employee> employees = new ArrayList<>();
@@ -112,13 +111,13 @@ public class MeetingsApiControllerIT {
 
     @After
     public void clear() {
+        repository.deleteAll();
+        contactRepository.deleteAll();
+        contactGroupRepository.deleteAll();
         for (Employee employee : employeeRepository.findAll()) {
             if(employee.getId() > 3)
                 employeeRepository.delete(employee.getId());
         }
-        contactGroupRepository.deleteAll();
-        contactRepository.deleteAll();
-        repository.deleteAll();
     }
 
     @Test
@@ -262,7 +261,6 @@ public class MeetingsApiControllerIT {
                 .when()
                 .get(RESOURCE + "/" + meeting1.getId())
                 .as(Meeting.class);
-        toCompare.setMeetingDate(meeting1.getMeetingDate());
         assert toCompare.equals(meeting1);
     }
 

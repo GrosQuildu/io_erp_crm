@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
     public Employee findById(Integer id);
     public Employee findByMail(String mail);
+    public Employee findByRole(Employee.Role role);
 }

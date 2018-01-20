@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.LocalDateSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.BaseModel;
 import io.swagger.model.common.Employee;
@@ -70,10 +74,14 @@ public class Task extends BaseModel {
 
   @JsonProperty("endDate")
   @Column(nullable = false, unique = false)
+  @JsonDeserialize(using=LocalDateDeserializer.class)
+  @JsonSerialize(using = LocalDateSerializer.class)
   private LocalDate endDate;
 
   @JsonProperty("startDate")
   @Column(nullable = false, unique = false)
+  @JsonDeserialize(using=LocalDateDeserializer.class)
+  @JsonSerialize(using = LocalDateSerializer.class)
   private LocalDate startDate;
 
   protected Task() {}

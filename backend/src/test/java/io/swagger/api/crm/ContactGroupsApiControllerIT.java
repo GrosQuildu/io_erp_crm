@@ -55,8 +55,6 @@ public class ContactGroupsApiControllerIT {
             erpToken = ITHelper.getToken(Employee.Role.ERP);
         }
 
-        repository.deleteAll();
-
         group1 = new ContactGroup(null, "Grupa o indeksie 0");
         group2 = new ContactGroup(null, "Grupa o indeksie 1");
 

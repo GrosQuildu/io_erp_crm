@@ -11,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.rest.RepositoryRestMvcAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,10 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
 @EnableSwagger2
-@ComponentScan(basePackages = { "io.swagger", "io.swagger.api" })
-@EnableAutoConfiguration(exclude = RepositoryRestMvcAutoConfiguration.class)
+@EnableAutoConfiguration
 public class Swagger2SpringBoot implements CommandLineRunner {
 
     @Autowired
@@ -54,7 +54,7 @@ public class Swagger2SpringBoot implements CommandLineRunner {
 
     @Autowired
     public void authenticationManager(AuthenticationManagerBuilder builder, EmployeeRepository repository, EmployeeService service) throws Exception {
-        //Setup a default user if db is empty
+        //Setup a default users if db is empty
         if (repository.count()==0) {
             List<String> passwords = Arrays.asList("81J3V6V9SQMT", "2G8UI6F0UVJC", "AM3MR3F0JNG4");
             service.save(new Employee(1, "admin", "admin@io_erp_crm.com", passwords.get(0), Employee.Role.ADMIN));
@@ -64,8 +64,8 @@ public class Swagger2SpringBoot implements CommandLineRunner {
             System.out.println("admin - " + passwords.get(0));
             System.out.println("main_crm - " + passwords.get(1));
             System.out.println("main_erp - " + passwords.get(2));
-            builder.userDetailsService(userDetailsService(repository)).passwordEncoder(passwordEncoder);
         }
+        builder.userDetailsService(userDetailsService(repository)).passwordEncoder(passwordEncoder);
     }
 
     private String generatePassword(Integer length) {

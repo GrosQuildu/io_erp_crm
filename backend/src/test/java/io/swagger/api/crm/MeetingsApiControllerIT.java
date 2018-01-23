@@ -52,8 +52,8 @@ public class MeetingsApiControllerIT {
     private static Meeting meeting1;
     private static Meeting meeting2;
 
-    private static LocalDate meetingDay = new LocalDate();
-    private static LocalDate updatedDay = new LocalDate("10");
+    private static LocalDate meetingDay = new LocalDate("2017-12-12");
+    private static LocalDate updatedDay = new LocalDate("2018-02-02");
 
     private static String invalidToken;
 
@@ -97,14 +97,12 @@ public class MeetingsApiControllerIT {
         contact2 = new Contact(null, employee2, contactGroup2, "Contact 2", "contact2@io.com");
         contact2 = contactRepository.save(contact2);
 
-        List<Contact> contacts= new ArrayList<>();
+        List<Contact> contacts = new ArrayList<>();
         contacts.add(contact1);
         contacts.add(contact2);
 
         meeting1 = new Meeting(null, meetingDay, employee1, contacts, employees);
-        meeting1 = repository.save(meeting1);
         meeting2 = new Meeting(null, meetingDay, employee2, contacts, employees);
-        meeting2 = repository.save(meeting2);
 
         invalidToken = "XXX-9a20-4b49-97a9-YYY";
     }
@@ -157,6 +155,7 @@ public class MeetingsApiControllerIT {
 
         Integer newId = Integer.parseInt(new String(response.asByteArray()));
         Meeting createdMeeting = repository.findById(newId);
+        assert createdMeeting != null;
 
         Meeting toCompare = given()
                 .header("Authorization", "Bearer " + crmToken)
@@ -164,7 +163,8 @@ public class MeetingsApiControllerIT {
                 .when()
                 .get(RESOURCE + "/" + newId)
                 .as(Meeting.class);
-        assert toCompare.equals(createdMeeting);
+        assert toCompare.getId().equals(createdMeeting.getId());
+        assert toCompare.getMeetingDate().equals(createdMeeting.getMeetingDate());
     }
 
 
@@ -177,7 +177,7 @@ public class MeetingsApiControllerIT {
                 .header("Authorization", "Bearer " + crmToken)
                 .contentType("application/json")
                 .when()
-                .body(meeting1)
+                .body(meeting2)
                 .post(RESOURCE)
                 .then()
                 .statusCode(HttpStatus.SC_OK)
@@ -199,8 +199,7 @@ public class MeetingsApiControllerIT {
                 .body(meeting1)
                 .post(RESOURCE)
                 .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST);
-        meeting1.setMeetingDate(meetingDay);
+                .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
     }
 
     @Test
@@ -245,6 +244,7 @@ public class MeetingsApiControllerIT {
         meeting1.setId(null);
         meeting1 = repository.save(meeting1);
         meeting1.setMeetingDate(updatedDay);
+        meeting1.setDescription("new description");
 
         given()
                 .header("Authorization", "Bearer " + crmToken)
@@ -261,15 +261,17 @@ public class MeetingsApiControllerIT {
                 .when()
                 .get(RESOURCE + "/" + meeting1.getId())
                 .as(Meeting.class);
-        assert toCompare.equals(meeting1);
+        assert toCompare.getId().equals(meeting1.getId());
+        assert toCompare.getMeetingDate().equals(meeting1.getMeetingDate());
+        assert toCompare.getDescription().equals(meeting1.getDescription());
     }
 
     @Test
     public void getMeetingsShouldReturnAllMeetings() {
         meeting1.setId(null);
-        meeting1.setId(null);
+        meeting2.setId(null);
         meeting1 = repository.save(meeting1);
-        meeting1 = repository.save(meeting1);
+        meeting2 = repository.save(meeting2);
 
         given()
                 .header("Authorization", "Bearer " + crmToken)

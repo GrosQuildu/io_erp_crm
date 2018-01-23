@@ -81,8 +81,8 @@ public class TasksApiControllerIT {
         taskStatus2 = new TaskStatus(null, "status 1");
         taskStatus2 = taskStatusRepository.save(taskStatus2);
 
-        endDate = new LocalDate();
-        startDate = new LocalDate();
+        endDate = new LocalDate("2017-12-12");
+        startDate = new LocalDate("2015-02-01");
 
         task1 = new Task(null, "Task 1", taskStatus1, employee1, "black", endDate, startDate);
         task2 = new Task(null, "Task 2", taskStatus2, employee2, "black", endDate, startDate);
@@ -143,7 +143,8 @@ public class TasksApiControllerIT {
                 .when()
                 .get(RESOURCE + "/" + newId)
                 .as(Task.class);
-        assert toCompare.equals(createdTask);
+        assert toCompare.getId().equals(createdTask.getId());
+        assert toCompare.getBackgroundColor().equals(createdTask.getBackgroundColor());
     }
 
 
@@ -170,7 +171,7 @@ public class TasksApiControllerIT {
 
     @Test
     public void createTaskWithoutRequiredFieldsShouldReturnError() {
-        task1.setEmployee(null);
+        task1.title(null);
         given()
                 .header("Authorization", "Bearer " + crmToken)
                 .contentType("application/json")
@@ -178,8 +179,7 @@ public class TasksApiControllerIT {
                 .body(task1)
                 .post(RESOURCE)
                 .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST);
-        task1.setEmployee(employee1);
+                .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
     }
 
     @Test
@@ -223,6 +223,7 @@ public class TasksApiControllerIT {
     public void updateTaskShouldUpdate() {
         task1 = repository.save(task1);
         task1.setEmployee(employee2);
+        task1.setBackgroundColor("white");
 
         given()
                 .header("Authorization", "Bearer " + crmToken)
@@ -239,13 +240,15 @@ public class TasksApiControllerIT {
                 .when()
                 .get(RESOURCE + "/" + task1.getId())
                 .as(Task.class);
-        assert toCompare.equals(task1);
+        assert toCompare.getId().equals(task1.getId());
+        assert toCompare.getBackgroundColor().equals(task1.getBackgroundColor());
+        assert toCompare.getEmployee().equals(task1.getEmployee());
     }
 
     @Test
     public void getTasksShouldReturnAllTasks() {
         task1 = repository.save(task1);
-        task1 = repository.save(task1);
+        task2 = repository.save(task2);
 
         given()
                 .header("Authorization", "Bearer " + crmToken)

@@ -47,11 +47,11 @@ public class Task extends BaseModel {
 
   @JsonProperty("notes")
   @OneToMany(orphanRemoval=true)
-  @Cascade(CascadeType.ALL)
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private List<TaskNote> notes = null;
 
   @JsonProperty("contacts")
-  @OneToMany
+  @ManyToMany
   private List<Contact> contacts = null;
 
   @JsonProperty("employee")
@@ -162,7 +162,12 @@ public class Task extends BaseModel {
   }
 
   public void setComments(List<TaskComment> comments) {
-    this.comments = comments;
+    if(this.comments == null)
+      this.comments = comments;
+    else {
+      this.comments.clear();
+      this.comments.addAll(comments);
+    }
   }
 
   public Task notes(List<TaskNote> notes) {
@@ -191,7 +196,12 @@ public class Task extends BaseModel {
   }
 
   public void setNotes(List<TaskNote> notes) {
-    this.notes = notes;
+    if(this.notes == null)
+      this.notes = notes;
+    else {
+      this.notes.clear();
+      this.notes.addAll(notes);
+    }
   }
 
   public Task contacts(List<Contact> contacts) {

@@ -140,6 +140,8 @@ public class ContactApiControllerIT {
 
     @Test
     public void createContactWithProperUserTokenShouldReturnIdAndSaveObject() {
+        contact1.setEmployee(employee2);
+
         Response response = given()
                 .header("Authorization", "Bearer " + crmToken)
                 .contentType("application/json")
@@ -240,6 +242,8 @@ public class ContactApiControllerIT {
         contact1 = repository.save(contact1);
         contact1.setName("Ulala");
         contact1.setClient(client2);
+        contact1.setEmployee(employee2);
+
 
         given()
                 .header("Authorization", "Bearer " + crmToken)

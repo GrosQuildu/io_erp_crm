@@ -48,7 +48,7 @@ public class ContactsApiController implements ContactsApi {
 
     public ResponseEntity<Integer> createContact(@ApiParam(value = "Contact to create"  )  @Valid @RequestBody Contact contact) {
         contact = BaseModel.dependsOn(ContactGroup.class, contactGroupRepository, contact);
-        contact = BaseModel.dependsOn(Employee.class, contactGroupRepository, contact);
+        contact = BaseModel.dependsOn(Employee.class, employeeRepository, contact);
         if(contact.getClient() != null)
             contact = BaseModel.dependsOn(Client.class, clientRepository, contact);
 
@@ -82,7 +82,7 @@ public class ContactsApiController implements ContactsApi {
 
         contact = BaseModel.combineWithOld(contactRepository, contact, contactId);
         contact = BaseModel.dependsOn(ContactGroup.class, contactGroupRepository, contact);
-        contact = BaseModel.dependsOn(Employee.class, contactGroupRepository, contact);
+        contact = BaseModel.dependsOn(Employee.class, employeeRepository, contact);
         if(contact.getClient() != null)
             contact = BaseModel.dependsOn(Client.class, clientRepository, contact);
 

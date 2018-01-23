@@ -50,7 +50,7 @@ public class TasksApiController implements TasksApi {
     TaskNoteRepository taskNoteRepository;
     
     public ResponseEntity<Integer> createTask(@ApiParam(value = "Task to create"  )  @Valid @RequestBody Task task) {
-        task = BaseModel.dependsOn(Employee.class, employeeRepository, task, "EmployeeCommissioned");
+        task = BaseModel.dependsOn(Employee.class, employeeRepository, task);
         if(task.getEmployee() != null)
             task = BaseModel.dependsOn(Employee.class, employeeRepository, task);
         task = BaseModel.dependsOn(TaskStatus.class, taskStatusRepository, task);
@@ -98,7 +98,7 @@ public class TasksApiController implements TasksApi {
 
         task = BaseModel.combineWithOld(taskRepository, task, taskId);
 
-        task = BaseModel.dependsOn(Employee.class, employeeRepository, task, "EmployeeCommissioned");
+        task = BaseModel.dependsOn(Employee.class, employeeRepository, task);
         if(task.getEmployee() != null)
             task = BaseModel.dependsOn(Employee.class, employeeRepository, task);
         task = BaseModel.dependsOn(TaskStatus.class, taskStatusRepository, task);

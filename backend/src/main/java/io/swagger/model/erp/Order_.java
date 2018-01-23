@@ -261,7 +261,12 @@ public class Order_ extends BaseModel {
   }
 
   public void setorderedArticles(List<OrderedArticle> orderedArticles) {
-    this.orderedArticles = orderedArticles;
+    if(this.orderedArticles == null)
+      this.orderedArticles = orderedArticles;
+    else {
+      this.orderedArticles.clear();
+      this.orderedArticles.addAll(orderedArticles);
+    }
   }
 
   public Order_ clientId(Client client) {

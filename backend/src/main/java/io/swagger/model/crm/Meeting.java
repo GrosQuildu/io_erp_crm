@@ -38,11 +38,11 @@ public class Meeting extends BaseModel {
   private LocalDate meetingDate;
 
   @JsonProperty("employees")
-  @OneToMany
+  @ManyToMany
   private List<Employee> employees;
 
   @JsonProperty("contacts")
-  @OneToMany
+  @ManyToMany
   private List<Contact> contacts;
 
   @JsonProperty("notes")
@@ -62,6 +62,7 @@ public class Meeting extends BaseModel {
   private String purpose = null;
 
   @JsonProperty("mainEmployee")
+  @NotNull
   @OneToOne
   private Employee mainEmployee;
 
@@ -125,7 +126,12 @@ public class Meeting extends BaseModel {
   }
 
   public void setNotes(List<MeetingNote> notes) {
-    this.notes = notes;
+    if(this.notes == null)
+      this.notes = notes;
+    else {
+      this.notes.clear();
+      this.notes.addAll(notes);
+    }
   }
 
 

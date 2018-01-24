@@ -40,7 +40,7 @@ CRM
 
 ### Entity Relationship Diagram
 Whole database
-![Whole database](/project/db_schemas/schema.png)
+![Whole database](/project/db_schemas/schema_small.png)
 
 
 ### API specification

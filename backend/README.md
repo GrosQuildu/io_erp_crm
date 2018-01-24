@@ -21,7 +21,7 @@ First, check configuration in src/main/resources/application.properties and appl
 * security.oauth2.client.id / client-secret - for basic auth in Oauth
 * security.default.admin.user / mail / password - for auth
 
-Second, setup postgres databases (io and test_io by default). Installation guides [here](https://wiki.postgresql.org/wiki/Detailed_installation_guides).
+Second, create postgres databases (io and test_io by default). Installation guides [here](https://wiki.postgresql.org/wiki/Detailed_installation_guides).
 
 ## Build
 

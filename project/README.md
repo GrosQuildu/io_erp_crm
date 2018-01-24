@@ -42,16 +42,6 @@ CRM
 Whole database
 ![Whole database](/project/db_schemas/schema.png)
 
----
-
-ERP entities
-![erp database](/project/db_schemas/schema_erp.png)
-
----
-
-CRM entities
-![crm database](/project/db_schemas/schema_crm.png)
-
 
 ### API specification
 [Backend api swagger specification - yaml](/project/api/erp_crm_api.yaml)

@@ -8,9 +8,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by gros on 16.11.17.
- */
 public class ModelHelper {
     //  https://stackoverflow.com/questions/19737626/how-to-ignore-null-values-using-springframework-beanutils-copyproperties
     public static String[] getNullPropertyNames (Object source) {

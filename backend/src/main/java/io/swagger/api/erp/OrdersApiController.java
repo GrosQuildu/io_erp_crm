@@ -75,7 +75,7 @@ public class OrdersApiController implements OrdersApi {
             }
             weightSum.add(new BigDecimal(weight));
         }
-        //todo
+        
         BigDecimal deliveryCost = weightSum;
         return new ResponseEntity<BigDecimal>(deliveryCost, HttpStatus.OK);
     }

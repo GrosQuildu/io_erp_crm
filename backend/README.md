@@ -49,7 +49,6 @@ mvn integration-test -P integration
 To run unit tests:
 
 ```
-# all tests
 mvn test
 ```
 

@@ -1,4 +1,24 @@
 {
-  "address" : "localhost",
-  "port" : "8080"
+  "address": "localhost",
+  "port": "8080",
+  "employeeFirstName": "",
+  "employeeName": "",
+  "employeeMail": "",
+  "employeeTelephone": "",
+  "employeePassword": "",
+  "signatureScanPath": "",
+  "mailServerAddress": "mailng.az.pl",
+  "mailPort": "587",
+  "mailAddress": "kontakt@mblacharski.pl",
+  "mailPassword": "V@l$m1a70",
+  "defaultCC": "kontakt@mblacharski.pl",
+  "defaultSenderName": "Marcin Blacharski",
+  "ordersConditions": "",
+  "ordersComments": "",
+  "mailContent": "",
+  "defaultOrderPdfPath": "",
+  "defaultProformaPdfPath": "",
+  "bank": "",
+  "providerData": "",
+  "companyLogoPath": ""
 }

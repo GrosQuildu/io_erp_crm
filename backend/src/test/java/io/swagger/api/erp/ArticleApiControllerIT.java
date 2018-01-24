@@ -5,12 +5,13 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import io.swagger.Swagger2SpringBoot;
 import io.swagger.api.ITHelper;
-import io.swagger.model.common.*;
+import io.swagger.model.common.Employee;
+import io.swagger.model.common.Unit;
+import io.swagger.model.common.UnitRepository;
 import io.swagger.model.erp.Article;
 import io.swagger.model.erp.ArticleRepository;
 import org.apache.http.HttpStatus;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +20,7 @@ import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
@@ -29,6 +31,7 @@ import static org.hamcrest.Matchers.hasItems;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Configuration
 @ContextConfiguration
+@TestPropertySource("classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Swagger2SpringBoot.class)
 public class ArticleApiControllerIT {
      private static final String RESOURCE = "/api/erp/articles";

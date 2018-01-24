@@ -13,14 +13,15 @@ Default database is postgres.
 
 ## Setup
 
-First, check configuration in src/main/resources/application.properties:
+First, check configuration in src/main/resources/application.properties and application-test.properties:
 
 * server.port - default 8080
-* spring.datasource.url - default localhost:5432/test_io
+* spring.datasource.url - default localhost:5432/io
 * spring.datasource.username / password - for database
 * security.oauth2.client.id / client-secret - for basic auth in Oauth
+* security.default.admin.user / mail / password - for auth
 
-Second, setup postgres database. Installation guides [here](https://wiki.postgresql.org/wiki/Detailed_installation_guides).
+Second, setup postgres databases (io and test_io by default). Installation guides [here](https://wiki.postgresql.org/wiki/Detailed_installation_guides).
 
 ## Build
 
@@ -50,9 +51,6 @@ To run unit tests:
 ```
 # all tests
 mvn test
-
-# single test
-mvn -Dtest=EmployeeApiControllerTest test
 ```
 
 ## Documentation
@@ -74,4 +72,4 @@ There are three roles for employees: admin, erp and crm. All of them have access
 
 Default users credentials can be found in application.properties.
 
-Remember to change them and default basic auth credentials.
+Remember to change them and the default basic auth credentials.

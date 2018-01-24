@@ -1,93 +1,71 @@
 package io.swagger.api;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import com.jayway.restassured.response.Response;
 import io.swagger.model.common.Employee;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 
 import static com.jayway.restassured.RestAssured.given;
 
 public class ITHelper {
     private static final String GET_TOKEN = "/api/oauth/token";
 
-    private static String adminName;
-    private static String adminMail;
-    private static String adminPass;
-
-    private static String crmName;
-    private static String crmMail;
-    private static String crmPass;
-
-    private static String erpName;
-    private static String erpMail;
-    private static String erpPass;
-
-    @Value("${security.default.admin.user}")
-    public void setAdminName(String adminName) { ITHelper.adminName = adminName; }
-    @Value("${security.default.admin.mail}")
-    public void setAdminMail(String adminMail) { ITHelper.adminMail = adminMail; }
-    @Value("${security.default.admin.password}")
-    public void setAdminPass(String adminPass) { ITHelper.adminPass = adminPass; }
-
-    @Value("${security.default.crm.user}")
-    public void setCrmName(String crmName) { ITHelper.crmName = crmName; }
-    @Value("${security.default.crm.mail}")
-    public void setCrmMail(String crmMail) { ITHelper.crmMail = crmMail; }
-    @Value("${security.default.crm.password}")
-    public void setCrmPass(String crmPass) { ITHelper.crmPass = crmPass; }
-
-    @Value("${security.default.erp.user}")
-    public void setErpName(String erpName) { ITHelper.erpName = erpName; }
-    @Value("${security.default.erp.mail}")
-    public void setErpMail(String erpMail) { ITHelper.erpMail = erpMail; }
-    @Value("${security.default.erp.password}")
-    public void setErpPass(String erpPass) { ITHelper.erpPass = erpPass; }
+    private static String basicUser;
+    private static String basicPassword;
 
 
     static public String getToken(Employee.Role role) {
-        adminName = "admin";
-        adminMail = "admin@io_erp_crm.com";
-        adminPass = "81J3V6V9SQMT";
+        Resource resourceTest = new ClassPathResource("/application-test.properties");
+        Properties propsTest = null;
+        try {
+            propsTest = PropertiesLoaderUtils.loadProperties(resourceTest);
+        } catch (IOException e) {
+            System.out.println("Error in ITHelper GetToken");
+            e.printStackTrace();
+            return "";
+        }
 
-        erpName = "main_erp";
-        erpMail = "main_erp@io_erp_crm.com";
-        erpPass = "AM3MR3F0JNG4";
+        List<String> usernames = Arrays.asList(propsTest.getProperty("security.default.admin.user"),
+                propsTest.getProperty("security.default.crm.user"), propsTest.getProperty("security.default.erp.user"));
+        List<String> emails = Arrays.asList(propsTest.getProperty("security.default.admin.mail"),
+                propsTest.getProperty("security.default.crm.mail"), propsTest.getProperty("security.default.erp.mail"));
+        List<String> passwords = Arrays.asList(propsTest.getProperty("security.default.admin.password"),
+                propsTest.getProperty("security.default.crm.password"), propsTest.getProperty("security.default.erp.password"));
 
-        crmName = "main_crm";
-        crmMail = "main_crm@io_erp_crm.com";
-        crmPass = "2G8UI6F0UVJC";
+
+        basicUser = propsTest.getProperty("security.oauth2.client.id");
+        basicPassword = propsTest.getProperty("security.oauth2.client.client-secret");
 
         String token = null;
-//        System.out.println("------------------------");
-//        System.out.println("------------------------");
-//        System.out.println(adminName);
-//        System.out.println(adminPass);
-//        System.out.println("------------------------");
-//        System.out.println("------------------------");
         switch (role) {
             case ADMIN:
             Response response = given()
-                    .auth().basic("javafx-client", "R3GMPX2DQHD1234VFG929ABW")
-                    .parameters("grant_type", "password", "username", adminMail, "password", adminPass)
+                    .auth().basic(basicUser, basicPassword)
+                    .parameters("grant_type", "password", "username", emails.get(0), "password", passwords.get(0))
                     .when().post(GET_TOKEN).then().extract().response();
             token = response.path("access_token");
             break;
 
             case CRM:
             response = given()
-                    .auth().basic("javafx-client", "R3GMPX2DQHD1234VFG929ABW")
-                    .parameters("grant_type", "password", "username", crmMail, "password", crmPass)
+                    .auth().basic(basicUser, basicPassword)
+                    .parameters("grant_type", "password", "username", emails.get(1), "password", passwords.get(1))
                     .when().post(GET_TOKEN).then().extract().response();
             token = response.path("access_token");
             break;
 
             case ERP:
             response = given()
-                    .auth().basic("javafx-client", "R3GMPX2DQHD1234VFG929ABW")
-                    .parameters("grant_type", "password", "username", erpMail, "password", erpPass)
+                    .auth().basic(basicUser, basicPassword)
+                    .parameters("grant_type", "password", "username", emails.get(2), "password", passwords.get(2))
                     .when().post(GET_TOKEN).then().extract().response();
             token = response.path("access_token");
             break;

@@ -12,24 +12,35 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.rest.RepositoryRestMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
 @EnableSwagger2
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = RepositoryRestMvcAutoConfiguration.class)
 public class Swagger2SpringBoot implements CommandLineRunner {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ApplicationContext ctx;
 
     @Override
     public void run(String... arg0) throws Exception {
@@ -56,14 +67,21 @@ public class Swagger2SpringBoot implements CommandLineRunner {
     public void authenticationManager(AuthenticationManagerBuilder builder, EmployeeRepository repository, EmployeeService service) throws Exception {
         //Setup a default users if db is empty
         if (repository.count()==0) {
-            List<String> passwords = Arrays.asList("81J3V6V9SQMT", "2G8UI6F0UVJC", "AM3MR3F0JNG4");
-            service.save(new Employee(1, "admin", "admin@io_erp_crm.com", passwords.get(0), Employee.Role.ADMIN));
-            service.save(new Employee(2, "main_crm", "main_crm@io_erp_crm.com", passwords.get(1), Employee.Role.CRM));
-            service.save(new Employee(3, "main_erp", "main_erp@io_erp_crm.com", passwords.get(2), Employee.Role.ERP));
-            System.out.println("Created default employees:");
-            System.out.println("admin - " + passwords.get(0));
-            System.out.println("main_crm - " + passwords.get(1));
-            System.out.println("main_erp - " + passwords.get(2));
+            Resource resource = new ClassPathResource("/application.properties");
+            Properties props = PropertiesLoaderUtils.loadProperties(resource);
+
+            Environment env = ctx.getEnvironment();
+
+            List<String> usernames = Arrays.asList(env.getProperty("security.default.admin.user"),
+                    env.getProperty("security.default.crm.user"), env.getProperty("security.default.erp.user"));
+            List<String> emails = Arrays.asList(env.getProperty("security.default.admin.mail"),
+                    env.getProperty("security.default.crm.mail"), env.getProperty("security.default.erp.mail"));
+            List<String> passwords = Arrays.asList(env.getProperty("security.default.admin.password"),
+                    env.getProperty("security.default.crm.password"), env.getProperty("security.default.erp.password"));
+
+            service.save(new Employee(1, usernames.get(0), emails.get(0), passwords.get(0), Employee.Role.ADMIN));
+            service.save(new Employee(2, usernames.get(1), emails.get(1), passwords.get(1), Employee.Role.CRM));
+            service.save(new Employee(3, usernames.get(2), emails.get(2), passwords.get(2), Employee.Role.ERP));
         }
         builder.userDetailsService(userDetailsService(repository)).passwordEncoder(passwordEncoder);
     }

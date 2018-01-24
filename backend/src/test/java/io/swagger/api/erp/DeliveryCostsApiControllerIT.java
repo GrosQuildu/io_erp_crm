@@ -5,7 +5,6 @@ import com.jayway.restassured.response.Response;
 import io.swagger.Swagger2SpringBoot;
 import io.swagger.api.ITHelper;
 import io.swagger.model.common.Employee;
-import io.swagger.model.common.Unit;
 import io.swagger.model.erp.DeliveryCost;
 import io.swagger.model.erp.DeliveryCostRepository;
 import org.apache.http.HttpStatus;
@@ -18,6 +17,7 @@ import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
@@ -29,6 +29,7 @@ import static org.hamcrest.Matchers.hasItems;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Configuration
 @ContextConfiguration
+@TestPropertySource("classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Swagger2SpringBoot.class)
 public class DeliveryCostsApiControllerIT {
     private static final String RESOURCE = "/api/erp/deliveryCosts";

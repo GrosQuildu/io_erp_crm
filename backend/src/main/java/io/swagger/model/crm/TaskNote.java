@@ -86,7 +86,6 @@ public class TaskNote extends BaseModel {
   **/
   @ApiModelProperty(value = "")
 
- @Size(min=4,max=10)
   public String getBackgroundColor() {
     return backgroundColor;
   }

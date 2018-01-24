@@ -9,7 +9,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ModelHelper {
-    //  https://stackoverflow.com/questions/19737626/how-to-ignore-null-values-using-springframework-beanutils-copyproperties
+    // mainly from https://stackoverflow.com/questions/19737626/how-to-ignore-null-values-using-springframework-beanutils-copyproperties
+    // This class is to combine old and new (received) object so that null values do not propagate
     public static String[] getNullPropertyNames (Object source) {
         final BeanWrapper src = new BeanWrapperImpl(source);
         java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();

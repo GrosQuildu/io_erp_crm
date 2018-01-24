@@ -67,6 +67,7 @@ public class Swagger2SpringBoot implements CommandLineRunner {
     public void authenticationManager(AuthenticationManagerBuilder builder, EmployeeRepository repository, EmployeeService service) throws Exception {
         //Setup a default users if db is empty
         if (repository.count()==0) {
+            // manually read properties - spring's automagic is somagic that it returns nulls for @Value. Probably lack of a dozen new interfaces
             Resource resource = new ClassPathResource("/application.properties");
             Properties props = PropertiesLoaderUtils.loadProperties(resource);
 

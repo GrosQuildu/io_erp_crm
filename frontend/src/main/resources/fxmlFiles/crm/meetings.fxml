@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="main.java.erp_crm.frontend.meetings.MeetingsController"
+      spacing="10"
+      fx:id="mainBox"
+            >
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+    <Label text="Meetings"/>
+    <TableView fx:id="meetingsTableView" VBox.vgrow="ALWAYS">
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
+        <columns>
+            <TableColumn fx:id="meetingDateColumn" text="Meeting date"/>
+            <TableColumn fx:id="nextMeetingDateColumn" text="Next meeting date"/>
+            <TableColumn fx:id="purposeColumn" text="Purpose"/>
+            <TableColumn fx:id="descriptionColumn" text="Description"/>
+        </columns>
+    </TableView>
+    <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+        <Button fx:id="addMeetingBtn" mnemonicParsing="false" styleClass="regularBtn" text="Add"/>
+        <Button fx:id="deleteMeetingBtn" mnemonicParsing="false" styleClass="regularBtn" text="Delete"/>
+        <Button fx:id="editMeetingBtn" mnemonicParsing="false" text="Edit"/>
+        <Button fx:id="refreshBtn" mnemonicParsing="false" text="Refresh"/>
+    </HBox>
+
+</VBox>

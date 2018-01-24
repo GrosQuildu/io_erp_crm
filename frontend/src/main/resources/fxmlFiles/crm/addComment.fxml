@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="main.java.erp_crm.frontend.tasks.AddCommentController"
+      fx:id="mainBox" spacing="10">
+    <padding>
+        <Insets top="10" left="10" right="10" bottom="10"/> </padding>
+    <TextArea fx:id="commentContentArea" VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="10">
+        <Button fx:id="addBtn" text="Add"/>
+        <Button fx:id="cancelBtn" text="Cancel"/>
+    </HBox>
+</VBox>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.web.WebView?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="main.java.erp_crm.frontend.orders.OrderPreviewController"
+      prefWidth="600.0" spacing="10" fx:id="mainBox" styleClass="mainBackground2">
+    <padding><Insets top="10" bottom="10" right="10" left="10"/> </padding>
+    <WebView fx:id="previewView" VBox.vgrow="ALWAYS"/>
+    <Button fx:id="closeBtn" text="Close" />
+
+
+</VBox>

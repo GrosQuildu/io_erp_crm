@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox fx:id="ordersBox" styleClass="mainBackground" maxHeight="1.7976931348623157E308" maxWidth="Infinity"
+      minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0"
+      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="main.java.erp_crm.frontend.orders.OrdersController">
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+    <Label text="Orders"/>
+    <TableView fx:id="orderTable" maxHeight="1.7976931348623157E308" maxWidth="Infinity" prefHeight="200.0"
+               prefWidth="200.0" VBox.vgrow="ALWAYS">
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+        <columns>
+            <TableColumn fx:id="orderNumberColumn" maxWidth="300" minWidth="30" prefWidth="200.0" text="Order number"/>
+          <TableColumn fx:id="clientColumn" maxWidth="300" minWidth="30" prefWidth="200.0" text="Client"/>
+          <TableColumn fx:id="signedColumn" maxWidth="300" minWidth="30" prefWidth="100.0" text="Signed"/>
+          <TableColumn fx:id="paidColumn" maxWidth="300" minWidth="30" prefWidth="100.0" text="Paid"/>
+            <TableColumn fx:id="dateColumn" maxWidth="300" minWidth="30" prefWidth="200.0" text="Date"/>
+          <TableColumn fx:id="realizationDeadlineColumn" maxWidth="300" minWidth="30" prefWidth="200.0"
+                       text="Realization deadline"/>
+          <TableColumn fx:id="stateColumn" maxWidth="300" minWidth="30" prefWidth="200.0" text="State"/>
+      </columns>
+    </TableView>
+    <HBox prefHeight="40.0" prefWidth="580.0" spacing="10.0" VBox.vgrow="NEVER">
+        <Button fx:id="addBtn" mnemonicParsing="false" text="Add"/>
+        <Button fx:id="editBtn" mnemonicParsing="false" text="Edit"/>
+        <Button fx:id="deleteBtn" mnemonicParsing="false" text="Delete"/>
+        <Button fx:id="exportBtn" mnemonicParsing="false" text="Export"/>
+        <Button fx:id="proformaBtn" mnemonicParsing="false" text="Proforma"/>
+        <Button fx:id="sendBtn" mnemonicParsing="false" text="Send..."/>
+        <Button fx:id="previewBtn" mnemonicParsing="false" text="Preview"/>
+        <Button fx:id="refreshBtn" mnemonicParsing="false" text="Refresh"/>
+    </HBox>
+</VBox>

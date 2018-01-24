@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="main.java.erp_crm.frontend.proformas.AddProformaController"
+            spacing="10" fx:id="mainBox" styleClass="mainBackground2">
+    <Label text="Issue date" />
+    <DatePicker fx:id="issueDatePicker" />
+    <Label text="Sale date" />
+    <DatePicker fx:id="saleDatePicker" />
+    <Label text="Payment date" />
+    <DatePicker fx:id="paymentDatePicker" />
+    <Label text="Payment method" />
+    <ComboBox fx:id="paymentMethodBox" />
+    <HBox spacing="10" maxWidth="Infinity">
+        <Button fx:id="applyBtn" text="Apply"/>
+        <Button fx:id="closeBtn" text="Close" />
+    </HBox>
+</VBox>

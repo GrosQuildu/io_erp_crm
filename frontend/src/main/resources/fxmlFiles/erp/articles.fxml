@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox maxHeight="1.7976931348623157E308" styleClass="mainBackground" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.erp_crm.frontend.articles.ArticlesController">
+   <children>
+      <Label text="Articles" />
+      <TableView fx:id="articleTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+
+          <columnResizePolicy>
+              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+          </columnResizePolicy>
+        <columns>
+          <TableColumn fx:id="nameColumn" prefWidth="200.0" text="Name" />
+          <TableColumn fx:id="availabilityColumn" prefWidth="100.0" text="Availability" />
+            <TableColumn fx:id="unitColumn" prefWidth="100.0" text="Unit" />
+            <TableColumn fx:id="unitPriceColumn" prefWidth="150.0" text="Unit price" />
+            <TableColumn fx:id="weightColumn" prefWidth="150.0" text="Weight" />
+        </columns>
+      </TableView>
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <children>
+            <Button fx:id="addArticleBtn" mnemonicParsing="false" text="Add" />
+            <Button fx:id="editArticleBtn" mnemonicParsing="false" text="Edit" />
+            <Button fx:id="deleteArticleBtn" mnemonicParsing="false" text="Delete" />
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>

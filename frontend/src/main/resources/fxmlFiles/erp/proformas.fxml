@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox fx:id="proformaBox" styleClass="mainBackground" maxHeight="1.7976931348623157E308"
+      maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
+      spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="main.java.erp_crm.frontend.proformas.ProformasController">
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+    <Label text="Proformas"/>
+    <TableView fx:id="proformasTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+      <columns>
+          <TableColumn fx:id="proformaNumberColumn" prefWidth="150.0" text="Number"/>
+          <TableColumn fx:id="clientColumn" prefWidth="200.0" text="Client"/>
+          <TableColumn fx:id="netColumn" prefWidth="100.0" text="Net price"/>
+          <TableColumn fx:id="paymentMethodColumn" prefWidth="100.0" text="Payment method"/>
+          <TableColumn fx:id="orderNumberColumn" prefWidth="150.0" text="Order number"/>
+      </columns>
+    </TableView>
+    <HBox prefHeight="40.0" prefWidth="580.0" spacing="10.0">
+        <Button fx:id="pdfBtn" mnemonicParsing="false" text="Export"/>
+        <Button fx:id="deleteBtn" mnemonicParsing="false" text="Delete"/>
+        <Button fx:id="refBtn" mnemonicParsing="false" text="Refresh"/>
+    </HBox>
+</VBox>

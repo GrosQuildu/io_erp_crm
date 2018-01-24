@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="main.java.erp_crm.frontend.tasks.AddEditTaskController"
+          vgap="10" hgap="10" minWidth="600" styleClass="mainBackground2"
+          fx:id="mainPane"
+>
+
+    <columnConstraints>
+        <ColumnConstraints percentWidth="33"  />
+        <ColumnConstraints percentWidth="33"  />
+        <ColumnConstraints percentWidth="33"  />
+    </columnConstraints>
+    <padding><Insets top="10" bottom="10" right="10" left="10"/> </padding>
+
+    <!-- TASK START DATE -->
+    <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" >
+        <Label text="Beginning" />
+        <DatePicker fx:id="beginningPicker"/>
+    </VBox>
+
+    <!-- TITLE -->
+    <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+        <Label text="Title"/>
+        <TextField fx:id="titleField" maxWidth="Infinity"/>
+    </VBox>
+
+
+    <!-- BACKGROUND COLOR -->
+
+    <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
+        <Label text="Background color"/>
+        <ColorPicker fx:id="backgroundPicker" maxWidth="Infinity"/>
+        <CheckBox fx:id="archiveCheckBox" text="Archived"/>
+    </VBox>
+
+    <!-- CONTACTS -->
+
+    <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="3">
+        <Label text="Contacts"/>
+        <TableView fx:id="contactsTableView" VBox.vgrow="ALWAYS">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+            <columns>
+                <TableColumn fx:id="contactNameColumn" text="Name"/>
+                <TableColumn fx:id="contactMailColumn" text="Mail"/>
+            </columns>
+        </TableView>
+        <HBox spacing="10">
+            <Button fx:id="addContactBtn" text="+"/>
+            <Button fx:id="remContactBtn" text="-"/>
+        </HBox>
+    </VBox>
+
+
+    <!-- END DATE -->
+
+    <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <Label text="Deadline"/>
+        <DatePicker fx:id="deadlinePicker"/>
+    </VBox>
+
+
+
+    <!-- DESCRIPTION -->
+
+    <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.columnSpan="2">
+        <Label text="Description"/>
+        <TextArea fx:id="descriptionArea"/>
+    </VBox>
+
+
+    <!-- TASK_NOTES-->
+
+    <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <Label text="Notes"/>
+        <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true">
+            <VBox fx:id="notesContainer" spacing="10" alignment="CENTER"/>
+        </ScrollPane>
+        <HBox spacing="10">
+            <Button fx:id="addNoteBtn" text="+"/>
+        </HBox>
+    </VBox>
+
+
+    <!-- STATUS -->
+
+    <VBox spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="0" >
+        <Label text="Status"/>
+        <ComboBox fx:id="statusComboBox" maxWidth="Infinity"/>
+    </VBox>
+
+    <!-- COMMISIONED -->
+
+    <VBox spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="1" >
+        <Label text="Commissioned employee"/>
+        <TextField fx:id="commissionedField" />
+        <HBox spacing="10">
+            <Button fx:id="commissionBtn" text="+"/>
+            <Button fx:id="remCommissionBtn" text="-"/>
+        </HBox>
+    </VBox>
+
+
+    <!-- COMMENTS-->
+
+    <VBox spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="3">
+        <Label text="Comments"/>
+        <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true">
+            <VBox fx:id="commentsContainer" spacing="10" alignment="CENTER"/>
+        </ScrollPane>
+        <HBox spacing="10">
+            <Button fx:id="addCommentBtn" text="+"/>
+        </HBox>
+    </VBox>
+
+    <!-- MAIN EMPLOYEE -->
+
+    <Label fx:id="mainEmployeeLabel" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+
+    <!-- SAVE & CANCEL BUTTONS -->
+    <HBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="5">
+        <Button fx:id="saveBtn" text="Save"/>
+        <Button fx:id="cancelBtn" text="Cancel"/>
+    </HBox>
+
+
+</GridPane>

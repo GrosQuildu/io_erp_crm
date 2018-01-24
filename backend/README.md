@@ -35,7 +35,7 @@ mvn package -Dmaven.test.skip=true
 ## Run
 
 ```
-java -jar ./target/swagger-spring-1.0.0.jar
+java -jar ./target/io-api-server-1.0.0.jar
 ```
 
 ## Tests

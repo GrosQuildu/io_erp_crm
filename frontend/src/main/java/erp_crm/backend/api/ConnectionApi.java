@@ -171,8 +171,7 @@ public class ConnectionApi {
             request.setHeader("Authorization", "Bearer " + token);
 
             HttpResponse result = httpClient.execute(request);
-            String body = EntityUtils.toString(result.getEntity(), "UTF-8");
-            return body;
+            return EntityUtils.toString(result.getEntity(), "UTF-8");
 
         } catch (Exception e) {
             AlertWindow.show(e.getMessage());

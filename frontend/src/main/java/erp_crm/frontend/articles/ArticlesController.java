@@ -1,13 +1,16 @@
 package main.java.erp_crm.frontend.articles;
 
 import javafx.beans.binding.Bindings;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import main.java.erp_crm.backend.api.erp.ArticlesControllerApi;
+import main.java.erp_crm.backend.api.erp.ArticlesApi;
 import main.java.erp_crm.backend.model.DBData;
+import main.java.erp_crm.backend.model.common.Unit;
 import main.java.erp_crm.backend.model.erp.Article;
 
 import java.io.IOException;
@@ -16,31 +19,25 @@ import java.util.ResourceBundle;
 
 
 public class ArticlesController implements Initializable{
-    public TableColumn weightColumn;
-    @FXML
-    private Button addArticleBtn;
-    @FXML
-    private Button editArticleBtn;
-    @FXML
-    private Button deleteArticleBtn;
-    @FXML
-    private TableView<Article> articleTable;
-    @FXML
-    private TableColumn<Article, String> nameColumn;
-    @FXML
-    private TableColumn<Article, Float> availabilityColumn;
-    @FXML
-    private TableColumn<Article, String> unitColumn;
-    @FXML
-    private TableColumn<Article, Float> unitPriceColumn;
-    private ArticlesControllerApi controller = new ArticlesControllerApi();
+    public Button addArticleBtn;
+    public Button editArticleBtn;
+    public Button deleteArticleBtn;
+    public TableView<Article> articleTable;
+    public TableColumn<Article, String> nameColumn;
+    public TableColumn<Article, Float> availabilityColumn;
+    public TableColumn<Article, Unit> unitColumn;
+    public TableColumn<Article, Float> unitPriceColumn;
+    public TableColumn<Article, Float> weightColumn;
+
+
+    private ArticlesApi controller = new ArticlesApi();
     private AddEditArticleController addEditArticleController;
-    private FXMLLoader loader;
 
 
-    public ArticlesController(){
+
+    private void loadControllers() {
         try {
-            loader = new FXMLLoader(getClass().getResource("/fxmlFiles/erp/addEditArticle.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlFiles/erp/addEditArticle.fxml"));
             loader.load();
             addEditArticleController = loader.getController();
             addEditArticleController.setArticlesController(this);
@@ -48,34 +45,63 @@ public class ArticlesController implements Initializable{
             e.printStackTrace();
         }
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        loadControllers();
+        setColumns();
+        refresh();
+        setEvents();
+        Bindings.bindContent(articleTable.getItems(), DBData.getArticles());
+    }
+
+    private void setColumns() {
         articleTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         unitColumn.setCellValueFactory(new PropertyValueFactory<>("unit"));
         availabilityColumn.setCellValueFactory(new PropertyValueFactory<>("availability"));
         unitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
         weightColumn.setCellValueFactory(new PropertyValueFactory<>("weight"));
-        refresh();
-        setEvents();
-        Bindings.bindContent(articleTable.getItems(), DBData.getArticles());
+
+        unitColumn.setCellFactory(column -> new TableCell<Article, Unit>() {
+            @Override
+            protected void updateItem(Unit item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+
     }
 
     private void setEvents() {
-        deleteArticleBtn.setOnAction(e -> {
-            Article toDelete = articleTable.getSelectionModel().getSelectedItem();
-            if(toDelete != null) {
-                controller.deleteArticle(toDelete);
-                refresh();
-            }
-        });
-        addArticleBtn.setOnAction(e -> addEditArticleController.show());
-        editArticleBtn.setOnAction(e -> {
-            Article selected = articleTable.getSelectionModel().getSelectedItem();
-            if(selected != null){
-                addEditArticleController.show(selected);
-            }
-        });
+        deleteArticleBtn.setOnAction(e -> deleteArticle());
+        addArticleBtn.setOnAction(e -> addArticle());
+        editArticleBtn.setOnAction(e -> editArticle());
+    }
+
+    private void deleteArticle() {
+        Article toDelete = articleTable.getSelectionModel().getSelectedItem();
+        if(toDelete != null) {
+            controller.deleteArticle(toDelete);
+            refresh();
+        }
+    }
+
+    private void addArticle() {
+        addEditArticleController.show();
+    }
+
+    private void editArticle() {
+        Article selected = articleTable.getSelectionModel().getSelectedItem();
+        if(selected != null){
+            addEditArticleController.show(selected);
+        }
     }
 
     void refresh() {

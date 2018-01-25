@@ -20,8 +20,8 @@ public class AddClientTypeController implements Initializable{
     public Button saveBtn;
     public Button cancelBtn;
 
+
     private Stage stage = new Stage();
-    private Scene scene;
     private ClientType clientType;
     private SettingsController settingsController;
     private ClientTypesApi controller = new ClientTypesApi();
@@ -29,17 +29,27 @@ public class AddClientTypeController implements Initializable{
 
     private void setEvents() {
         saveBtn.setOnAction(e -> {
-            clientType = new ClientType();
-            fillClientType();
-            controller.createClientType(clientType);
-            settingsController.refresh();
+            save();
             stage.close();
         });
         cancelBtn.setOnAction(e -> stage.close());
     }
 
+    private void save() {
+        clientType = new ClientType();
+        fillClientType();
+        controller.createClientType(clientType);
+        settingsController.refresh();
+    }
+
     public void show(){
+        initializeFields();
         stage.show();
+    }
+
+    private void initializeFields() {
+        clientType = null;
+        descriptionField.setText("");
     }
 
     private void fillClientType() {
@@ -49,7 +59,7 @@ public class AddClientTypeController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setEvents();
-        scene = new Scene(mainBox);
+        Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(Main.css);
         stage.setWidth(300);
         stage.setScene(scene);

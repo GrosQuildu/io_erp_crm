@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.java.erp_crm.Main;
 import main.java.erp_crm.backend.SharedData;
-import main.java.erp_crm.backend.api.erp.OrderControllerApi;
+import main.java.erp_crm.backend.api.erp.OrdersApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.common.Client;
 import main.java.erp_crm.backend.model.erp.DeliveryCost;
@@ -30,7 +30,6 @@ import static javafx.scene.input.KeyCode.ESCAPE;
 
 public class AddEditOrderController implements Initializable {
     public DatePicker realizationDeadlinePicker;
-    private Stage stage = new Stage();
     public Button saveBtn;
     public Button cancelBtn;
     public Button addArticleBtn;
@@ -59,15 +58,19 @@ public class AddEditOrderController implements Initializable {
     public TextField advanceField;
     public TextField vatField;
 
+    private Stage stage = new Stage();
     private OrdersController ordersController;
     private AddArticleToOrderController addArticleToOrderController;
     private AddClientToOrderController addClientToOrderController;
+    private OrdersApi controller = new OrdersApi();
+
+
     private Order order;
     private Client client;
-    private OrderControllerApi controller = new OrderControllerApi();
-    //private OrderedArticlesApiController controllerOrderedArticle = new OrderedArticlesApiController();
 
-    public AddEditOrderController() {
+
+
+    private void loadControllers() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlFiles/erp/addArticleToOrder.fxml"));
             loader.load();
@@ -104,16 +107,7 @@ public class AddEditOrderController implements Initializable {
     private void setEvents() {
         chooseClientBtn.setOnAction(e -> addClientToOrderController.show());
         saveBtn.setOnAction(e -> {
-            if(order!=null){
-                fillOrder();
-                controller.updateOrder(order.getId(), order);
-                ordersController.refresh();
-            } else {
-                order = new Order();
-                fillOrder();
-                controller.createOrder(order);
-            }
-            ordersController.refresh();
+            save();
             close();
         });
         cancelBtn.setOnAction(e -> close());
@@ -191,6 +185,19 @@ public class AddEditOrderController implements Initializable {
         });
     }
 
+    private void save() {
+        if(order!=null){
+            fillOrder();
+            controller.updateOrder(order.getId(), order);
+            ordersController.refresh();
+        } else {
+            order = new Order();
+            fillOrder();
+            controller.createOrder(order);
+        }
+        ordersController.refresh();
+    }
+
     private void close() {
         this.order = null;
         this.client = null;
@@ -219,18 +226,19 @@ public class AddEditOrderController implements Initializable {
     }
 
     public void show(){
-        stage.setMaximized(true);
+        initializeFields();
         orderNumberText.setText(OrderUtils.generateOrderNumber());
         stage.show();
     }
     public void show(Order order){
-        fillFields(order);
-        show();
+        initializeFields();
+        this.order = order;
+        this.client = order.getClient();
+        fillFields();
+        stage.show();
     }
 
-    private void fillFields(Order order) {
-       this.order = order;
-       this.client = order.getClient();
+    private void fillFields() {
         advanceField.setText(order.getAdvance().toString());
         clientField.setText(order.getClient().getName());
         commentsArea.setText(order.getComments());
@@ -249,16 +257,14 @@ public class AddEditOrderController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        stage.setMaximized(true);
+        loadControllers();
         setEvents();
         Scene scene = new Scene(mainPane);
         scene.getStylesheets().add(Main.css);
         stage.setWidth(300);
         stage.setScene(scene);
-        orderDatePicker.setValue(java.time.LocalDate.now());
-        realizationDatePicker.setValue(java.time.LocalDate.now());
-        realizationDeadlinePicker.setValue(java.time.LocalDate.now());
-        conditionsArea.setText(SharedData.getConfig().getOrdersConditions());
-        commentsArea.setText(SharedData.getConfig().getOrdersComments());
+        initializeFields();
 
         articleTableView.getItems().addListener((ListChangeListener<OrderedArticle>) change -> {
 
@@ -269,8 +275,35 @@ public class AddEditOrderController implements Initializable {
         });
     }
 
-    public void addArticle(OrderedArticle orderedArticle) {
+    private void initializeFields() {
+        this.order = null;
+        this.client = null;
+        articleTableView.getItems().clear();
 
+        advanceField.setText("");
+        clientField.setText("");
+        deliveryAddressArea.setText("");
+        deliveryCostField.setText("");
+        employeeText.setText("");
+        orderNumberText.setText("");
+        vatField.setText("");
+        stateField.setText("");
+
+
+        isDone.setSelected(false);
+        isPaid.setSelected(false);
+        isSignedBox.setSelected(false);
+
+        orderDatePicker.setValue(java.time.LocalDate.now());
+        realizationDatePicker.setValue(java.time.LocalDate.now());
+        realizationDeadlinePicker.setValue(java.time.LocalDate.now());
+
+        conditionsArea.setText(SharedData.getConfig().getOrdersConditions() != null ? SharedData.getConfig().getOrdersConditions() : "");
+        commentsArea.setText(SharedData.getConfig().getOrdersComments() != null ? SharedData.getConfig().getOrdersComments() : "");
+
+    }
+
+    public void addArticle(OrderedArticle orderedArticle) {
         articleTableView.getItems().add(orderedArticle);
     }
 

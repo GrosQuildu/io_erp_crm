@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import main.java.erp_crm.Main;
-import main.java.erp_crm.backend.api.crm.ContactsControllerApi;
+import main.java.erp_crm.backend.api.common.ContactsApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.common.Client;
 import main.java.erp_crm.backend.model.common.Employee;
@@ -21,7 +21,6 @@ import java.util.ResourceBundle;
 
 public class AddEditContactController implements Initializable{
     public VBox mainBox;
-    private Stage stage = new Stage();
     public TextField nameField;
     public TextField streetField;
     public TextField cityField;
@@ -34,8 +33,11 @@ public class AddEditContactController implements Initializable{
     public ComboBox<Employee> employeeBox;
     public ComboBox<Client> clientComboBox;
     public CheckBox vipBox;
+
+
+    private Stage stage = new Stage();
     private ContactsController contactsController;
-    private ContactsControllerApi controller = new ContactsControllerApi();
+    private ContactsApi controller = new ContactsApi();
     private Contact contact;
     
 
@@ -139,9 +141,9 @@ public class AddEditContactController implements Initializable{
                 controller.createContact(contact);
             }
             contactsController.refresh();
-            stage.close();
+            close();
         });
-        cancelBtn.setOnAction(e -> stage.close());
+        cancelBtn.setOnAction(e -> close());
     }
 
     public void setContactsController(ContactsController contactsController) {
@@ -154,7 +156,7 @@ public class AddEditContactController implements Initializable{
         streetField.setText(contact.getStreet());
         cityField.setText(contact.getCity());
         postCodeField.setText(contact.getPostCode());
-        
+
         telephoneField.setText(contact.getTelephone());
         mailField.setText(contact.getMail());
 
@@ -163,7 +165,24 @@ public class AddEditContactController implements Initializable{
         if(contact.getClient()!=null)
             clientComboBox.setValue(contact.getClient());
         vipBox.setSelected(contact.getVip());
-        
+
+    }
+    private void initializeFields() {
+        this.contact = null;
+        nameField.setText("");
+        streetField.setText("");
+        cityField.setText("");
+        postCodeField.setText("");
+
+        telephoneField.setText("");
+        mailField.setText("");
+
+        if(contactGroupBox.getItems().size()>0)
+            contactGroupBox.getSelectionModel().select(0);
+        if(clientComboBox.getItems().size()>0)
+            clientComboBox.getSelectionModel().select(0);
+        vipBox.setSelected(false);
+
     }
     private void fillContact() {
         contact.setName(nameField.getText());
@@ -178,9 +197,11 @@ public class AddEditContactController implements Initializable{
         contact.setEmployee(employeeBox.getValue());
     }
     public void show() {
+        initializeFields();
         stage.show();
     }
     public void show(Contact contact) {
+        initializeFields();
         this.contact = contact;
         fillFields(contact);
         stage.show();

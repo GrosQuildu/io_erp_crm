@@ -40,7 +40,7 @@ public class ErpChart {
         for (final PieChart.Data data : wykres.getData()) {
             if(admin) {
                 data.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED,
-                        e -> statisticsView.update(data.getName(), Float.toString(Math.round(calosc * (float) data.getPieValue()) / 100f) + " zł", String.valueOf(Math.round(data.getPieValue())) + "% całości"));
+                        e -> statisticsView.update(data.getName(), Float.toString(Math.round(calosc * (float) data.getPieValue()) / 100f) + " zł", String.valueOf(Math.round(data.getPieValue())) + "% of total"));
                 data.getNode().addEventHandler(MouseEvent.MOUSE_EXITED,
                         e -> statisticsView.update("", "", ""));
             }

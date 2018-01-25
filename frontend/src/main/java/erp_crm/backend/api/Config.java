@@ -10,7 +10,6 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-//TODO: USTAWIENIA -> zapis/odczyt do/z configa
 public class Config {
 
     //connection
@@ -44,14 +43,12 @@ public class Config {
     private String companyLogoPath="";
 
 
-    private Config(){
+    public Config(){}
 
-    }
     public Config(boolean init){
         ConfigReader reader = new ConfigReader();
         Config config = reader.readConfig();
-        address = config.getAddress();
-        port = config.getPort();
+        setFields(config);
     }
 
     public String getAddress() {
@@ -255,6 +252,12 @@ public class Config {
     }
 
     private Config(Config config){
+        setFields(config);
+
+
+    }
+
+    private void setFields(Config config) {
         //connection
         this.address = config.getAddress();
         this.port = config.getPort();
@@ -284,8 +287,6 @@ public class Config {
         this.bank = config.getBank();
         this.companyLogoPath = config.getCompanyLogoPath();
         this.providerData = config.getProviderData();
-
-
     }
 
     public void setCompanyLogoPath(String companyLogoPath) {

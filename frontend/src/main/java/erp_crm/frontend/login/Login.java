@@ -7,16 +7,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import main.java.erp_crm.Main;
-import main.java.erp_crm.backend.SharedData;
 import main.java.erp_crm.backend.api.ConnectionApi;
-import main.java.erp_crm.backend.api.common.EmployeeControllerApi;
+import main.java.erp_crm.backend.api.common.EmployeeApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.common.Employee;
 import main.java.erp_crm.frontend.mainView.MainController;
@@ -40,6 +38,9 @@ public class Login {
     public Login(Stage primaryStage){
         this.primaryStage = primaryStage;
     }
+
+
+
     public Boolean show(){
         String[] data = readLoginData();
         mainBox = new VBox();
@@ -115,58 +116,65 @@ public class Login {
 
     private void startMain() {
         connection = new ConnectionApi(loginField.getText(), passField.getText());
-        if(!connection.getToken().equals("") || true) {
-            saveLoginData(loginField.getText(), passField.getText());
-            EmployeeControllerApi employeeControllerApi = new EmployeeControllerApi();
-            employeeControllerApi.getEmployees();
-            System.out.println("-------------------------"+DBData.getEmployees().size());
-            for(Employee e : DBData.getEmployees()){
-                if(e.getMail().equals(loginField.getText())){
-                    DBData.setLoggedUser(e);
-                }
-            }
-            res = true;
+        res = assignEmployee();
+        if(!connection.getToken().equals("") && res) {
+            buildMainWindow();
             close();
-            BorderPane root;
-
-            try {
-                root = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/mainView.fxml"));
-                VBox clientsBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/clients.fxml"));
-                TabPane settingsBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/settings.fxml"));
-                VBox deliveryBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/deliveryCosts.fxml"));
-                VBox articlesBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/articles.fxml"));
-                VBox ordersBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/orders.fxml"));
-                VBox proformasBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/proformas.fxml"));
-                VBox meetingsBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/crm/meetings.fxml"));
-                VBox tasksBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/crm/tasks.fxml"));
-                VBox contactsBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/contacts.fxml"));
-                MainController.settingsBox = settingsBox;
-                MainController.clientsBox = clientsBox;
-                MainController.articlesBox = articlesBox;
-                MainController.deliveryBox = deliveryBox;
-                MainController.ordersBox = ordersBox;
-                MainController.proformasBox = proformasBox;
-                MainController.meetingsBox = meetingsBox;
-                MainController.tasksBox = tasksBox;
-                MainController.contactsBox = contactsBox;
-                primaryStage.setTitle("ERP");
-                root.setRight(null);
-                Scene scene = new Scene(root, 1000, 600);
-                scene.getStylesheets().add(Main.css);
-                root.setCenter(clientsBox);
-
-
-                primaryStage.setOnCloseRequest(this::askForClose);
-
-                primaryStage.setScene(scene);
-                primaryStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         } else {
             statusLabel.setText("Couldn't connect.");
         }
 
+    }
+
+    private boolean assignEmployee() {
+        saveLoginData(loginField.getText(), passField.getText());
+        EmployeeApi employeeApi = new EmployeeApi();
+        employeeApi.getEmployees();
+        for(Employee e : DBData.getEmployees()){
+            if(loginField.getText().equals(e.getMail())){
+                DBData.setLoggedUser(e);
+            }
+        }
+        return DBData.getLoggedUser() != null;
+    }
+
+    private void buildMainWindow() {
+        BorderPane root;
+
+        try {
+            root = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/mainView.fxml"));
+            VBox clientsBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/clients.fxml"));
+            TabPane settingsBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/settings.fxml"));
+            VBox deliveryBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/deliveryCosts.fxml"));
+            VBox articlesBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/articles.fxml"));
+            VBox ordersBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/orders.fxml"));
+            VBox proformasBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/proformas.fxml"));
+            VBox meetingsBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/crm/meetings.fxml"));
+            VBox tasksBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/crm/tasks.fxml"));
+            VBox contactsBox = FXMLLoader.load(getClass().getResource("/fxmlFiles/erp/contacts.fxml"));
+            MainController.settingsBox = settingsBox;
+            MainController.clientsBox = clientsBox;
+            MainController.articlesBox = articlesBox;
+            MainController.deliveryBox = deliveryBox;
+            MainController.ordersBox = ordersBox;
+            MainController.proformasBox = proformasBox;
+            MainController.meetingsBox = meetingsBox;
+            MainController.tasksBox = tasksBox;
+            MainController.contactsBox = contactsBox;
+            primaryStage.setTitle("ERP");
+            root.setRight(null);
+            Scene scene = new Scene(root, 1000, 600);
+            scene.getStylesheets().add(Main.css);
+            root.setCenter(clientsBox);
+
+
+            primaryStage.setOnCloseRequest(this::askForClose);
+
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void saveLoginData(String login, String haslo) {

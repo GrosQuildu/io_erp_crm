@@ -13,21 +13,21 @@ import javafx.stage.StageStyle;
 import java.util.HashMap;
 
 public class LoadingDialog {
-    VBox pane = new VBox();
-    Scene scene = new Scene(pane);
-    Stage stage = new Stage(StageStyle.UNDECORATED);
-    Thread thread;
-    private String komunikat;
-    HashMap<String,Integer> map = new HashMap<>();
-    public LoadingDialog(String komunikat){
-        this.komunikat=komunikat;
-        map.put(komunikat+"...",1);
-        map.put(komunikat+"..",2);
-        map.put(komunikat+".",3);
-        map.put(komunikat,4);
+    private VBox pane = new VBox();
+    private Scene scene = new Scene(pane);
+    private Stage stage = new Stage(StageStyle.UNDECORATED);
+    private Thread thread;
+    private String message;
+    private HashMap<String,Integer> map = new HashMap<>();
+    public LoadingDialog(String message){
+        this.message = message;
+        map.put(message +"...",1);
+        map.put(message +"..",2);
+        map.put(message +".",3);
+        map.put(message,4);
     }
     public void show(){
-        Label msg = new Label(komunikat+"...");
+        Label msg = new Label(message +"...");
         msg.setAlignment(Pos.CENTER);
         msg.setStyle("-fx-text-fill:#ffffff;");
         pane.setAlignment(Pos.CENTER_LEFT);
@@ -49,16 +49,16 @@ public class LoadingDialog {
                     Platform.runLater(() -> {
                         switch(map.get(msg.getText())){
                             case 1:
-                                msg.setText(komunikat);
+                                msg.setText(message);
                                 break;
                             case 2:
-                                msg.setText(komunikat+"...");
+                                msg.setText(message +"...");
                                 break;
                             case 3:
-                                msg.setText(komunikat+"..");
+                                msg.setText(message +"..");
                                 break;
                             case 4:
-                                msg.setText(komunikat+".");
+                                msg.setText(message +".");
                                 break;
                         }
                     });
@@ -82,20 +82,3 @@ public class LoadingDialog {
         thread.interrupt();
     }
 }
-
-
-/*
-LoadingDialog ld = new LoadingDialog("");
-Task<Boolean> task = new Task<Boolean>(){
-@Override
-protected Boolean call() throws Exception {
-    return ;
-}
-};
-task.setOnRunning(event -> ld.show());
-task.setOnSucceeded(event -> {
-ld.close();
-stage.close();
-});
-new Thread(task).start();
-* */

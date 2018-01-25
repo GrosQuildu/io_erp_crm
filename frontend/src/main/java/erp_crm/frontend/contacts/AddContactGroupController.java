@@ -15,11 +15,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddContactGroupController implements Initializable{
-    private Stage stage = new Stage();
     public VBox mainBox;
     public TextField descriptionField;
     public Button saveBtn;
     public Button cancelBtn;
+
+
+    private Stage stage = new Stage();
     private SettingsController settingsController;
     private ContactGroupApi controller = new ContactGroupApi();
     private ContactGroup contactGroup;

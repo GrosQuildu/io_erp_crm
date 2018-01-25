@@ -21,12 +21,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConnectionApi {
+    private final String clientId = "javafx-client";
+    private final String clientSecret = "R3GMPX2DQHD1234VFG929ABW";
 
 
     public enum ObjectType {ARTICLES, DELIVERY_COSTS, ORDERS, CLIENT_TYPES, UNITS, CONTACTS, TASKS, TASK_COMMENTS, TASK_COMMENTS_SECOND, TASK_NOTES, TASK_NOTES_SECOND, TASK_STATUSES, MEETINGS, MEETING_NOTES, MEETING_NOTES_SECOND, EMPLOYEES, PROFORMAS, CONTACT_GROUPS, CLIENTS}
     private String token = "";
-    private String clientId = "javafx-client";
-    private String clientSecret = "R3GMPX2DQHD1234VFG929ABW";
     private String username;
     private String password;
 
@@ -128,10 +128,6 @@ public class ConnectionApi {
             Map<String,String> responseMap = new HashMap<>();
             responseMap = (Map<String,String>) gson.fromJson(json, responseMap.getClass());
 
-            System.out.println("-----------------------------------------------------");
-            System.out.println(responseMap.get("access_token"));
-            System.out.println("-----------------------------------------------------");
-
             return responseMap.get("access_token") == null ? "" : responseMap.get("access_token");
 
         } catch (Exception e) {
@@ -157,11 +153,6 @@ public class ConnectionApi {
             HttpResponse result = httpClient.execute(request);
             String body = EntityUtils.toString(result.getEntity(), "UTF-8");
 
-
-            System.out.println("-----------------------------------------------------");
-            System.out.println(body);
-            System.out.println("-----------------------------------------------------");
-
             return Integer.parseInt(body);
 
         } catch (Exception e) {
@@ -181,10 +172,6 @@ public class ConnectionApi {
 
             HttpResponse result = httpClient.execute(request);
             String body = EntityUtils.toString(result.getEntity(), "UTF-8");
-
-            System.out.println("-----------------------------------------------------");
-            System.out.println(body);
-            System.out.println("-----------------------------------------------------");
             return body;
 
         } catch (Exception e) {
@@ -211,11 +198,6 @@ public class ConnectionApi {
             String body = EntityUtils.toString(result.getEntity(), "UTF-8");
 
 
-            System.out.println("-----------------------------------------------------");
-            System.out.println(body);
-            System.out.println("-----------------------------------------------------");
-
-
         } catch (Exception e) {
             AlertWindow.show(e.getMessage());
             e.printStackTrace();
@@ -233,12 +215,6 @@ public class ConnectionApi {
 
             HttpResponse result = httpClient.execute(request);
             String body = EntityUtils.toString(result.getEntity(), "UTF-8");
-
-
-            System.out.println("-----------------------------------------------------");
-            System.out.println(body);
-            System.out.println("-----------------------------------------------------");
-
 
         } catch (Exception e) {
             AlertWindow.show(e.getMessage());

@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp_crm.Main;
-import main.java.erp_crm.backend.api.erp.DeliveryCostControllerApi;
+import main.java.erp_crm.backend.api.erp.DeliveryCostApi;
 import main.java.erp_crm.backend.model.erp.DeliveryCost;
 
 import java.math.BigDecimal;
@@ -15,41 +15,54 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddEditDeliveryCostController implements Initializable{
-    private Stage stage = new Stage();
-    private Scene scene;
     public VBox mainBox;
     public TextField fromField;
     public TextField toField;
     public TextField priceField;
     public Button saveBtn;
     public Button cancelBtn;
+
+
+    private Stage stage = new Stage();
     private DeliveryCost deliveryCost;
-    private DeliveryCostsController deliveryCostsController;
-    private DeliveryCostControllerApi controller = new DeliveryCostControllerApi();
+    private DeliveryCostApi controller = new DeliveryCostApi();
 
 
     private void setEvents() {
         saveBtn.setOnAction(e -> {
-            if(deliveryCost!=null){
-                fillDeliveryCost();
-                controller.updateDeliveryCost(deliveryCost.getId(), deliveryCost);
-            } else {
-                deliveryCost = new DeliveryCost();
-                fillDeliveryCost();
-                controller.createDeliveryCost(deliveryCost);
-            }
-            controller.getDeliveryCosts();
+            save();
             stage.close();
         });
         cancelBtn.setOnAction(e -> stage.close());
     }
 
+    private void save() {
+        if(deliveryCost!=null){
+            fillDeliveryCost();
+            controller.updateDeliveryCost(deliveryCost.getId(), deliveryCost);
+        } else {
+            deliveryCost = new DeliveryCost();
+            fillDeliveryCost();
+            controller.createDeliveryCost(deliveryCost);
+        }
+        controller.getDeliveryCosts();
+    }
+
     public void show(){
-        this.deliveryCost = null;
+        initializeFields();
         stage.show();
     }
+
+    private void initializeFields() {
+        this.deliveryCost = null;
+        priceField.setText("");
+        fromField.setText("");
+        toField.setText("");
+        
+    }
+
     public void show(DeliveryCost deliveryCost){
-        show();
+        stage.show();
         fillFields(deliveryCost);
     }
 
@@ -65,13 +78,11 @@ public class AddEditDeliveryCostController implements Initializable{
         deliveryCost.setWeightTo(new BigDecimal(toField.getText()).floatValue());
     }
 
-    public void setDeliveryCostsController(DeliveryCostsController deliveryCostsController) {
-        this.deliveryCostsController = deliveryCostsController;
-    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setEvents();
-        scene = new Scene(mainBox);
+        Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(Main.css);
         stage.setWidth(300);
         stage.setScene(scene);

@@ -41,30 +41,6 @@ public class Utils {
     }
 
 
-    public static void blockLetters(KeyEvent e, TextField field){
-        if(e.getText().matches("[a-z]*[A-Z]*")) {
-            int start = field.getSelection().getStart();
-            int end = field.getSelection().getEnd();
-            field.setText(field.getText().replaceAll("[a-z]*[A-Z]*", ""));
-            field.positionCaret(field.getText().length());
-            if(start!=end) field.selectRange(start,end);
-        }
-    }
-    public static String generateMD5Hash(String s){
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(s.getBytes(), 0, s.length());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : md.digest()){
-                sb.append(String.format("%02x", b & 0xff));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        return "";
-    }
     public static String formatPln(Float liczba){
         DecimalFormat format = new DecimalFormat("###,###,###.## zł");
         return format.format(liczba);

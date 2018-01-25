@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp_crm.Main;
-import main.java.erp_crm.backend.api.erp.UnitControllerApi;
+import main.java.erp_crm.backend.api.erp.UnitsApi;
 import main.java.erp_crm.backend.model.common.Unit;
 import main.java.erp_crm.frontend.settings.SettingsController;
 
@@ -16,31 +16,42 @@ import java.util.ResourceBundle;
 
 public class AddUnitController implements Initializable{
 
-    private Stage stage = new Stage();
-    private Scene scene;
     public VBox mainBox;
     public TextField nameField;
     public TextField shortNameField;
     public Button saveBtn;
     public Button cancelBtn;
-    private Unit unit;
+
+
+    private Stage stage = new Stage();
     private SettingsController settingsController;
-    private UnitControllerApi controller = new UnitControllerApi();
+    private UnitsApi controller = new UnitsApi();
+
+
+    private Unit unit;
 
 
     private void setEvents() {
-        saveBtn.setOnAction(e -> {
-            unit = new Unit();
-            fillUnit();
-            controller.createUnit(unit);
-            settingsController.refresh();
-            stage.close();
-        });
+        saveBtn.setOnAction(e -> save());
         cancelBtn.setOnAction(e -> stage.close());
     }
 
+    private void save() {
+        unit = new Unit();
+        fillUnit();
+        controller.createUnit(unit);
+        settingsController.refresh();
+        stage.close();
+    }
+
     public void show(){
+        initializeFields();
         stage.show();
+    }
+
+    private void initializeFields() {
+        nameField.setText("");
+        shortNameField.setText("");
     }
 
     private void fillUnit() {
@@ -51,7 +62,7 @@ public class AddUnitController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setEvents();
-        scene = new Scene(mainBox);
+        Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(Main.css);
         stage.setWidth(300);
         stage.setScene(scene);

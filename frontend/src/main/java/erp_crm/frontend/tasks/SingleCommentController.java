@@ -17,6 +17,8 @@ public class SingleCommentController implements Initializable{
     public TextArea contentArea;
     public Label authorLabel;
     public Label dateLabel;
+
+
     private AddEditTaskController addEditTaskController;
     private TaskComment comment;
 
@@ -28,17 +30,20 @@ public class SingleCommentController implements Initializable{
 
     private void setEvents() {
 
-        deleteBtn.setOnAction(e -> {
-            if(comment!=null) {
-                addEditTaskController.deleteComment(comment);
-            }
-        });
-        saveBtn.setOnAction(e -> {
-            if(comment!=null) {
-                addEditTaskController.updateComment(comment);
-            }
+        deleteBtn.setOnAction(e -> delete());
+        saveBtn.setOnAction(e -> save());
+    }
 
-        });
+    private void delete() {
+        if(comment!=null) {
+            addEditTaskController.deleteComment(comment);
+        }
+    }
+
+    private void save() {
+        if(comment!=null) {
+            addEditTaskController.updateComment(comment);
+        }
     }
 
     public void setAddEditTaskController(AddEditTaskController addEditTaskController) {
@@ -51,7 +56,7 @@ public class SingleCommentController implements Initializable{
     }
 
     private void fillFields() {
-//        authorLabel.setText(comment.getEmployee().getName());
+        authorLabel.setText(comment.getEmployee().getName());
         dateLabel.setText(comment.getTime().toString());
         contentArea.setText(comment.getContent());
     }

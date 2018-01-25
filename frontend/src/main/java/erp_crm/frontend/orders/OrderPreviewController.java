@@ -16,20 +16,19 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class OrderPreviewController implements Initializable {
-    private Stage stage = new Stage();
     public VBox mainBox;
     public WebView previewView;
     public Button closeBtn;
-    private OrdersController ordersController;
+
+
+
+    private Stage stage = new Stage();
 
 
     private void setEvents() {
         closeBtn.setOnAction(e -> stage.close());
     }
 
-    public WebView getPreviewView() {
-        return previewView;
-    }
 
 
     public void show(Order order){
@@ -129,7 +128,4 @@ public class OrderPreviewController implements Initializable {
 
     }
 
-    public void setOrdersController(OrdersController ordersController) {
-        this.ordersController = ordersController;
-    }
 }

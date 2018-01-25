@@ -10,7 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp_crm.Main;
-import main.java.erp_crm.backend.api.common.ClientsControllerApi;
+import main.java.erp_crm.backend.api.common.ClientsApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.common.Client;
 
@@ -27,7 +27,7 @@ public class AddClientToOrderController implements Initializable{
     public Button addBtn;
     public Button cancelBtn;
     private AddEditOrderController addEditOrderController;
-    private ClientsControllerApi controller = new ClientsControllerApi();
+    private ClientsApi controller = new ClientsApi();
 
     private void setEvents() {
         addBtn.setOnAction(e -> {

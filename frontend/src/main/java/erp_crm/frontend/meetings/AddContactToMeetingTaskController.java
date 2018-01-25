@@ -10,7 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp_crm.Main;
-import main.java.erp_crm.backend.api.crm.ContactsControllerApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.crm.Contact;
 import main.java.erp_crm.frontend.tasks.AddEditTaskController;
@@ -19,17 +18,18 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddContactToMeetingTaskController implements Initializable{
-    private Stage stage = new Stage();
     public VBox mainBox;
     public TableView<Contact> contactTableView;
-    public TableColumn nameColumn;
-    public TableColumn nipColumn;
-    public TableColumn mailColumn;
+    public TableColumn<Contact, String> nameColumn;
+    public TableColumn<Contact, String> nipColumn;
+    public TableColumn<Contact, String> mailColumn;
     public Button addBtn;
     public Button cancelBtn;
+
+
+    private Stage stage = new Stage();
     private AddEditMeetingController addEditMeetingController;
     private AddEditTaskController addEditTaskController;
-    private ContactsControllerApi controller = new ContactsControllerApi();
 
     private void setEvents() {
         addBtn.setOnAction(e -> {
@@ -52,7 +52,6 @@ public class AddContactToMeetingTaskController implements Initializable{
         stage.setScene(scene);
         setEvents();
         setColumns();
-//        controller.getContacts();
         Bindings.bindContent(contactTableView.getItems(), DBData.getContacts());
     }
 

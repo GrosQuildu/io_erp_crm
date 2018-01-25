@@ -3,14 +3,11 @@ package main.java.erp_crm.frontend.proformas;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXMLLoader;
 import main.java.erp_crm.backend.Utils;
-import main.java.erp_crm.backend.api.erp.ProformasControllerApi;
+import main.java.erp_crm.backend.api.erp.ProformasApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.erp.Order;
 import main.java.erp_crm.backend.model.erp.OrderedArticle;
 import main.java.erp_crm.backend.model.erp.Proforma;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -20,7 +17,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -29,28 +25,30 @@ import java.util.ResourceBundle;
  * Created by marcin on 07.09.16.
  */
 public class ProformasController implements Initializable{
-    @FXML
-    private TableView<Proforma> proformasTable;
-    @FXML
-    private TableColumn<Proforma, String> proformaNumberColumn;
-    @FXML
-    private TableColumn<Proforma, Order> clientColumn;
-    @FXML
-    private TableColumn<Proforma, Order> netColumn;
-    @FXML
-    private TableColumn<Proforma, String> paymentMethodColumn;
-    @FXML
-    private TableColumn<Proforma, Order> orderNumberColumn;
-    @FXML
-    private Button pdfBtn,refBtn;
-    @FXML
-    private Button deleteBtn;
+    public TableView<Proforma> proformasTable;
+    public TableColumn<Proforma, String> proformaNumberColumn;
+    public TableColumn<Proforma, Order> clientColumn;
+    public TableColumn<Proforma, Order> netColumn;
+    public TableColumn<Proforma, String> paymentMethodColumn;
+    public TableColumn<Proforma, Order> orderNumberColumn;
+    public Button pdfBtn,refBtn;
+    public Button deleteBtn;
+
+
     private AddProformaController addProformaController;
-    private ProformasControllerApi controller = new ProformasControllerApi();
-    private ProformasControllerApi proformasControllerApi = new ProformasControllerApi();
+    private ProformasApi controller = new ProformasApi();
+    private ProformasApi proformasApi = new ProformasApi();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        loadControllers();
+
+        prepareTable();
+        setEvents();
+        Bindings.bindContent(proformasTable.getItems(), DBData.getProformas());
+    }
+
+    private void loadControllers() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlFiles/erp/addProforma.fxml"));
             loader.load();
@@ -59,7 +57,9 @@ public class ProformasController implements Initializable{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    private void prepareTable() {
         proformaNumberColumn.setCellValueFactory(new PropertyValueFactory<>("proformaNumber"));
         clientColumn.setCellValueFactory(new PropertyValueFactory<>("order"));
         clientColumn.setCellFactory(column -> new TableCell<Proforma, Order>() {
@@ -113,8 +113,6 @@ public class ProformasController implements Initializable{
             }
         });
         updateTable();
-        setEvents();
-        Bindings.bindContent(proformasTable.getItems(), DBData.getProformas());
     }
 
     private float calculateOrderNet(List<OrderedArticle> orderedArticles) {
@@ -133,7 +131,7 @@ public class ProformasController implements Initializable{
         deleteBtn.setOnAction(e -> {
             Proforma selected = proformasTable.getSelectionModel().getSelectedItem();
             if(selected!=null) {
-                proformasControllerApi.deleteProforma(selected);
+                proformasApi.deleteProforma(selected);
             }
         });
     }

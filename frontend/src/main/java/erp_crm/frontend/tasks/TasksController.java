@@ -6,10 +6,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import main.java.erp_crm.backend.api.crm.TaskControllerApi;
+import main.java.erp_crm.backend.api.crm.TasksApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.common.Employee;
-import main.java.erp_crm.backend.model.crm.Meeting;
 import main.java.erp_crm.backend.model.crm.Task;
 import main.java.erp_crm.backend.model.crm.TaskStatus;
 import org.joda.time.LocalDate;
@@ -28,21 +27,19 @@ public class TasksController  implements Initializable{
     public TableColumn<Task, Employee> employeeColumn;
     public TableColumn<Task, Employee> employeeCommissionedColumn;
     public TableColumn<Task, TaskStatus> statusColumn;
+    public TableColumn<Task, String> colorColumn;
     public Button addTaskBtn;
     public Button deleteTaskBtn;
     public Button editTaskBtn;
     public Button refreshBtn;
-    public TableColumn<Task, String> colorColumn;
 
     private AddEditTaskController addEditTaskController;
 
-    private FXMLLoader loader;
-    private TaskControllerApi tasksControllerApi = new TaskControllerApi();
+    private TasksApi tasksControllerApi = new TasksApi();
 
-    public TasksController(){
-
+    private void loadControllers() {
         try {
-            loader = new FXMLLoader(getClass().getResource("/fxmlFiles/crm/addEditTask.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlFiles/crm/addEditTask.fxml"));
             loader.load();
             addEditTaskController = loader.getController();
             addEditTaskController.setTasksController(this);
@@ -50,9 +47,10 @@ public class TasksController  implements Initializable{
             e.printStackTrace();
         }
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        loadControllers();
         setColumns();
         setEvents();
         Bindings.bindContent(tasksTableView.getItems(), DBData.getTasks());
@@ -60,21 +58,29 @@ public class TasksController  implements Initializable{
     }
 
     private void setEvents() {
-        addTaskBtn.setOnAction(e -> addEditTaskController.show());
-        deleteTaskBtn.setOnAction(e -> {
-            Task selected = tasksTableView.getSelectionModel().getSelectedItem();
-            if(selected!=null){
-                tasksControllerApi.deleteTask(selected);
-                refresh();
-            }
-        });
-        editTaskBtn.setOnAction(e -> {
-            Task selected = tasksTableView.getSelectionModel().getSelectedItem();
-            if(selected!=null){
-                addEditTaskController.show(selected);
-            }
-        });
+        addTaskBtn.setOnAction(e -> addTask());
+        deleteTaskBtn.setOnAction(e -> deleteSelectedTask());
+        editTaskBtn.setOnAction(e -> editTask());
         refreshBtn.setOnAction(e -> refresh());
+    }
+
+    private void editTask() {
+        Task selected = tasksTableView.getSelectionModel().getSelectedItem();
+        if(selected!=null){
+            addEditTaskController.show(selected);
+        }
+    }
+
+    private void addTask() {
+        addEditTaskController.show();
+    }
+
+    private void deleteSelectedTask() {
+        Task selected = tasksTableView.getSelectionModel().getSelectedItem();
+        if(selected!=null){
+            tasksControllerApi.deleteTask(selected);
+            refresh();
+        }
     }
 
     private void setColumns() {

@@ -14,6 +14,8 @@ public class SingleTaskNoteController implements Initializable{
     public Button saveBtn;
     public VBox mainBox;
     public TextArea contentArea;
+
+
     private AddEditTaskController addEditTaskController;
     private TaskNote note;
 
@@ -24,17 +26,20 @@ public class SingleTaskNoteController implements Initializable{
 
     private void setEvents() {
 
-        deleteBtn.setOnAction(e -> {
-            if(note!=null) {
-                addEditTaskController.deleteNote(note);
-            }
-        });
-        saveBtn.setOnAction(e -> {
-            if(note!=null) {
-                addEditTaskController.updateNote(note);
-            }
+        deleteBtn.setOnAction(e -> delete());
+        saveBtn.setOnAction(e -> save());
+    }
 
-        });
+    private void save() {
+        if(note!=null) {
+            addEditTaskController.updateNote(note);
+        }
+    }
+
+    private void delete() {
+        if(note!=null) {
+            addEditTaskController.deleteNote(note);
+        }
     }
 
     public void setAddEditTaskController(AddEditTaskController addEditTaskController) {
@@ -52,7 +57,11 @@ public class SingleTaskNoteController implements Initializable{
     public void setNote(TaskNote note) {
         this.note = note;
         fillFields();
-        mainBox.setStyle("-fx-background-color: "+ note.getBackgroundColor() +";");
+        mainBox.setStyle(generateBackgroundString(note));
+    }
+
+    private String generateBackgroundString(TaskNote note) {
+        return "-fx-background-color: "+ note.getBackgroundColor() +";";
     }
 
     public TaskNote getNote() {

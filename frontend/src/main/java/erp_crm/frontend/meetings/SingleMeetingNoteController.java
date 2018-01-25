@@ -14,6 +14,8 @@ public class SingleMeetingNoteController implements Initializable{
     public Button saveBtn;
     public VBox mainBox;
     public TextArea contentArea;
+
+
     private AddEditMeetingController addEditMeetingController;
     private MeetingNote note;
 
@@ -52,7 +54,11 @@ public class SingleMeetingNoteController implements Initializable{
     public void setNote(MeetingNote note) {
         this.note = note;
         fillFields();
-        mainBox.setStyle("-fx-background-color: "+ note.getBackgroundColor() +";");
+        mainBox.setStyle(generateBackgroundString(note));
+    }
+
+    private String generateBackgroundString(MeetingNote note) {
+        return "-fx-background-color: "+ note.getBackgroundColor() +";";
     }
 
     public MeetingNote getNote() {

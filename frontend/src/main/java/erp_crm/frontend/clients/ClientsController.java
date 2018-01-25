@@ -1,13 +1,14 @@
 package main.java.erp_crm.frontend.clients;
 
 import javafx.beans.binding.Bindings;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import main.java.erp_crm.backend.api.common.ClientsControllerApi;
+import main.java.erp_crm.backend.api.common.ClientsApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.common.Client;
 
@@ -30,35 +31,31 @@ public class ClientsController implements Initializable {
     public TableColumn<Client, String> postCodeDeliveryColumn;
     public TableColumn<Client, String> clientType;
     public TableView<Client> clientsTable;
-    @FXML
-    public static VBox clientsBox;
-    @FXML
-    private Button addClientBtn;
-    @FXML
-    private Button deleteClientBtn;
-    @FXML
-    private Button editClientBtn;
-    @FXML
-    private Button refreshBtn;
+    public VBox clientsBox;
+    public Button addClientBtn;
+    public Button deleteClientBtn;
+    public Button editClientBtn;
+    public Button refreshBtn;
 
-    private ClientsControllerApi controller = new ClientsControllerApi();
+    private ClientsApi controller = new ClientsApi();
 
-    private FXMLLoader loader;
     private AddEditClientController addEditClientController;
 
-    public ClientsController(){
+
+    private void loadControllers() {
         try {
-            loader = new FXMLLoader(getClass().getResource("/fxmlFiles/erp/addEditClient.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlFiles/erp/addEditClient.fxml"));
             loader.load();
             addEditClientController = loader.getController();
             addEditClientController.setClientsController(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        loadControllers();
         createColumns();
         setEvents();
         refresh();

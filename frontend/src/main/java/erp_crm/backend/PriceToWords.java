@@ -2,10 +2,6 @@ package main.java.erp_crm.backend;
 
 
 
-/* ----- Klasa pomocnicza - konwertuje liczby na kwoty słownie (w proformach) ------ */
-
-
-
 public class PriceToWords {
     static String[] jedn = {"", "jeden", "dwa", "trzy", "cztery", "pięć", "sześć","siedem", "osiem","dziewięć"};
     static String[] nast = {"", "jedenaście", "dwanaście", "trzynaście","czternaście","piętnaście","szesnaście","siedemnaście","osiemnaście","dziewiętnaście"};

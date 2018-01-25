@@ -11,7 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp_crm.Main;
-import main.java.erp_crm.backend.api.erp.ArticlesControllerApi;
+import main.java.erp_crm.backend.api.erp.ArticlesApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.erp.Article;
 import main.java.erp_crm.backend.model.erp.OrderedArticle;
@@ -22,7 +22,6 @@ import java.util.ResourceBundle;
 
 public class AddArticleToOrderController implements Initializable {
     public TextField amountField;
-    private Stage stage = new Stage();
     public VBox mainBox;
     public TableView<Article> articleTableView;
     public TableColumn nameColumn;
@@ -30,32 +29,39 @@ public class AddArticleToOrderController implements Initializable {
     public TableColumn weightColumn;
     public Button addBtn;
     public Button cancelBtn;
+
+
+    private Stage stage = new Stage();
     private AddEditOrderController addEditOrderController;
-    private ArticlesControllerApi articlesControllerApi = new ArticlesControllerApi();
+    private ArticlesApi articlesApi = new ArticlesApi();
 
     private void setEvents() {
         addBtn.setOnAction(e -> {
-            Article item = articleTableView.getSelectionModel().getSelectedItem();
-            if(item!=null){
-                OrderedArticle orderedArticle = new OrderedArticle();
-                orderedArticle.setArticle(item);
-                orderedArticle.setAmount(Integer.parseInt(amountField.getText()));
-                orderedArticle.setWeight(item.getWeight() * orderedArticle.getAmount());
-                orderedArticle.setNetPrice(new BigDecimal(orderedArticle.getAmount() * item.getUnitPrice().floatValue()));
-                addEditOrderController.addArticle(orderedArticle);
-
-            }
+            addSelectedArticle();
             stage.close();
         });
         cancelBtn.setOnAction(e -> stage.close());
     }
+
+    private void addSelectedArticle() {
+        Article item = articleTableView.getSelectionModel().getSelectedItem();
+        if(item!=null){
+            OrderedArticle orderedArticle = new OrderedArticle();
+            orderedArticle.setArticle(item);
+            orderedArticle.setAmount(Integer.parseInt(amountField.getText()));
+            orderedArticle.setWeight(item.getWeight() * orderedArticle.getAmount());
+            orderedArticle.setNetPrice(new BigDecimal(orderedArticle.getAmount() * item.getUnitPrice().floatValue()));
+            addEditOrderController.addArticle(orderedArticle);
+        }
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(Main.css);
         stage.setScene(scene);
         setColumns();
-        articlesControllerApi.refreshArticles();
+        articlesApi.refreshArticles();
         setEvents();
 
         Bindings.bindContent(articleTableView.getItems(), DBData.getArticles());

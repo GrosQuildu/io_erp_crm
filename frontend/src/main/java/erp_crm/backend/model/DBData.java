@@ -25,19 +25,12 @@ public class DBData {
     private static ObservableList<Article> articles = FXCollections.observableArrayList();
     private static ObservableList<DeliveryCost> deliveryCosts = FXCollections.observableArrayList();
     private static ObservableList<Order> orders = FXCollections.observableArrayList();
-    private static ObservableList<OrderedArticle> orderedArticles = FXCollections.observableArrayList();
     private static ObservableList<Proforma> proformas = FXCollections.observableArrayList();
     
     
     //CRM
     private static ObservableList<Meeting> meetings = FXCollections.observableArrayList();
-    private static ObservableList<MeetingContact> meetingContacts = FXCollections.observableArrayList();
-    private static ObservableList<MeetingEmployee> meetingEmployees = FXCollections.observableArrayList();
-    private static ObservableList<MeetingNote> meetingNotes = FXCollections.observableArrayList();
     private static ObservableList<Task> tasks = FXCollections.observableArrayList();
-    private static ObservableList<TaskComment> taskComments = FXCollections.observableArrayList();
-    private static ObservableList<TaskContact> taskContacts = FXCollections.observableArrayList();
-    private static ObservableList<TaskNote> taskNotes = FXCollections.observableArrayList();
     private static ObservableList<TaskStatus> taskStatuses = FXCollections.observableArrayList();
     private static Employee loggedUser;
 
@@ -100,13 +93,6 @@ public class DBData {
         DBData.orders.setAll(orders);
     }
 
-    public static ObservableList<OrderedArticle> getOrderedArticles() {
-        return orderedArticles;
-    }
-
-    public static void setOrderedArticles(List<OrderedArticle> orderedArticles) {
-        DBData.orderedArticles.setAll(orderedArticles);
-    }
 
     public static ObservableList<Proforma> getProformas() {
         return proformas;
@@ -140,60 +126,12 @@ public class DBData {
         DBData.meetings.setAll(meetings);
     }
 
-    public static ObservableList<MeetingContact> getMeetingContacts() {
-        return meetingContacts;
-    }
-
-    public static void setMeetingContacts(List<MeetingContact> meetingContacts) {
-        DBData.meetingContacts.setAll(meetingContacts);
-    }
-
-    public static ObservableList<MeetingEmployee> getMeetingEmployees() {
-        return meetingEmployees;
-    }
-
-    public static void setMeetingEmployees(List<MeetingEmployee> meetingEmployees) {
-        DBData.meetingEmployees.setAll(meetingEmployees);
-    }
-
-    public static ObservableList<MeetingNote> getMeetingNotes() {
-        return meetingNotes;
-    }
-
-    public static void setMeetingNotes(List<MeetingNote> meetingNotes) {
-        DBData.meetingNotes.setAll(meetingNotes);
-    }
-
     public static ObservableList<Task> getTasks() {
         return tasks;
     }
 
     public static void setTasks(List<Task> tasks) {
         DBData.tasks.setAll(tasks);
-    }
-
-    public static ObservableList<TaskComment> getTaskComments() {
-        return taskComments;
-    }
-
-    public static void setTaskComments(List<TaskComment> taskComments) {
-        DBData.taskComments.setAll(taskComments);
-    }
-
-    public static ObservableList<TaskContact> getTaskContacts() {
-        return taskContacts;
-    }
-
-    public static void setTaskContacts(List<TaskContact> taskContacts) {
-        DBData.taskContacts.setAll(taskContacts);
-    }
-
-    public static ObservableList<TaskNote> getTaskNotes() {
-        return taskNotes;
-    }
-
-    public static void setTaskNotes(List<TaskNote> taskNotes) {
-        DBData.taskNotes.setAll(taskNotes);
     }
 
     public static ObservableList<TaskStatus> getTaskStatuses() {

@@ -1,7 +1,6 @@
 package main.java.erp_crm.frontend.settings;
 
 import javafx.beans.binding.Bindings;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -11,8 +10,8 @@ import main.java.erp_crm.backend.SharedData;
 import main.java.erp_crm.backend.api.Config;
 import main.java.erp_crm.backend.api.common.ClientTypesApi;
 import main.java.erp_crm.backend.api.common.ContactGroupApi;
-import main.java.erp_crm.backend.api.crm.TaskStatusControllerApi;
-import main.java.erp_crm.backend.api.erp.UnitControllerApi;
+import main.java.erp_crm.backend.api.crm.TaskStatusApi;
+import main.java.erp_crm.backend.api.erp.UnitsApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.common.ClientType;
 import main.java.erp_crm.backend.model.common.Unit;
@@ -48,60 +47,42 @@ public class SettingsController implements Initializable {
     public TableColumn contactGroupDescriptionColumn;
     public Button addContactGroupBtn;
     public Button deleteContactGroupBtn;
-    @FXML
-    private TextField senderField;
-    @FXML
-    private TextField ccField;
-    @FXML
-    private Button saveSettingsBtn;
-    @FXML
-    private TextField mailAddressField;
-    @FXML
-    private TextField serverField;
-    @FXML
-    private TextField portField;
-    @FXML
-    private TextField mailPasswordField;
-    @FXML
-    private TextField firstNameField;
-    @FXML
-    private TextField nameField;
-    @FXML
-    private TextField mailField;
-    @FXML
-    private TextField telephoneField;
-    @FXML
-    private PasswordField passField;
-    @FXML
-    private Button saveProfileBtn;
-    @FXML
-    private TextArea ordersArea, commentsArea, mailContentArea;
-    @FXML
-    private Button saveDefaultBtn;
-    @FXML
-    private TextField proformaPathField, ordersPathField;
-    @FXML
-    private TextField scanField;
+    public TextField senderField;
+    public TextField ccField;
+    public Button saveSettingsBtn;
+    public TextField mailAddressField;
+    public TextField serverField;
+    public TextField portField;
+    public TextField mailPasswordField;
+    public TextField firstNameField;
+    public TextField nameField;
+    public TextField mailField;
+    public TextField telephoneField;
+    public PasswordField passField;
+    public Button saveProfileBtn;
+    public TextArea ordersArea, commentsArea, mailContentArea;
+    public Button saveDefaultBtn;
+    public TextField proformaPathField, ordersPathField;
+    public TextField scanField;
 
     private ClientTypesApi clientTypesApi = new ClientTypesApi();
-    private UnitControllerApi unitControllerApi = new UnitControllerApi();
+    private UnitsApi unitsApi = new UnitsApi();
+    private TaskStatusApi taskStatusApi = new TaskStatusApi();
+    private ContactGroupApi contactGroupApi = new ContactGroupApi();
 
     private AddClientTypeController addClientTypeController;
-
     private AddUnitController addUnitController;
     private AddTaskStatusController addTaskStatusController;
-    private TaskStatusControllerApi taskStatusControllerApi = new TaskStatusControllerApi();
     private AddContactGroupController addContactGroupController;
-    private ContactGroupApi contactGroupApi = new ContactGroupApi();
 
     public static String getUserDataDirectory() {
         return System.getProperty("user.home") + "/.ERP-MB/";
     }
 
     public void refresh() {
-        unitControllerApi.getUnits();
+        unitsApi.getUnits();
         clientTypesApi.getClientTypes();
-        taskStatusControllerApi.getTaskStatuses();
+        taskStatusApi.getTaskStatuses();
         contactGroupApi.getContactGroups();
     }
 
@@ -110,6 +91,17 @@ public class SettingsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         setEvents();
+        loadControllers();
+        Bindings.bindContent(unitsTableView.getItems(), DBData.getUnits());
+        Bindings.bindContent(clientTypesTableView.getItems(), DBData.getClientTypes());
+        Bindings.bindContent(statusesTableView.getItems(), DBData.getTaskStatuses());
+        Bindings.bindContent(contactGroupTableView.getItems(), DBData.getContactGroups());
+        refresh();
+        fillFields();
+
+    }
+
+    private void loadControllers() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlFiles/erp/addUnit.fxml"));
             loader.load();
@@ -133,13 +125,6 @@ public class SettingsController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Bindings.bindContent(unitsTableView.getItems(), DBData.getUnits());
-        Bindings.bindContent(clientTypesTableView.getItems(), DBData.getClientTypes());
-        Bindings.bindContent(statusesTableView.getItems(), DBData.getTaskStatuses());
-        Bindings.bindContent(contactGroupTableView.getItems(), DBData.getContactGroups());
-        refresh();
-        fillFields();
-
     }
 
     private void fillFields() {
@@ -172,58 +157,71 @@ public class SettingsController implements Initializable {
     }
 
     private void setEvents() {
-        deleteClientTypeBtn.setOnAction(e -> {
-            ClientType item = clientTypesTableView.getSelectionModel().getSelectedItem();
-            if(item!=null) {
-                clientTypesApi.deleteClientType(item);
-                refresh();
-            }
-        });
-        deleteUnitBtn.setOnAction(e ->{
-            Unit item = unitsTableView.getSelectionModel().getSelectedItem();
-            if(item!=null) {
-                unitControllerApi.deleteUnit(item);
-                refresh();
-            }
-        });
-        addClientTypeBtn.setOnAction(e -> addClientTypeController.show());
-        addContactGroupBtn.setOnAction(e -> addContactGroupController.show());
-        deleteContactGroupBtn.setOnAction(e -> {
-            ContactGroup item = contactGroupTableView.getSelectionModel().getSelectedItem();
-            if(item!=null) {
-                contactGroupApi.deleteContactGroup(item);
-                refresh();
-            }
-
-        });
-        addUnitBtn.setOnAction(e -> addUnitController.show());
-
-        addStatusBtn.setOnAction(e -> addTaskStatusController.show());
-        deleteStatusBtn.setOnAction(e -> {
-            TaskStatus item = statusesTableView.getSelectionModel().getSelectedItem();
-            if(item!=null) {
-                taskStatusControllerApi.deleteTaskStatus(item);
-                refresh();
-            }
-
-        });
+        deleteClientTypeBtn.setOnAction(e -> deleteSelectedClientType());
+        deleteUnitBtn.setOnAction(e -> deleteSelectedUnit());
+        addClientTypeBtn.setOnAction(e -> addClientType());
+        addContactGroupBtn.setOnAction(e -> addContactGroup());
+        deleteContactGroupBtn.setOnAction(e -> deleteSelectedContactGroup());
+        addUnitBtn.setOnAction(e -> addUnit());
+        addStatusBtn.setOnAction(e -> addTaskStatus());
+        deleteStatusBtn.setOnAction(e -> deleteSelectedTaskStatus());
 
         saveSettingsBtn.setOnAction(e -> saveConfig());
         saveProfileBtn.setOnAction(e -> saveConfig());
-        proformaPathField.setOnMouseClicked(event -> {
-            proformaPathField.setText(showFolderChooser());
-        });
-        ordersPathField.setOnMouseClicked(event -> {
-            ordersPathField.setText(showFolderChooser());
-        });
+        proformaPathField.setOnMouseClicked(event -> proformaPathField.setText(showFolderChooser()));
+        ordersPathField.setOnMouseClicked(event -> ordersPathField.setText(showFolderChooser()));
 
-        scanField.setOnMouseClicked(e -> {
-            scanField.setText(showFolderChooser());
-        });
-        logoField.setOnMouseClicked(e -> {
-            logoField.setText(showFolderChooser());
-        });
+        scanField.setOnMouseClicked(e -> scanField.setText(showFolderChooser()));
+        logoField.setOnMouseClicked(e -> logoField.setText(showFolderChooser()));
         saveDefaultBtn.setOnAction(e -> saveConfig());
+    }
+
+    private void deleteSelectedTaskStatus() {
+        TaskStatus item = statusesTableView.getSelectionModel().getSelectedItem();
+        if(item!=null) {
+            taskStatusApi.deleteTaskStatus(item);
+            refresh();
+        }
+    }
+
+    private void addTaskStatus() {
+        addTaskStatusController.show();
+    }
+
+    private void addUnit() {
+        addUnitController.show();
+    }
+
+    private void deleteSelectedContactGroup() {
+        ContactGroup item = contactGroupTableView.getSelectionModel().getSelectedItem();
+        if(item!=null) {
+            contactGroupApi.deleteContactGroup(item);
+            refresh();
+        }
+    }
+
+    private void addContactGroup() {
+        addContactGroupController.show();
+    }
+
+    private void addClientType() {
+        addClientTypeController.show();
+    }
+
+    private void deleteSelectedUnit() {
+        Unit item = unitsTableView.getSelectionModel().getSelectedItem();
+        if(item!=null) {
+            unitsApi.deleteUnit(item);
+            refresh();
+        }
+    }
+
+    private void deleteSelectedClientType() {
+        ClientType item = clientTypesTableView.getSelectionModel().getSelectedItem();
+        if(item!=null) {
+            clientTypesApi.deleteClientType(item);
+            refresh();
+        }
     }
 
     private String showFolderChooser() {

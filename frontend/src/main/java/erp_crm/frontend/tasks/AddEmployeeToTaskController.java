@@ -10,7 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp_crm.Main;
-import main.java.erp_crm.backend.api.common.EmployeeControllerApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.common.Employee;
 import main.java.erp_crm.frontend.meetings.AddEditMeetingController;
@@ -29,21 +28,28 @@ public class AddEmployeeToTaskController implements Initializable {
     private Stage stage = new Stage();
     private AddEditTaskController addEditTaskController;
     private AddEditMeetingController addEditMeetingController;
-    private EmployeeControllerApi controller = new EmployeeControllerApi();
 
     private void setEvents() {
         addBtn.setOnAction(e -> {
-            Employee item = employeeTableView.getSelectionModel().getSelectedItem();
-            if (item != null) {
-                if(addEditTaskController != null) {
-                    addEditTaskController.addEmployeeCommissioned(item);
-                } else if(addEditMeetingController != null){
-                    addEditMeetingController.addEmployee(item);
-                }
-            }
-            stage.close();
+            save();
+            close();
         });
-        cancelBtn.setOnAction(e -> stage.close());
+        cancelBtn.setOnAction(e -> close());
+    }
+
+    private void close() {
+        stage.close();
+    }
+
+    private void save() {
+        Employee item = employeeTableView.getSelectionModel().getSelectedItem();
+        if (item != null) {
+            if(addEditTaskController != null) {
+                addEditTaskController.addEmployeeCommissioned(item);
+            } else if(addEditMeetingController != null){
+                addEditMeetingController.addEmployee(item);
+            }
+        }
     }
 
     @Override
@@ -53,7 +59,6 @@ public class AddEmployeeToTaskController implements Initializable {
         stage.setScene(scene);
         setEvents();
         setColumns();
-//        controller.getEmployees();
         Bindings.bindContent(employeeTableView.getItems(), DBData.getEmployees());
     }
 

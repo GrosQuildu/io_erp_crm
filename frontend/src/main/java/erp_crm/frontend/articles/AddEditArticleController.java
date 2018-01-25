@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp_crm.Main;
-import main.java.erp_crm.backend.api.erp.ArticlesControllerApi;
+import main.java.erp_crm.backend.api.erp.ArticlesApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.common.Unit;
 import main.java.erp_crm.backend.model.erp.Article;
@@ -19,18 +19,19 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddEditArticleController implements Initializable {
+    private Stage stage = new Stage();
     public VBox mainBox;
     public TextField nameField;
-    private Stage stage = new Stage();
-    private Scene scene;
     public TextField availabilityField;
     public ComboBox<Unit> unitComboBox;
     public TextField unitPriceField;
     public Button saveBtn;
     public Button cancelBtn;
     public TextField weightField;
+
+
     private Article article;
-    private ArticlesControllerApi controller = new ArticlesControllerApi();
+    private ArticlesApi controller = new ArticlesApi();
     private ArticlesController articlesController;
 
 
@@ -62,9 +63,21 @@ public class AddEditArticleController implements Initializable {
 
     public void show(){
         this.article = null;
+        initializeFields();
         if(unitComboBox.getItems().size()>0) unitComboBox.getSelectionModel().select(0);
         stage.show();
     }
+
+    private void initializeFields() {
+        availabilityField.setText("0.00");
+        if(unitComboBox.getItems().size()>0) {
+            unitComboBox.getSelectionModel().select(0);
+        }
+        nameField.setText("");
+        unitPriceField.setText("0.00");
+        weightField.setText("0");
+    }
+
     public void show(Article article){
         show();
         fillFields(article);
@@ -83,13 +96,13 @@ public class AddEditArticleController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setEvents();
-        scene = new Scene(mainBox);
+        Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(Main.css);
         stage.setWidth(300);
         stage.setScene(scene);
-        //unitComboBox.getItems().addAll(controller.refreshUnits());
         Bindings.bindContent(unitComboBox.getItems(), DBData.getUnits());
         controller.refreshUnits();
+        initializeFields();
     }
 
     public void setArticlesController(ArticlesController articlesController) {

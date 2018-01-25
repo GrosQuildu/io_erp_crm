@@ -1,8 +1,6 @@
 package main.java.erp_crm.frontend.meetings;
 
 import javafx.beans.binding.Bindings;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -11,13 +9,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import main.java.erp_crm.backend.api.crm.MeetingsControllerApi;
+import main.java.erp_crm.backend.api.crm.MeetingsApi;
 import main.java.erp_crm.backend.model.DBData;
-import main.java.erp_crm.backend.model.crm.Contact;
 import main.java.erp_crm.backend.model.crm.Meeting;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,24 +32,23 @@ public class MeetingsController implements Initializable{
     public VBox mainBox;
 
     private AddEditMeetingController addEditMeetingController;
-    private MeetingsControllerApi meetingsControllerApi = new MeetingsControllerApi();
+    private MeetingsApi meetingsApi = new MeetingsApi();
 
-    private FXMLLoader loader;
 
-    public MeetingsController(){
 
+    private void loadControllers() {
         try {
-            loader = new FXMLLoader(getClass().getResource("/fxmlFiles/crm/addEditMeeting.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlFiles/crm/addEditMeeting.fxml"));
             loader.load();
             addEditMeetingController = loader.getController();
-            addEditMeetingController.setMeetingsController(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        loadControllers();
         setColumns();
         setEvents();
         Bindings.bindContent(meetingsTableView.getItems(), DBData.getMeetings());
@@ -69,10 +64,18 @@ public class MeetingsController implements Initializable{
                 addEditMeetingController.show(selected);
             }
         });
+        deleteMeetingBtn.setOnAction(e -> delete());
+    }
+
+    private void delete() {
+        Meeting selected = meetingsTableView.getSelectionModel().getSelectedItem();
+        if(selected!=null) {
+            meetingsApi.deleteMeeting(selected);
+        }
     }
 
     private void refresh() {
-        meetingsControllerApi.getMeetings();
+        meetingsApi.getMeetings();
     }
 
     private void setColumns() {

@@ -39,12 +39,6 @@ public class OrderUtils {
         return false;
     }
     public static String generateProformaNumber(){
-        Proforma p = new Proforma();
-        if(p!=null && p.getProformaNumber()!=null) {
-            if (!p.getProformaNumber().isEmpty()) {
-                return p.getProformaNumber();
-            }
-        }
         String pattern = "yy";
         StringBuilder sb = new StringBuilder();
         SimpleDateFormat formatter = new SimpleDateFormat(pattern, Locale.getDefault());

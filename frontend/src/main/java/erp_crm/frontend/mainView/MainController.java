@@ -1,22 +1,19 @@
 package main.java.erp_crm.frontend.mainView;
 
-import main.java.erp_crm.backend.SharedData;
-import main.java.erp_crm.backend.model.DBData;
-import main.java.erp_crm.backend.model.common.Employee;
-import main.java.erp_crm.frontend.statistics.StatisticsView;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import main.java.erp_crm.backend.model.DBData;
+import main.java.erp_crm.backend.model.common.Employee;
+import main.java.erp_crm.frontend.statistics.StatisticsView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-/*Kontroler do głównego pojemnika*/
+
 public class MainController implements Initializable{
     public static TabPane settingsBox;
     public static VBox clientsBox;
@@ -27,28 +24,32 @@ public class MainController implements Initializable{
     public static VBox meetingsBox;
     public static VBox tasksBox;
     public static VBox contactsBox;
+
+
+    public BorderPane root;
     public VBox sidebar;
     public VBox rightSidebar;
-    private GridPane zestawieniaBox;
-    @FXML
-    private BorderPane root;
-    private enum ActiveScene {
-        Clients, Orders, Proformas, Articles, Reports, DeliveryCosts, Meetings, Settings, Tasks, Contacts
-    }
-    private ActiveScene active;
-    @FXML
-    private Button clientsBtn, ordersBtn, proformasBtn, articlesBtn, reportsBtn, deliveryCostsBtn, settingsBtn;
+    public Button clientsBtn;
+    public Button ordersBtn;
+    public Button proformasBtn;
+    public Button articlesBtn;
+    public Button reportsBtn;
+    public Button deliveryCostsBtn;
+    public Button settingsBtn;
     public Button meetingsBtn;
     public Button contactsBtn;
     public Button tasksBtn;
+    private GridPane statisticsBox;
+    private ActiveScene active;
+    private enum ActiveScene {
+        Clients, Orders, Proformas, Articles, Reports, DeliveryCosts, Meetings, Settings, Tasks, Contacts
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        //ustawienie pierwszego widoku
         setViewAccordingToRole();
         StatisticsView statisticsView = new StatisticsView();
-        zestawieniaBox= statisticsView.getBox();
+        statisticsBox = statisticsView.getBox();
         updateView();
         setEvents();
     }
@@ -62,7 +63,6 @@ public class MainController implements Initializable{
             sidebar.getChildren().removeAll(ordersBtn, proformasBtn, articlesBtn, reportsBtn, deliveryCostsBtn);
             active = ActiveScene.Tasks;
         } else {
-            //admin
             active = ActiveScene.Clients;
         }
     }
@@ -106,7 +106,7 @@ public class MainController implements Initializable{
             updateView();
         });
         reportsBtn.setOnAction(e -> {
-            root.setCenter(zestawieniaBox);
+            root.setCenter(statisticsBox);
             active = ActiveScene.Reports;
             updateView();
         });
@@ -123,19 +123,12 @@ public class MainController implements Initializable{
 
     }
 
-    //Ustawianie klas dla przycisków w menu (podświetlanie dla aktywnych widoków)
-
     private void updateView() {
-        clientsBtn.getStyleClass().remove("active");
-        ordersBtn.getStyleClass().remove("active");
-        proformasBtn.getStyleClass().remove("active");
-        articlesBtn.getStyleClass().remove("active");
-        reportsBtn.getStyleClass().remove("active");
-        deliveryCostsBtn.getStyleClass().remove("active");
-        settingsBtn.getStyleClass().remove("active");
-        meetingsBtn.getStyleClass().remove("active");
-        tasksBtn.getStyleClass().remove("active");
-        contactsBtn.getStyleClass().remove("active");
+        removeActiveClass();
+        setActiveClass();
+    }
+
+    private void setActiveClass() {
         switch(active){
             case Clients:
                 clientsBtn.getStyleClass().add("active");
@@ -168,5 +161,18 @@ public class MainController implements Initializable{
                 contactsBtn.getStyleClass().add("active");
                 break;
         }
+    }
+
+    private void removeActiveClass() {
+        clientsBtn.getStyleClass().remove("active");
+        ordersBtn.getStyleClass().remove("active");
+        proformasBtn.getStyleClass().remove("active");
+        articlesBtn.getStyleClass().remove("active");
+        reportsBtn.getStyleClass().remove("active");
+        deliveryCostsBtn.getStyleClass().remove("active");
+        settingsBtn.getStyleClass().remove("active");
+        meetingsBtn.getStyleClass().remove("active");
+        tasksBtn.getStyleClass().remove("active");
+        contactsBtn.getStyleClass().remove("active");
     }
 }

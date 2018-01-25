@@ -19,6 +19,7 @@ import main.java.erp_crm.backend.pdf.PdfGenerator;
 import main.java.erp_crm.frontend.loading.LoadingDialog;
 import main.java.erp_crm.frontend.settings.SettingsController;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.io.File;
@@ -46,12 +47,6 @@ public class SendMailController implements Initializable{
 
     public void show(Order item) {
         order = item;
-        if(order == null){
-            orderBox.setSelected(false);
-            orderBox.setDisable(true);
-            proformaBox.setSelected(false);
-            proformaBox.setDisable(true);
-        }
         fillFields();
         stage.show();
     }
@@ -60,6 +55,11 @@ public class SendMailController implements Initializable{
         if(order!=null){
             visibleAddressesField.setText(order.getClient().getMail());
             subjectField.setText("Order no. " + order.getOrderNumber());
+        } else {
+            orderBox.setSelected(false);
+            orderBox.setDisable(true);
+            proformaBox.setSelected(false);
+            proformaBox.setDisable(true);
         }
     }
 
@@ -79,10 +79,12 @@ public class SendMailController implements Initializable{
         });
         cancelBtn.setOnAction(e -> stage.close());
         addAttachmentBtn.setOnAction(e -> chooseFile());
-        deleteAttachmentBtn.setOnAction(e -> {
-            File item = attachmentList.getSelectionModel().getSelectedItem();
-            if(item!=null) attachmentList.getItems().remove(item);
-        });
+        deleteAttachmentBtn.setOnAction(e -> deleteSelectedFile());
+    }
+
+    private void deleteSelectedFile() {
+        File item = attachmentList.getSelectionModel().getSelectedItem();
+        if(item!=null) attachmentList.getItems().remove(item);
     }
 
     private void chooseFile() {
@@ -94,61 +96,17 @@ public class SendMailController implements Initializable{
         ArrayList<String> filesList = new ArrayList<>();
         ArrayList<InternetAddress> visibleAddresses = new ArrayList<>();
         ArrayList<InternetAddress> hiddenAddresses = new ArrayList<>();
-        if(!visibleAddressesField.getText().isEmpty() && (visibleAddressesField.getText().contains(",") || visibleAddressesField.getText().contains(";"))) {
-            for (String i : visibleAddressesField.getText().split("[;,]")) {
-                try {
-                    visibleAddresses.add(new InternetAddress(i));
-                } catch (AddressException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else if(!visibleAddressesField.getText().isEmpty()){
-            try {
-                visibleAddresses.add(new InternetAddress(visibleAddressesField.getText()));
-            } catch (AddressException e) {
-                e.printStackTrace();
-            }
+        addAddresses(visibleAddresses);
+        addHiddenAddresses(hiddenAddresses);
+        addAttachments(filesList);
+        try {
+            send(filesList, visibleAddresses, hiddenAddresses);
+        } catch (IOException | MessagingException e) {
+            e.printStackTrace();
         }
-        if(!hiddenAddressesField.getText().isEmpty()  && (hiddenAddressesField.getText().contains(",") || hiddenAddressesField.getText().contains(";"))) {
-            for (String i : hiddenAddressesField.getText().split("[;,]")) {
-                try {
-                    hiddenAddresses.add(new InternetAddress(i));
-                } catch (AddressException e) {
-                    e.printStackTrace();
-                }
-            }
-        }else if(!hiddenAddressesField.getText().isEmpty()){
-            try {
-                hiddenAddresses.add(new InternetAddress(hiddenAddressesField.getText()));
-            } catch (AddressException e) {
-                e.printStackTrace();
-            }
-        }
-        if(attachmentList.getItems().size()>0) {
-            attachmentList.getItems().forEach(file -> filesList.add(file.getName()));
-        }
-        if(proformaBox.isSelected()){
-            Proforma proforma = DBData.getProforma(order.getOrderNumber());
-            try {
-                File file = new File(SettingsController.getUserDataDirectory()+"tmp");
-                if(PdfGenerator.proforma(order, file.getPath() + Utils.normalizeString(proforma.getProformaNumber().replace("/", "-")) + ".pdf")){
-                    filesList.add(file.getPath() + Utils.normalizeString(proforma.getProformaNumber().replace("/", "-")) + ".pdf");
-                }
-            } catch (IOException | DocumentException e) {
-                e.printStackTrace();
-            }
-        }
-        if(orderBox.isSelected()){
-            try {
-                File file = new File(SettingsController.getUserDataDirectory()+"tmp");
-                if(!file.exists()) file.mkdir();
-                if(PdfGenerator.order(order, file.getPath() + Utils.normalizeString(order.getOrderNumber().replace("/", "-")) + ".pdf")){
-                    filesList.add(file.getPath() + Utils.normalizeString(order.getOrderNumber().replace("/", "-")) + ".pdf");
-                }
-            } catch (IOException | DocumentException e) {
-                e.printStackTrace();
-            }
-        }
+    }
+
+    private void send(ArrayList<String> filesList, ArrayList<InternetAddress> visibleAddresses, ArrayList<InternetAddress> hiddenAddresses) throws IOException, MessagingException {
         Mail mail = new Mail(
                 visibleAddresses,
                 hiddenAddresses,
@@ -180,5 +138,70 @@ public class SendMailController implements Initializable{
             al.show();
         });
         new Thread(sendTask).start();
+    }
+
+    private void addAttachments(ArrayList<String> filesList) {
+        if(attachmentList.getItems().size()>0) {
+            attachmentList.getItems().forEach(file -> filesList.add(file.getName()));
+        }
+        if(proformaBox.isSelected()){
+            Proforma proforma = DBData.getProforma(order.getOrderNumber());
+            try {
+                File file = new File(SettingsController.getUserDataDirectory()+"tmp");
+                assert proforma != null;
+                if(PdfGenerator.proforma(order, file.getPath() + Utils.normalizeString(proforma.getProformaNumber().replace("/", "-")) + ".pdf")){
+                    filesList.add(file.getPath() + Utils.normalizeString(proforma.getProformaNumber().replace("/", "-")) + ".pdf");
+                }
+            } catch (IOException | DocumentException e) {
+                e.printStackTrace();
+            }
+        }
+        if(orderBox.isSelected()){
+            try {
+                File file = new File(SettingsController.getUserDataDirectory()+"tmp");
+                if(!file.exists()) file.mkdir();
+                if(PdfGenerator.order(order, file.getPath() + Utils.normalizeString(order.getOrderNumber().replace("/", "-")) + ".pdf")){
+                    filesList.add(file.getPath() + Utils.normalizeString(order.getOrderNumber().replace("/", "-")) + ".pdf");
+                }
+            } catch (IOException | DocumentException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void addHiddenAddresses(ArrayList<InternetAddress> hiddenAddresses) {
+        if(!hiddenAddressesField.getText().isEmpty()  && (hiddenAddressesField.getText().contains(",") || hiddenAddressesField.getText().contains(";"))) {
+            for (String i : hiddenAddressesField.getText().split("[;,]")) {
+                try {
+                    hiddenAddresses.add(new InternetAddress(i));
+                } catch (AddressException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else if(!hiddenAddressesField.getText().isEmpty()){
+            try {
+                hiddenAddresses.add(new InternetAddress(hiddenAddressesField.getText()));
+            } catch (AddressException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void addAddresses(ArrayList<InternetAddress> visibleAddresses) {
+        if(!visibleAddressesField.getText().isEmpty() && (visibleAddressesField.getText().contains(",") || visibleAddressesField.getText().contains(";"))) {
+            for (String i : visibleAddressesField.getText().split("[;,]")) {
+                try {
+                    visibleAddresses.add(new InternetAddress(i));
+                } catch (AddressException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if(!visibleAddressesField.getText().isEmpty()){
+            try {
+                visibleAddresses.add(new InternetAddress(visibleAddressesField.getText()));
+            } catch (AddressException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

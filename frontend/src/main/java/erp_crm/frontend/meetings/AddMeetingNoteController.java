@@ -22,6 +22,8 @@ public class AddMeetingNoteController implements Initializable {
     public Button cancelBtn;
     public VBox mainBox;
     public ColorPicker backgroundColorPicker;
+
+
     private Stage stage = new Stage();
     private AddEditMeetingController addEditMeetingController;
 

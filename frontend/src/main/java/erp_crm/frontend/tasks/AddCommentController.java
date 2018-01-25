@@ -19,12 +19,13 @@ public class AddCommentController implements Initializable{
     public TextArea commentContentArea;
     public Button addBtn;
     public Button cancelBtn;
+
+
     private AddEditTaskController addEditTaskController;
     private Stage stage = new Stage();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(Main.css);
         stage.setScene(scene);
@@ -59,6 +60,11 @@ public class AddCommentController implements Initializable{
     }
 
     public void show() {
+        initializeFields();
         stage.show();
+    }
+
+    private void initializeFields() {
+        commentContentArea.setText("");
     }
 }

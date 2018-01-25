@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp_crm.Main;
-import main.java.erp_crm.backend.api.common.ClientsControllerApi;
+import main.java.erp_crm.backend.api.common.ClientsApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.common.Client;
 import main.java.erp_crm.backend.model.common.ClientType;
@@ -19,8 +19,6 @@ import java.util.ResourceBundle;
 
 public class AddEditClientController implements Initializable {
     public VBox mainBox;
-    private Stage stage = new Stage();
-    private Scene scene;
     public TextField nameField;
     public TextField streetField;
     public TextField cityField;
@@ -35,25 +33,36 @@ public class AddEditClientController implements Initializable {
     public ComboBox<ClientType> clientTypeBox;
     public Button saveBtn;
     public Button cancelBtn;
+
+
+    private Stage stage = new Stage();
     private ClientsController clientsController;
-    private ClientsControllerApi controller = new ClientsControllerApi();
+    private ClientsApi controller = new ClientsApi();
     private Client client = null;
 
 
     private void setEvents() {
         saveBtn.setOnAction(e -> {
-            if(client!=null){
-                fillClient();
-                controller.updateClient(client);
-            } else {
-                client = new Client();
-                fillClient();
-                controller.createClient(client);
-            }
+            save();
             clientsController.refresh();
-            stage.close();
+            close();
         });
-        cancelBtn.setOnAction(e -> stage.close());
+        cancelBtn.setOnAction(e -> close());
+    }
+
+    private void close() {
+        stage.close();
+    }
+
+    private void save() {
+        if(client!=null){
+            fillClient();
+            controller.updateClient(client);
+        } else {
+            client = new Client();
+            fillClient();
+            controller.createClient(client);
+        }
     }
 
     private void fillClient() {
@@ -72,13 +81,12 @@ public class AddEditClientController implements Initializable {
     }
 
     public void show(){
-        this.client = null;
+        initializeFields();
         stage.show();
-        if(clientTypeBox.getItems().size()>0) clientTypeBox.getSelectionModel().select(0);
     }
     public void show(Client client){
         fillFields(client);
-        show();
+        stage.show();
     }
     private void fillFields(Client client) {
         this.client = client;
@@ -96,16 +104,33 @@ public class AddEditClientController implements Initializable {
         if(client.getClientType()!=null)
             clientTypeBox.setValue(client.getClientType());
     }
+    private void initializeFields() {
+        this.client = null;
+        nameField.setText("");
+        streetField.setText("");
+        cityField.setText("");
+        postCodeField.setText("");
+        nameDeliveryField.setText("");
+        streetDeliveryField.setText("");
+        postCodeDeliveryField.setText("");
+        cityDeliveryField.setText("");
+        nipField.setText("");
+        telephoneField.setText("");
+        mailField.setText("");
+        if(clientTypeBox.getItems().size()>0)
+            clientTypeBox.getSelectionModel().select(0);
+    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setEvents();
-        scene = new Scene(mainBox);
+        Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(Main.css);
         stage.setWidth(300);
         stage.setScene(scene);
-        //clientTypeBox.getItems().addAll(controller.getClientTypes());
         Bindings.bindContent(clientTypeBox.getItems(), DBData.getClientTypes());
+        initializeFields();
     }
 
     public void setClientsController(ClientsController clientsController) {

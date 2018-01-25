@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.erp_crm.Main;
-import main.java.erp_crm.backend.api.crm.TaskStatusControllerApi;
+import main.java.erp_crm.backend.api.crm.TaskStatusApi;
 import main.java.erp_crm.backend.model.crm.TaskStatus;
 import main.java.erp_crm.frontend.settings.SettingsController;
 
@@ -21,26 +21,36 @@ public class AddTaskStatusController implements Initializable{
     public Button saveBtn;
     public Button cancelBtn;
     private SettingsController settingsController;
-    private TaskStatusControllerApi controller = new TaskStatusControllerApi();
+    private TaskStatusApi controller = new TaskStatusApi();
     private TaskStatus status;
 
 
     private void setEvents() {
         saveBtn.setOnAction(e -> {
-            status = new TaskStatus();
-            fillUnit();
-            controller.createTaskStatus(status);
-            settingsController.refresh();
+            save();
             stage.close();
         });
         cancelBtn.setOnAction(e -> stage.close());
     }
 
+    private void save() {
+        status = new TaskStatus();
+        fillStatus();
+        controller.createTaskStatus(status);
+        settingsController.refresh();
+    }
+
     public void show(){
+        initializeFields();
         stage.show();
     }
 
-    private void fillUnit() {
+    private void initializeFields() {
+        status = null;
+        descriptionField.setText("");
+    }
+
+    private void fillStatus() {
         status.setDescription(descriptionField.getText());
     }
 

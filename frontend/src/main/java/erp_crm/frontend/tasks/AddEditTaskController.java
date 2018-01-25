@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -15,7 +16,7 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import main.java.erp_crm.Main;
 import main.java.erp_crm.backend.Utils;
-import main.java.erp_crm.backend.api.crm.TaskControllerApi;
+import main.java.erp_crm.backend.api.crm.TasksApi;
 import main.java.erp_crm.backend.model.DBData;
 import main.java.erp_crm.backend.model.common.Employee;
 import main.java.erp_crm.backend.model.crm.*;
@@ -37,11 +38,9 @@ public class AddEditTaskController implements Initializable{
     public DatePicker beginningPicker;
     public TextField titleField;
     public ColorPicker backgroundPicker;
-
     public TableView<Contact> contactsTableView;
     public TableColumn contactNameColumn;
     public TableColumn contactMailColumn;
-
     public Button addContactBtn;
     public Button remContactBtn;
     public Label mainEmployeeLabel;
@@ -58,20 +57,38 @@ public class AddEditTaskController implements Initializable{
 
     private Stage stage = new Stage();
     private TasksController tasksController;
-    private ObservableList<SingleCommentController> comments = FXCollections.observableArrayList();
-    private Task task;
-    private ObservableList<SingleTaskNoteController> notes = FXCollections.observableArrayList();
 
     private AddContactToMeetingTaskController addContactToMeetingTaskController;
 
-    private Employee commissioned = null;
     private AddCommentController addCommentController;
     private AddTaskNoteController addTaskNoteController;
     private AddEmployeeToTaskController addEmployeeToTaskController;
-    private TaskControllerApi taskControllerApi = new TaskControllerApi();
+    private TasksApi tasksApi = new TasksApi();
+
+    private Employee commissioned = null;
+    private Task task = null;
+    private ObservableList<SingleCommentController> comments = FXCollections.observableArrayList();
+    private ObservableList<SingleTaskNoteController> notes = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        loadControllers();
+        Scene scene = new Scene(mainPane);
+        scene.getStylesheets().add(Main.css);
+        stage.setScene(scene);
+        setEvents();
+        setColumns();
+        Bindings.bindContent(statusComboBox.getItems(), DBData.getTaskStatuses());
+        initializeFields();
+    }
+
+    private void setColumns() {
+        contactNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        contactNameColumn.setCellValueFactory(new PropertyValueFactory<>("mail"));
+    }
+
+
+    private void loadControllers() {
         try {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlFiles/crm/addContactToMeetingTask.fxml"));
@@ -99,14 +116,31 @@ public class AddEditTaskController implements Initializable{
         }  catch (IOException e) {
             e.printStackTrace();
         }
-        Scene scene = new Scene(mainPane);
-        scene.getStylesheets().add(Main.css);
-        stage.setScene(scene);
-        setColumns();
-        setEvents();
+    }
 
+    private void initializeFields() {
+        task = null;
+        commissioned = null;
+        prepareStatusBox();
+        beginningPicker.setValue(LocalDate.now());
+        deadlinePicker.setValue(LocalDate.now());
+        commissionedField.setText("");
+        titleField.setText("");
+        mainEmployeeLabel.setText("");
+        descriptionArea.setText("");
+        archiveCheckBox.setSelected(false);
+        backgroundPicker.setValue(Color.WHITE);
+        contactsTableView.getItems().clear();
+        if(statusComboBox.getItems().size()>0) {
+            statusComboBox.getSelectionModel().select(0);
+        }
+        comments.clear();
+        notes.clear();
+        commentsContainer.getChildren().clear();
+        notesContainer.getChildren().clear();
+    }
 
-        Bindings.bindContent(statusComboBox.getItems(), DBData.getTaskStatuses());
+    private void prepareStatusBox() {
         if(statusComboBox.getItems().size()>0){
             statusComboBox.getSelectionModel().select(0);
         }
@@ -141,47 +175,64 @@ public class AddEditTaskController implements Initializable{
                                             return DBData.getTaskStatus(string);
                                         }
                                     });
-        beginningPicker.setValue(LocalDate.now());
-        deadlinePicker.setValue(LocalDate.now());
-    }
-
-    private void setColumns() {
     }
 
     private void setEvents() {
         commissionedField.setEditable(false);
         saveBtn.setOnAction(e -> {
-            if(task==null){
-                task = new Task();
-                fillTask();
-                taskControllerApi.createTask(task);
-            }  else {
-                fillTask();
-                taskControllerApi.updateTask(task);
-            }
-            tasksController.refresh();
+            save();
             close();
         });
-        cancelBtn.setOnAction(e -> stage.close());
-        addContactBtn.setOnAction(e -> addContactToMeetingTaskController.show());
+        cancelBtn.setOnAction(e -> close());
+        addContactBtn.setOnAction(e -> addContact());
         remContactBtn.setOnAction(e -> remContact());
-        addCommentBtn.setOnAction(e -> addCommentController.show());
-        addNoteBtn.setOnAction(e -> addTaskNoteController.show());
-        remCommissionBtn.setOnAction(e -> {
-            commissioned = null;
-            if(task != null){
-                task.setEmployeeCommissioned(null);
-                taskControllerApi.updateTask(task);
-            }
-        });
-        commissionBtn.setOnAction(e -> addEmployeeToTaskController.show());
+        addCommentBtn.setOnAction(e -> addComment());
+        addNoteBtn.setOnAction(e -> addNote());
+        remCommissionBtn.setOnAction(e -> removeCommission());
+        commissionBtn.setOnAction(e -> addEmployee());
+    }
+
+    private void addEmployee() {
+        addEmployeeToTaskController.show();
+    }
+
+    private void removeCommission() {
+        commissioned = null;
+        if(task != null){
+            task.setEmployeeCommissioned(null);
+            tasksApi.updateTask(task);
+        }
+    }
+
+    private void addNote() {
+        addTaskNoteController.show();
+    }
+
+    private void addComment() {
+        addCommentController.show();
+    }
+
+    private void addContact() {
+        addContactToMeetingTaskController.show();
+    }
+
+    private void save() {
+        if(task==null){
+            task = new Task();
+            fillTask();
+            tasksApi.createTask(task);
+        }  else {
+            fillTask();
+            tasksApi.updateTask(task);
+        }
+        tasksController.refresh();
     }
 
     private void remContact() {
         Contact selected = contactsTableView.getSelectionModel().getSelectedItem();
         if(selected!=null){
             if(task!=null) {
-                taskControllerApi.updateTask(task);
+                tasksApi.updateTask(task);
                 task.getContacts().remove(selected);
             }
             contactsTableView.getItems().remove(selected);
@@ -203,9 +254,11 @@ public class AddEditTaskController implements Initializable{
     }
 
     public void show() {
+        initializeFields();
         stage.show();
     }
     public void show(Task task){
+        initializeFields();
         this.task = task;
         fillFields();
         stage.show();
@@ -255,6 +308,11 @@ public class AddEditTaskController implements Initializable{
 
 
     public void addNote(TaskNote taskNote) {
+        for(SingleTaskNoteController n : notes){
+            if(n.getNote().getContent().equals(taskNote.getContent()) && n.getNote().getBackgroundColor().equals(taskNote.getBackgroundColor())
+                    && notesContainer.getChildren().contains(n.getMainBox())
+                    ) return;
+        }
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlFiles/crm/singleTaskNote.fxml"));
             loader.load();
@@ -269,6 +327,11 @@ public class AddEditTaskController implements Initializable{
     }
 
     public void addComment(TaskComment comment) {
+        for(SingleCommentController n : comments){
+            if(n.getComment().getContent().equals(comment.getContent())
+                    && commentsContainer.getChildren().contains(n.getMainBox())
+                    ) return;
+        }
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlFiles/crm/singleComment.fxml"));
             loader.load();
@@ -286,7 +349,7 @@ public class AddEditTaskController implements Initializable{
 
         if(task!=null){
             task.getComments().remove(comment);
-            taskControllerApi.deleteComment(task, comment);
+            tasksApi.deleteComment(task, comment);
         }
         SingleCommentController toRemove = null;
         for(SingleCommentController i : comments){
@@ -306,14 +369,14 @@ public class AddEditTaskController implements Initializable{
                    i.setContent(comment.getContent());
                 }
             }
-            taskControllerApi.updateComment(task, comment);
+            tasksApi.updateComment(task, comment);
         }
     }
 
     public void deleteNote(TaskNote note) {
         if(task!=null){
             task.getNotes().remove(note);
-            taskControllerApi.deleteNote(task, note);
+            tasksApi.deleteNote(task, note);
         }
         SingleTaskNoteController toRemove = null;
         for(SingleTaskNoteController i : notes){
@@ -333,7 +396,7 @@ public class AddEditTaskController implements Initializable{
                     i.setContent(note.getContent());
                 }
             }
-            taskControllerApi.updateNote(task, note);
+            tasksApi.updateNote(task, note);
         }
     }
 

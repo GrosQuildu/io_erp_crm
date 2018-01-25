@@ -1,7 +1,6 @@
 package main.java.erp_crm.frontend.proformas;
 
 import com.lowagie.text.DocumentException;
-import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -12,8 +11,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import main.java.erp_crm.Main;
 import main.java.erp_crm.backend.SharedData;
-import main.java.erp_crm.backend.api.erp.ProformasControllerApi;
-import main.java.erp_crm.backend.model.DBData;
+import main.java.erp_crm.backend.api.erp.ProformasApi;
 import main.java.erp_crm.backend.model.erp.Order;
 import main.java.erp_crm.backend.model.erp.Proforma;
 import main.java.erp_crm.backend.pdf.PdfGenerator;
@@ -31,7 +29,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddProformaController implements Initializable {
-    private Stage stage = new Stage();
     public VBox mainBox;
     public DatePicker issueDatePicker;
     public DatePicker saleDatePicker;
@@ -39,11 +36,14 @@ public class AddProformaController implements Initializable {
     public ComboBox<String> paymentMethodBox;
     public Button applyBtn;
     public Button closeBtn;
-    private Order order = null;
-    private Proforma proforma = null;
+
+
+    private Stage stage = new Stage();
     private OrdersController ordersController;
     private ProformasController proformasController;
-    private ProformasControllerApi proformasControllerApi = new ProformasControllerApi();
+    private ProformasApi proformasApi = new ProformasApi();
+    private Order order = null;
+    private Proforma proforma = null;
 
     public void show(Order order){
         this.order = order;
@@ -83,7 +83,7 @@ public class AddProformaController implements Initializable {
             } else {
                 p.setProformaNumber(proforma.getProformaNumber());
             }
-            proformasControllerApi.createProforma(p);
+            proformasApi.createProforma(p);
 
             stage.close();
             exportToPDF(p, true);
@@ -94,51 +94,64 @@ public class AddProformaController implements Initializable {
         Optional<ButtonType> res= Optional.empty();
         order = p.getOrder();
         if(ask){
-            Alert al = new Alert(Alert.AlertType.CONFIRMATION);
-            al.setTitle("Export to PDF file");
-            al.setHeaderText(null);
-            al.setContentText("Do you want to export "+p.getProformaNumber()+" to PDF file?");
-            al.getDialogPane().getStylesheets().add(Main.css);
-            res = al.showAndWait();
+            res = showExportAlert(p);
         }
         if(!ask || res.isPresent() && res.get()==ButtonType.OK){
-            FileChooser fc = new FileChooser();
-            fc.setTitle("Proforma export");
-            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
-            fc.setInitialFileName(
-                    "Proforma for "+
-                            order.getClient().getName().replace("&"," and ")+
-                            " no "+p.getProformaNumber().replace("/","-")+".pdf"
-            );
-            fc.setInitialDirectory(new File(SharedData.getConfig().getDefaultProformaPdfPath().isEmpty()?".": SharedData.getConfig().getDefaultProformaPdfPath()));
-            Stage fStage = new Stage(StageStyle.DECORATED);
-            fStage.setMaximized(false);
-            File file = fc.showSaveDialog(fStage);
+            File file = getFileToSave(p);
 
-            LoadingDialog ld = new LoadingDialog("Exporting to pdf");
-            Task<Boolean> eksportTask = new Task<Boolean>() {
-                @Override
-                protected Boolean call() throws Exception {
-                    if (file != null)
-                        try {
-                            return PdfGenerator.proforma(order, file.toPath().toString(), true);
-                        } catch (IOException | DocumentException e1) {
-                            e1.printStackTrace();
-                        }
-                    return true;
-                }
-            };
-            eksportTask.setOnRunning(eve -> ld.show());
-            eksportTask.setOnSucceeded(eve -> {
-                ld.close();
-                if(ordersController!=null)
-                    ordersController.refresh();
-                if(proformasController!=null)
-                    proformasController.updateTable();
-            });
-            new Thread(eksportTask).start();
+            runExport(file);
 
         }
+    }
+
+    private void runExport(File file) {
+        LoadingDialog ld = new LoadingDialog("Exporting to pdf");
+        Task<Boolean> eksportTask = new Task<Boolean>() {
+            @Override
+            protected Boolean call() throws Exception {
+                if (file != null)
+                    try {
+                        return PdfGenerator.proforma(order, file.toPath().toString(), true);
+                    } catch (IOException | DocumentException e1) {
+                        e1.printStackTrace();
+                    }
+                return true;
+            }
+        };
+        eksportTask.setOnRunning(eve -> ld.show());
+        eksportTask.setOnSucceeded(eve -> {
+            ld.close();
+            if(ordersController!=null)
+                ordersController.refresh();
+            if(proformasController!=null)
+                proformasController.updateTable();
+        });
+        new Thread(eksportTask).start();
+    }
+
+    private File getFileToSave(Proforma p) {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Proforma export");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
+        fc.setInitialFileName(
+                "Proforma for "+
+                        order.getClient().getName().replace("&"," and ")+
+                        " no "+p.getProformaNumber().replace("/","-")+".pdf"
+        );
+        fc.setInitialDirectory(new File(SharedData.getConfig().getDefaultProformaPdfPath().isEmpty()?".": SharedData.getConfig().getDefaultProformaPdfPath()));
+        Stage fStage = new Stage(StageStyle.DECORATED);
+        fStage.setMaximized(false);
+        return fc.showSaveDialog(fStage);
+    }
+
+    private Optional<ButtonType> showExportAlert(Proforma p) {
+        Optional<ButtonType> res;Alert al = new Alert(Alert.AlertType.CONFIRMATION);
+        al.setTitle("Export to PDF file");
+        al.setHeaderText(null);
+        al.setContentText("Do you want to export "+p.getProformaNumber()+" to PDF file?");
+        al.getDialogPane().getStylesheets().add(Main.css);
+        res = al.showAndWait();
+        return res;
     }
 
     @Override

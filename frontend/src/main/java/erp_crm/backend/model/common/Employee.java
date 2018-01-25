@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.gson.*;
+import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Column;
@@ -23,25 +24,25 @@ import java.util.Objects;
 
 @Entity
 public class Employee {
-  @JsonProperty("id")
+  @SerializedName("id")
   @Id
   @GeneratedValue
   private Integer id;
 
-  @JsonProperty("name")
+  @SerializedName("name")
   @NotNull
   @Column(nullable = false, unique = false)
   private String name;
 
-  @JsonProperty("telephone")
+  @SerializedName("telephone")
   private String telephone = null;
 
-  @JsonProperty("mailField")
+  @SerializedName("mail")
   @NotNull
   @Column(nullable = false, unique = true)
   private String mail;
 
-  @JsonProperty("password")
+  @SerializedName("password")
   @NotNull
   @Column(nullable = false, unique = false)
   private String password;
@@ -100,14 +101,18 @@ public class Employee {
     }
   }
 
-  @JsonProperty("role")
   @NotNull
+  @SerializedName("roleEnum")
   private Role role;
 
-  @JsonProperty("monthSchedule")
+  @SerializedName("role")
+  private String roleString="";
+
+
+  @SerializedName("monthSchedule")
   private BigDecimal monthSchedule = null;
 
-  @JsonProperty("visibility")
+  @SerializedName("visibility")
   @NotNull
   private Boolean visibility = true;
 
@@ -179,8 +184,8 @@ public class Employee {
   }
 
   /**
-   * Get mailField
-   * @return mailField
+   * Get mail
+   * @return mail
    **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
@@ -310,7 +315,7 @@ public class Employee {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    telephone: ").append(toIndentedString(telephone)).append("\n");
-    sb.append("    mailField: ").append(toIndentedString(mail)).append("\n");
+    sb.append("    mail: ").append(toIndentedString(mail)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("    monthSchedule: ").append(toIndentedString(monthSchedule)).append("\n");
@@ -332,6 +337,16 @@ public class Employee {
 
   public String serialize(){
     return new Gson().toJson(this);
+  }
+
+
+  public void postSetRole(){
+    for(Role i : Role.values()){
+      if(i.value.equals(roleString)) {
+        this.role = i;
+        break;
+      }
+    }
   }
 
 }

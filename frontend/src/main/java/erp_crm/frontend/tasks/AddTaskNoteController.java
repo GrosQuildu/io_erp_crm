@@ -21,6 +21,8 @@ public class AddTaskNoteController implements Initializable {
     public Button cancelBtn;
     public VBox mainBox;
     public ColorPicker backgroundColorPicker;
+
+
     private Stage stage = new Stage();
     private AddEditTaskController addEditTaskController;
 
@@ -37,10 +39,14 @@ public class AddTaskNoteController implements Initializable {
     private void setEvents() {
         cancelBtn.setOnAction(e -> close());
         addBtn.setOnAction(e -> {
-            TaskNote note = createNote();
-            addEditTaskController.addNote(note);
+            save();
             close();
         });
+    }
+
+    private void save() {
+        TaskNote note = createNote();
+        addEditTaskController.addNote(note);
     }
 
     private TaskNote createNote() {

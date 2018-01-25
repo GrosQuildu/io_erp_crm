@@ -21,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-//klasa do tworzenia wszystkich pdfów w programie
 public class PdfGenerator {
     public static String filePath;
     private static final int STANDARD_CELLSPAN=1;
@@ -49,7 +48,7 @@ public class PdfGenerator {
         cell.addElement(p);
         return cell;
     }
-    private static PdfPCell generateCell(int border, String text, int colspan, boolean bold, int fontSize){
+    private static PdfPCell generateCell(String text, int colspan, boolean bold, int fontSize){
         BaseFont bf = null;
         try {
             if(bold)
@@ -63,13 +62,13 @@ public class PdfGenerator {
         Font font = new Font(bf, fontSize);
         PdfPCell cell = new PdfPCell();
         Paragraph p = new Paragraph(text, font);
-        cell.setBorder(border);
+        cell.setBorder(0);
         cell.setColspan(colspan);
         cell.setPadding(10);
         cell.addElement(p);
         return cell;
     }
-    private static PdfPCell generateCell(int border, String text, int colspan, boolean bold,Integer leading){
+    private static PdfPCell generateCell(String text, int colspan, boolean bold, Integer leading){
         BaseFont bf = null;
         try {
             if(bold)
@@ -84,7 +83,7 @@ public class PdfGenerator {
         PdfPCell cell = new PdfPCell();
         Paragraph p = new Paragraph(text, font);
         p.setLeading(leading);
-        cell.setBorder(border);
+        cell.setBorder(0);
         cell.setColspan(colspan);
         cell.setPadding(10);
         cell.addElement(p);
@@ -227,7 +226,7 @@ public class PdfGenerator {
         cell.addElement(tmp);
         cell.setPadding(3);
         provider.addCell(cell);
-        cell = generateCell(0,"Provider's bank account number:",STANDARD_CELLSPAN,true,9);
+        cell = generateCell("Provider's bank account number:",STANDARD_CELLSPAN,true,9);
         cell.setPadding(3);
         provider.addCell(cell);
 
@@ -463,7 +462,7 @@ public class PdfGenerator {
         cell.addElement(tmp);
         cell.setPadding(3);
         dostawca.addCell(cell);
-        cell = generateCell(0,"Provider's bank account number:",STANDARD_CELLSPAN,true,9);
+        cell = generateCell("Provider's bank account number:",STANDARD_CELLSPAN,true,9);
         cell.setPadding(3);
         dostawca.addCell(cell);
 
@@ -865,49 +864,49 @@ public class PdfGenerator {
             if(i!=null){
 
 
-                cell = generateCell(0, (lp++).toString()+".",STANDARD_CELLSPAN,false, new Integer(10));
+                cell = generateCell((lp++).toString()+".",STANDARD_CELLSPAN,false, new Integer(10));
                 cell.setPadding(2);
                 t.addCell(cell);
-                cell = generateCell(0, (i.getArticle() != null && i.getArticle().getName() != null ?
+                cell = generateCell((i.getArticle() != null && i.getArticle().getName() != null ?
                         i.getArticle().getName().trim() : ""),2,false, new Integer(10));
                 cell.setPadding(2);
                 t.addCell(cell);
-                cell = generateCell(0, (i.getAmount() != null ? i.getAmount().toString() : ""),STANDARD_CELLSPAN,false, new Integer(10));
+                cell = generateCell((i.getAmount() != null ? i.getAmount().toString() : ""),STANDARD_CELLSPAN,false, new Integer(10));
                 cell.setPadding(2);
                 t.addCell(cell);
-                cell = generateCell(0, Utils.formatPln(i.getArticle() != null && i.getArticle().getUnitPrice()!=null?
+                cell = generateCell(Utils.formatPln(i.getArticle() != null && i.getArticle().getUnitPrice()!=null?
                         i.getArticle().getUnitPrice().floatValue() : 0f),STANDARD_CELLSPAN,false, new Integer(10));
                 cell.setPadding(2);
                 t.addCell(cell);
-                cell = generateCell(0, Utils.formatPln(i.getNetPrice()!=null ? i.getNetPrice().floatValue() : 0f),STANDARD_CELLSPAN,false, new Integer(10));
+                cell = generateCell(Utils.formatPln(i.getNetPrice()!=null ? i.getNetPrice().floatValue() : 0f),STANDARD_CELLSPAN,false, new Integer(10));
                 cell.setPadding(2);
                 t.addCell(cell);
-                cell = generateCell(0, Utils.formatKg(i.getWeight() != null ? i.getWeight() : 0f),STANDARD_CELLSPAN,false, new Integer(10));
+                cell = generateCell(Utils.formatKg(i.getWeight() != null ? i.getWeight() : 0f),STANDARD_CELLSPAN,false, new Integer(10));
                 cell.setPadding(2);
                 t.addCell(cell);
                 lastLp=lp;
             }
         }
         if(1f- order.getDeliveryCost().floatValue()<5000 && order.getDeliveryCost().floatValue()>0){ //toDo: zamiast 1f: cena netto
-            cell = generateCell(0, (lastLp+1)+".",STANDARD_CELLSPAN,false, new Integer(10));
+            cell = generateCell((lastLp+1)+".",STANDARD_CELLSPAN,false, new Integer(10));
             cell.setPadding(2);
             t.addCell(cell);
             cell = generateCell(0, "Delivery",2,false);
             cell.setPadding(2);
             t.addCell(cell);
-            cell = generateCell(0, "-",STANDARD_CELLSPAN,false, new Integer(10));
+            cell = generateCell("-",STANDARD_CELLSPAN,false, new Integer(10));
             cell.setPadding(2);
             t.addCell(cell);
-            cell = generateCell(0, "-",STANDARD_CELLSPAN,false, new Integer(10));
+            cell = generateCell("-",STANDARD_CELLSPAN,false, new Integer(10));
             cell.setPadding(2);
             t.addCell(cell);
-            cell = generateCell(0, Utils.formatPln(order.getDeliveryCost().floatValue()),STANDARD_CELLSPAN,false, new Integer(10));
+            cell = generateCell(Utils.formatPln(order.getDeliveryCost().floatValue()),STANDARD_CELLSPAN,false, new Integer(10));
             cell.setPadding(2);
             t.addCell(cell);
-            cell = generateCell(0, "-",STANDARD_CELLSPAN,false, new Integer(10));
+            cell = generateCell("-",STANDARD_CELLSPAN,false, new Integer(10));
             cell.setPadding(2);
             t.addCell(cell);
-            cell = generateCell(0, "-",STANDARD_CELLSPAN,false, new Integer(10));
+            cell = generateCell("-",STANDARD_CELLSPAN,false, new Integer(10));
             cell.setPadding(2);
             t.addCell(cell);
         }

@@ -21,7 +21,7 @@ Enterprise resource planning and Customer Relationship Management systems.
 * Email communication
 
 ### Project
-![Here](/project/) for architecture, diagrams and technologies
+[Here](/project/) for architecture, diagrams and technologies
 
 ### Authors
 * Marcin Blacharski
